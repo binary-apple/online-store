@@ -1,4 +1,4 @@
-const Utils = require('../Utils');
+import Utils from '../Utils';
 
 const utils = new Utils();
 
