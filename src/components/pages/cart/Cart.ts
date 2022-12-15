@@ -1,15 +1,13 @@
 import { IContext } from "../../../app/types/IApp";
-import { IRouter } from "../../../router/types/IRouter";
+import Request from "../../../utils/request/Requst";
+
+const request = new Request();
 
 class Cart {
     async init(context: IContext) {
-        const cart = fetch('https://dummyjson.com/products?limit=100');
-        (context.$router as IRouter).fetchList.push(cart);
-    
-        const image = await (await cart).json();
+        const cart = await request.get(context, 'https://dummyjson.com/products?limit=100');
 
-
-        return this.render(image.limit);
+        return this.render(cart.limit);
     }
 
     render(image: number) {

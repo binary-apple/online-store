@@ -18,5 +18,5 @@ export interface IRouter {
     activateLinks(context: IContext): void;
     getCurrentRouter(): IRouterItem | undefined;
     context: IContext;
-    fetchList: Array<Promise<Response>>;
+    fetchList: Array<AbortController>;
 }

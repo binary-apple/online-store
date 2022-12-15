@@ -12,7 +12,7 @@ class Router implements IRouter {
     name = '$router';
     routers = [] as Array<IRouterItem>;
     context = {} as IContext;
-    fetchList = [] as Array<Promise<Response>>;
+    fetchList = [] as Array<AbortController>;
 
     constructor(routers: Array<IRouterItem>) {
         this.routers = [...routers];
@@ -41,6 +41,9 @@ class Router implements IRouter {
 
     push(pushProps: IRouteURL, e: MouseEvent) {
         if (this.fetchList.length) {
+            this.fetchList.forEach((item) => item.abort());
+
+            this.fetchList.length = 0;
         }
 
         if (e) {
