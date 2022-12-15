@@ -35,7 +35,7 @@ class Router implements IRouter {
             this.context.router = currentRouter;
 
             await controller.init(this.context);
-    
+
             this.activateLinks(this.context);
 
             const initRoute = this.init.bind(this, this.context);
@@ -50,7 +50,7 @@ class Router implements IRouter {
     push(pushProps: IRouteURL, e: MouseEvent) {
         if (e) e.preventDefault();
 
-        this.abortFetch()
+        this.abortFetch();
 
         const address = this.getUrl(pushProps, e);
 
@@ -102,7 +102,7 @@ class Router implements IRouter {
         const links = document.querySelectorAll('[href]');
 
         if (links.length) {
-            const push = this.push.bind(this, {url: '', data: context});
+            const push = this.push.bind(this, { url: '', data: context });
 
             links.forEach((item) => {
                 const clone = utils.replaceItem(item as HTMLElement);
