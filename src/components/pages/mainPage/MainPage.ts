@@ -9,7 +9,16 @@ class MainPage {
         return `
             <ul>
                 <li>
-                    <span href="/product/1">product</span>
+                    <a href="/cart">cart</a>
+                </li>
+                <li>
+                    <a href="/product/1">product</a>
+                </li>
+                <li>
+                    <a href="/product/2">product2</a>
+                </li>
+                <li>
+                    <a href="/product/3">product3</a>
                 </li>
             </ul>
         `

@@ -39,7 +39,11 @@ class Router implements IRouter {
             this.activateLinks(this.context);
 
             const initRoute = this.init.bind(this, this.context);
-            listeners.onceListener('popstate', initRoute);
+            const abortFetch = this.abortFetch.bind(this);
+            listeners.onceListener('popstate', () => {
+                initRoute();
+                abortFetch();
+            });
         }
     }
 
