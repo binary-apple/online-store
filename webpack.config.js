@@ -29,10 +29,6 @@ const baseConfig = {
         loader: 'ts-loader',
       },
       {
-        test: /\.html$/i,
-        loader: 'html-loader',
-      },
-      {
         test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
         type: 'asset/resource',
         generator: {
