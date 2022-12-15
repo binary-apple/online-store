@@ -7,7 +7,11 @@ class MainPage {
 
     render() {
         return `
-            MAIN PAGE
+            <ul>
+                <li>
+                    <span href="/product/1">product</span>
+                </li>
+            </ul>
         `
     }
 }

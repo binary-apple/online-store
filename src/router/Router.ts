@@ -20,9 +20,13 @@ class Router implements IRouter {
         this.init = this.init;
         this.activateLinks = this.activateLinks;
         this.getCurrentRouter = this.getCurrentRouter;
+        this.abortFetch = this.abortFetch;
+        this.isProductPage = this.isProductPage;
+        this.getUrl = this.getUrl;
+        this.makeRedirect = this.makeRedirect;
     }
 
-    init(context: IContext) {
+    async init(context: IContext) {
         this.context = context;
 
         const currentRouter = this.getCurrentRouter();
@@ -30,7 +34,7 @@ class Router implements IRouter {
         if (currentRouter) {
             this.context.router = currentRouter;
 
-            controller.init(this.context);
+            await controller.init(this.context);
     
             this.activateLinks(this.context);
 
@@ -40,25 +44,27 @@ class Router implements IRouter {
     }
 
     push(pushProps: IRouteURL, e: MouseEvent) {
+        if (e) e.preventDefault();
+
+        this.abortFetch()
+
+        const address = this.getUrl(pushProps, e);
+
+        this.makeRedirect(address);
+
+        const { data } = pushProps;
+        this.init(data);
+    }
+
+    abortFetch() {
         if (this.fetchList.length) {
             this.fetchList.forEach((item) => item.abort());
 
             this.fetchList.length = 0;
         }
+    }
 
-        if (e) {
-            e.preventDefault();
-        }
-
-        let address = '';
-        const { url, data } = pushProps;
-
-        if (url) {
-            address = url;
-        } else {
-            address = (e.target as HTMLElement).getAttribute('href') as string;
-        }
-
+    makeRedirect(address: string) {
         const pathname = utils.getPathName();
 
         if (pathname !== address) {
@@ -72,8 +78,20 @@ class Router implements IRouter {
         } else {
             globalThis.history.pushState(address, '', address);
         }
+    }
 
-        this.init(data);
+    getUrl(pushProps: IRouteURL, e: MouseEvent) {
+        const { url } = pushProps;
+
+        let address;
+
+        if (url) {
+            address = url;
+        } else {
+            address = (e.target as HTMLElement).getAttribute('href') as string;
+        }
+
+        return address;
     }
 
     activateLinks(context: IContext) {
@@ -95,13 +113,21 @@ class Router implements IRouter {
 
         let router;
 
-        if (pathname.split('/').length === 3) {
+        const isProductPage = this.isProductPage(pathname);
+
+        if (isProductPage) {
             router = this.routers.find((el) => el.path === '/product');
         } else {
             router = this.routers.find((el) => el.path === pathname);
         }
 
         return router || this.routers.find((el) => el.path === 404);
+    }
+
+    isProductPage(pathname: string) {
+        const params = pathname.split('/');
+
+        return params.length === 3 && params[1] === 'product';
     }
 }
 
