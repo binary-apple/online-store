@@ -11,11 +11,13 @@ const baseConfig = {
   output: {
     path: path.resolve(__dirname, './dist'),
     filename: 'index.js',
+    publicPath: "/",
   },
   mode: 'development',
   plugins: [
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, './src/index.html')
+      template: path.resolve(__dirname, './src/index.html'),
+      publicPath: "./"
     }),
     new CleanWebpackPlugin(),
     new ESLintPlugin(),
