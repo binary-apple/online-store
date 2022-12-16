@@ -11,7 +11,6 @@ class Header {
                 <input type="text">
                 <button type="button">Поиск</button>
             </header>
-            ${dispatchEvent(event) || ''}
         `;
     }
 }
