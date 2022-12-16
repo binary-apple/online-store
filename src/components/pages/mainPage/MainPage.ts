@@ -1,7 +1,7 @@
-import { IContext } from "../../../app/types/IApp";
+import { IInstanceContext } from '../../../utils/context/types/IContext';
 
 class MainPage {
-    init(context: IContext) {
+    init(context: IInstanceContext) {
         return this.render();
     }
 
@@ -21,7 +21,7 @@ class MainPage {
                     <a href="/product/3">product3</a>
                 </li>
             </ul>
-        `
+        `;
     }
 }
 

@@ -16,10 +16,10 @@ class Utils {
         return clone;
     }
 
-    getPathName() {
-        const currentUrl = new URL(window.location.href);
+    getPathName(url: string = window.location.href) {
+        const currentUrl = new URL(url);
 
-        return  currentUrl.pathname;
+        return currentUrl.pathname;
     }
 }
 

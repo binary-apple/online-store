@@ -1,21 +1,20 @@
-import { IContext } from '../app/types/IApp';
 import Controller from '../controller/Controller';
+import { IListeners } from '../utils/listeners/types/IListeners';
 import Utils from '../utils/Utils';
-import Listeners from '../utils/listeners/Listeners';
 import { IRouter, IRouterItem, IRouteURL } from './types/IRouter';
+import { IInstanceContext } from '../utils/context/types/IContext';
 
 const utils = new Utils();
 const controller = new Controller();
-const listeners = new Listeners();
 
 class Router implements IRouter {
     name = '$router';
     routers = [] as Array<IRouterItem>;
-    context = {} as IContext;
+    context = {} as IInstanceContext;
     fetchList = [] as Array<AbortController>;
+    currentRouter = {} as IRouterItem;
 
-    constructor(routers: Array<IRouterItem>) {
-        this.routers = [...routers];
+    constructor() {
         this.push = this.push;
         this.init = this.init;
         this.activateLinks = this.activateLinks;
@@ -24,30 +23,47 @@ class Router implements IRouter {
         this.isProductPage = this.isProductPage;
         this.getUrl = this.getUrl;
         this.makeRedirect = this.makeRedirect;
+        this.addRoutersToContext = this.addRoutersToContext;
+        this.activateController = this.activateController;
     }
 
-    async init(context: IContext) {
-        this.context = context;
+    async init(context: IInstanceContext) {
+        this.routers = context.$store?.data.routers;
+
+        this.addRoutersToContext(context);
 
         const currentRouter = this.getCurrentRouter();
 
         if (currentRouter) {
-            this.context.router = currentRouter;
+            await this.activateController(context, currentRouter);
+        }
 
-            await controller.init(this.context);
+        this.context = context;
+    }
 
-            this.activateLinks(this.context);
-
-            const initRoute = this.init.bind(this, this.context);
-            const abortFetch = this.abortFetch.bind(this);
-            listeners.onceListener('popstate', () => {
-                initRoute();
-                abortFetch();
-            });
+    addRoutersToContext(context: IInstanceContext) {
+        if ((context.$router as IRouter)?.routers) {
+            (context.$router as IRouter).routers = this.routers;
         }
     }
 
-    push(pushProps: IRouteURL, e: MouseEvent) {
+    async activateController(context: IInstanceContext, currentRouter: IRouterItem) {
+        (context.$router as IRouter).currentRouter = currentRouter;
+
+        await controller.init(context);
+
+        this.activateLinks(context);
+
+        const initRoute = this.init.bind(this, context);
+        const abortFetch = this.abortFetch.bind(this);
+
+        (context.$listeners as IListeners).onceListener('popstate', () => {
+            initRoute();
+            abortFetch();
+        });
+    }
+
+    push(pushProps: IRouteURL, e: MouseEvent | undefined = undefined) {
         if (e) e.preventDefault();
 
         this.abortFetch();
@@ -58,6 +74,8 @@ class Router implements IRouter {
 
         const { data } = pushProps;
         this.init(data);
+
+        return address;
     }
 
     abortFetch() {
@@ -68,13 +86,13 @@ class Router implements IRouter {
         }
     }
 
-    makeRedirect(address: string) {
+    makeRedirect(address: string | undefined) {
         const pathname = utils.getPathName();
 
         if (pathname !== address) {
             const lastChar = pathname[pathname.length - 1];
 
-            if (lastChar === '/' && pathname.length > 1) {
+            if (lastChar === '/' && pathname.length > 1 && address) {
                 address = address.slice(1);
             }
 
@@ -84,21 +102,21 @@ class Router implements IRouter {
         }
     }
 
-    getUrl(pushProps: IRouteURL, e: MouseEvent) {
+    getUrl(pushProps: IRouteURL, e: MouseEvent | undefined) {
         const { url } = pushProps;
 
         let address;
 
         if (url) {
             address = url;
-        } else {
+        } else if (!url && e) {
             address = (e.target as HTMLElement).getAttribute('href') as string;
         }
 
         return address;
     }
 
-    activateLinks(context: IContext) {
+    activateLinks(context: IInstanceContext) {
         const links = document.querySelectorAll('[href]');
 
         if (links.length) {
@@ -120,12 +138,12 @@ class Router implements IRouter {
         const isProductPage = this.isProductPage(pathname);
 
         if (isProductPage) {
-            router = this.routers.find((el) => el.path === '/product');
+            router = this.routers?.find((el) => el.path === '/product');
         } else {
-            router = this.routers.find((el) => el.path === pathname);
+            router = this.routers?.find((el) => el.path === pathname);
         }
 
-        return router || this.routers.find((el) => el.path === 404);
+        return router || this.routers?.find((el) => el.path === 404);
     }
 
     isProductPage(pathname: string) {

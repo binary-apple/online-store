@@ -1,14 +1,17 @@
-import { IContext } from "../../app/types/IApp";
-import { IRouter } from "../../router/types/IRouter";
+import { IInstanceContext } from '../context/types/IContext';
+import { IRouter } from '../../router/types/IRouter';
+import fetch from 'node-fetch';
 
 class Request {
-    async get(context: IContext, url: string) {
+    async get(context: IInstanceContext | null, url: string) {
         const controller = new AbortController();
         const { signal } = controller;
 
-        (context.$router as IRouter).fetchList.push(controller);
+        if (context) {
+            (context.$router as IRouter).fetchList.push(controller);
+        }
 
-        return await (await fetch(url, { signal })).json();
+        return await (await fetch(url, { signal } as object)).json();
     }
 }
 

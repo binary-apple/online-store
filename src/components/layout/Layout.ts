@@ -1,18 +1,18 @@
 import Header from './header/Header';
 import Footer from './footer/Footer';
 import { IRenderComponent } from '../pages/types/IRenderComponent';
-import { IContext } from '../../app/types/IApp';
+import { IInstanceContext } from '../../utils/context/types/IContext';
 
 const header = new Header();
 const footer = new Footer();
 
 class Layout {
-    async init(context: IContext, component: IRenderComponent | undefined) {
+    async init(context: IInstanceContext, component: IRenderComponent | undefined) {
         return this.render(context, component);
     }
 
-    async render(context: IContext, component: IRenderComponent | undefined) {
-        return  `
+    async render(context: IInstanceContext, component: IRenderComponent | undefined) {
+        return `
             <div class="container-fluid">
                 ${await header.init()}
                 <main class="main">
@@ -20,7 +20,7 @@ class Layout {
                 </main>
                 ${await footer.init()}
             </div>
-        `
+        `;
     }
 }
 

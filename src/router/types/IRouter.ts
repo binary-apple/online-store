@@ -1,4 +1,4 @@
-import { IContext } from "../../app/types/IApp";
+import { IInstanceContext } from '../../utils/context/types/IContext';
 
 export interface IRouterItem {
     path: string | number;
@@ -6,17 +6,19 @@ export interface IRouterItem {
 }
 
 export type IRouteURL = {
-    url: string;  
-    data: IContext;
-}
+    url: string;
+    data: IInstanceContext;
+};
 
 export interface IRouter {
     name: string;
     routers: Array<IRouterItem>;
     push(props: IRouteURL | null, e: MouseEvent): void;
-    init(context: IContext): void;
-    activateLinks(context: IContext): void;
+    init(context: IInstanceContext): void;
+    activateLinks(context: IInstanceContext): void;
     getCurrentRouter(): IRouterItem | undefined;
-    context: IContext;
+    context: IInstanceContext;
     fetchList: Array<AbortController>;
+    abortFetch(): void;
+    currentRouter: IRouterItem;
 }

@@ -1,6 +1,6 @@
-import { IContext } from "../../../app/types/IApp";
+import { IInstanceContext } from '../../../utils/context/types/IContext';
 
 export interface IRenderComponent {
     render(): string;
-    init(context: IContext): string | Promise<string>;
+    init(context: IInstanceContext): string | Promise<string>;
 }

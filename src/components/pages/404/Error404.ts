@@ -1,14 +1,14 @@
-import { IContext } from "../../../app/types/IApp";
+import { IInstanceContext } from '../../../utils/context/types/IContext';
 
 class Error404 {
-    init(context: IContext) {
+    init(context: IInstanceContext) {
         return this.render();
     }
 
     render() {
         return `
             ERORR PAGE
-        `
+        `;
     }
 }
 

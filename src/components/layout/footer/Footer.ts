@@ -8,7 +8,7 @@ class Footer {
             <footer>
                 Футер
             </footer>
-        `
+        `;
     }
 }
 

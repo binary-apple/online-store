@@ -1,14 +1,18 @@
 class Header {
     init() {
-        return this.render({});
+        const event = new Event('render');
+
+        return this.render(event);
     }
 
-    render(content: object) {
+    render(event: Event) {
         return `
             <header>
-                Шапка
+                <input type="text">
+                <button type="button">Поиск</button>
             </header>
-        `
+            ${dispatchEvent('render') || ''}
+        `;
     }
 }
 

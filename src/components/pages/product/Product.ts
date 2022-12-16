@@ -1,7 +1,7 @@
-import { IContext } from "../../../app/types/IApp";
+import { IInstanceContext } from '../../../utils/context/types/IContext';
 
 class Product {
-    init(context: IContext) {
+    init(context: IInstanceContext) {
         return this.render();
     }
 
