@@ -1,0 +1,57 @@
+@import './colors';
+@import './typography';
+
+.header {
+    position: sticky;
+    top: 0;
+    height: 72px;
+    background-color: $surface;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.logo {
+    height: 32px;
+    width: 166px;
+    background-image: url('./assets/img/logo.svg');
+}
+
+.shopping-cart {
+    display: flex;
+    align-items: center;
+}
+
+.cart {
+    position: relative;
+    height: 32px;
+    width: 32px;
+    background: url('./assets/img/shopping-cart.svg') no-repeat;
+    background-size: 100%;
+    margin-left: 20px;
+}
+
+.purchase-cnt {
+    position: absolute;
+    background-color: $primary;
+    padding: 2px;
+    color: $onPrimary;
+    min-width: 16px;
+    border-radius: 7px;
+    top: -4px;
+    left: 19px;
+    line-height: 1;
+    text-align: center;
+    font-size: 12px;
+}
+
+.total {
+    color: $onSurface;
+}
+
+.total-amount::before {
+    content: '€';
+}
