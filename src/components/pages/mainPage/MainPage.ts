@@ -1,11 +1,21 @@
+import { IInstanceContext } from '../../../utils/context/types/IContext';
+import { IProductsAPI } from '../../../api/types/IProducts';
+
 class MainPage {
-    init() {
-        return this.render();
+    products = {} as IProductsAPI;
+
+    async init(context: IInstanceContext) {
+        this.products = await context.$api?.getProducts(null);
+
+        const cards = this.products?.products.map((item) => `<div>${item.title}</div>`);
+
+        return await this.render(cards);
     }
 
-    render() {
+    render(cards: Array<string>) {
         return `
             <ul>
+                ${cards?.join('')}
                 <li>
                     <a href="/cart">cart</a>
                 </li>

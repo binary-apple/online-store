@@ -1,17 +1,14 @@
-import { IRouter } from '../router/types/IRouter';
-import { IStore } from '../store/types/IStore';
-import { IListeners } from '../utils/listeners/types/IListeners';
-import { IApp } from './types/IApp';
+import { IApp, IAppModule } from './types/IApp';
 import Context from '../utils/context/Context';
 import { IInstanceContext } from '../utils/context/types/IContext';
 
 const context = new Context();
 
 class App implements IApp {
-    modules = [] as Array<IRouter | IStore | IListeners>;
+    modules = [] as Array<IAppModule>;
     context = {} as IInstanceContext;
 
-    use(module: IRouter | IStore | IListeners) {
+    use(module: IAppModule) {
         const moduleItem = { ...module };
 
         this.modules.push(moduleItem);

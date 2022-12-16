@@ -1,18 +1,11 @@
-import Request from '../../../utils/request/Requst';
-import { IInstanceContext } from '../../../utils/context/types/IContext';
-
-const request = new Request();
-
 class Cart {
-    async init(context: IInstanceContext) {
-        const cart = await request.get(context, 'https://dummyjson.com/products?limit=100');
-
-        return this.render(cart.limit);
+    async init() {
+        return this.render();
     }
 
-    render(image: number) {
+    render() {
         return `
-            Количество продуктов: ${image};        
+            Количество продуктов: ;        
         `;
     }
 }
