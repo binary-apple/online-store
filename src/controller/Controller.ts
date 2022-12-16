@@ -5,7 +5,7 @@ import Error404 from '../components/pages/404/Error404';
 import Product from '../components/pages/product/Product';
 import { IRouter, IRouterItem } from '../router/types/IRouter';
 import { IRenderComponent } from '../components/pages/types/IRenderComponent';
-import { IInstanceContext } from '../utils/context/types/IContext';
+import { IInstanceContext } from "../utils/context/types/IContext";
 
 const layout = new Layout();
 const mainPage = new MainPage();
