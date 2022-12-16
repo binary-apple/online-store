@@ -1,7 +1,7 @@
 import Router from '../Router';
 import { IRouter, IRouteURL } from '../types/IRouter';
 import { IInstanceContext } from '../../utils/context/types/IContext';
-import app from '../../__test__/createApp';
+import testApp from '../../__test__/createApp';
 
 const router = new Router();
 
@@ -20,7 +20,7 @@ test('Редирект', () => {
 });
 
 test('Нужный роутер определяется всегда', () => {
-    const appRouter = (app.context.$router as IRouter).getCurrentRouter();
+    const appRouter = (testApp.context.$router as IRouter).getCurrentRouter();
 
     const hasRouter = typeof appRouter === 'object' && appRouter !== null;
 

@@ -19,15 +19,17 @@ class Controller {
 
         const templateSlot = this.getTemplateSlot(($router as IRouter).currentRouter);
 
-        window.addEventListener('render', () => {
-            const button = document.querySelector('button');
-            console.log('rendered', button);
-        });
-
         const template = await layout.init(context, templateSlot);
 
+        this.renderPage(root, template);
+    }
+
+    renderPage(root: HTMLElement, template: string) {
         root.innerHTML = '';
         root.insertAdjacentHTML('afterbegin', template);
+
+        const event = new Event('page-rendered');
+        dispatchEvent(event);
     }
 
     getTemplateSlot(router: IRouterItem) {

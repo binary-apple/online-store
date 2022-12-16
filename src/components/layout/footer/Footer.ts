@@ -1,9 +1,9 @@
 class Footer {
     init() {
-        return this.render({});
+        return this.render();
     }
 
-    render(content: object) {
+    render() {
         return `
             <footer>
                 Футер

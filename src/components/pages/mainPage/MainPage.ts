@@ -1,7 +1,5 @@
-import { IInstanceContext } from '../../../utils/context/types/IContext';
-
 class MainPage {
-    init(context: IInstanceContext) {
+    init() {
         return this.render();
     }
 

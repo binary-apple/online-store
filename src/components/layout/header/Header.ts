@@ -1,11 +1,9 @@
 class Header {
     init() {
-        const event = new Event('render');
-
-        return this.render(event);
+        return this.render();
     }
 
-    render(event: Event) {
+    render() {
         return `
             <header>
                 <input type="text">

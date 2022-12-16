@@ -1,7 +1,5 @@
-import { IInstanceContext } from '../../../utils/context/types/IContext';
-
 class Error404 {
-    init(context: IInstanceContext) {
+    init() {
         return this.render();
     }
 
