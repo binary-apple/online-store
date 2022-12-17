@@ -4,4 +4,5 @@ export interface IProductsAPI {
 
 export interface IProductAPI {
     title: string;
+    category: string;
 }

@@ -4,12 +4,12 @@ import { IProductsAPI } from './IProducts';
 export interface IAPI {
     name: string;
     init(context: IInstanceContext): void;
-    getProducts(e: MouseEvent | null): Promise<IProductsAPI>;
+    getProducts(context: IInstanceContext, e?: MouseEvent | undefined): Promise<IProductsAPI>;
     context: IInstanceContext;
 }
 
 export interface IApiProps {
     context: IInstanceContext | null;
     url: string;
-    e: MouseEvent | null;
+    e: MouseEvent | undefined;
 }

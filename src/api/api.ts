@@ -17,9 +17,9 @@ class API implements IAPI {
         this.context = context;
     }
 
-    async getProducts(e: MouseEvent | null) {
+    async getProducts(context: IInstanceContext, e?: MouseEvent | undefined) {
         const apiProps = {
-            context: this.context,
+            context: context,
             url: 'https://dummyjson.com/products?limit=100',
             e,
         };

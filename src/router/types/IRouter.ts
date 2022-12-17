@@ -12,7 +12,7 @@ export type IRouteURL = {
 
 export interface IRouter {
     name: string;
-    routers: Array<IRouterItem>;
+    routers: Array<IRouterItem> | undefined;
     push(props: IRouteURL | null, e: MouseEvent): void;
     init(context: IInstanceContext): void;
     activateLinks(context: IInstanceContext): void;
