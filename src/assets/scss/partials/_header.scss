@@ -8,21 +8,12 @@
     background-color: $surface;
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
 }
 
 .logo {
     height: 32px;
     width: 166px;
-    background-image: url('./assets/img/logo.svg');
-}
-
-.shopping-cart {
-    display: flex;
-    align-items: center;
+    background: url('./assets/img/logo.svg') no-repeat;
 }
 
 .cart {
@@ -52,6 +43,9 @@
     color: $onSurface;
 }
 
-.total-amount::before {
-    content: '€';
+.total-amount {
+    width: 70px;
+    &::before {
+        content: '€';
+    }
 }
