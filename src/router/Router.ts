@@ -3,6 +3,7 @@ import { IListeners } from '../utils/listeners/types/IListeners';
 import Utils from '../utils/Utils';
 import { IRouter, IRouterItem, IRouteURL } from './types/IRouter';
 import { IInstanceContext } from '../utils/context/types/IContext';
+import { cancelNavigation } from '../events/Events';
 
 const utils = new Utils();
 const controller = new Controller();
@@ -11,7 +12,6 @@ class Router implements IRouter {
     name = '$router';
     routers = [] as Array<IRouterItem>;
     context = {} as IInstanceContext;
-    fetchList = [] as Array<AbortController>;
     currentRouter = {} as IRouterItem;
 
     constructor() {
@@ -19,7 +19,6 @@ class Router implements IRouter {
         this.init = this.init;
         this.activateLinks = this.activateLinks;
         this.getCurrentRouter = this.getCurrentRouter;
-        this.abortFetch = this.abortFetch;
         this.isProductPage = this.isProductPage;
         this.getUrl = this.getUrl;
         this.makeRedirect = this.makeRedirect;
@@ -27,7 +26,7 @@ class Router implements IRouter {
         this.activateController = this.activateController;
     }
 
-    async init(context: IInstanceContext) {
+    init(context: IInstanceContext) {
         this.routers = context.$store?.data.routers;
 
         this.addRoutersToContext(context);
@@ -35,7 +34,7 @@ class Router implements IRouter {
         const currentRouter = this.getCurrentRouter();
 
         if (currentRouter) {
-            await this.activateController(context, currentRouter);
+            this.activateController(context, currentRouter);
         }
 
         this.context = context;
@@ -55,18 +54,17 @@ class Router implements IRouter {
         this.activateLinks(context);
 
         const initRoute = this.init.bind(this, context);
-        const abortFetch = this.abortFetch.bind(this);
 
         (context.$listeners as IListeners).onceListener('popstate', () => {
             initRoute();
-            abortFetch();
+            dispatchEvent(cancelNavigation);
         });
     }
 
     push(pushProps: IRouteURL, e: MouseEvent | undefined = undefined) {
         if (e) e.preventDefault();
 
-        this.abortFetch();
+        dispatchEvent(cancelNavigation);
 
         const address = this.getUrl(pushProps, e);
 
@@ -76,14 +74,6 @@ class Router implements IRouter {
         this.init(data);
 
         return address;
-    }
-
-    abortFetch() {
-        if (this.fetchList.length) {
-            this.fetchList.forEach((item) => item.abort());
-
-            this.fetchList.length = 0;
-        }
     }
 
     makeRedirect(address: string | undefined) {

@@ -18,7 +18,5 @@ export interface IRouter {
     activateLinks(context: IInstanceContext): void;
     getCurrentRouter(): IRouterItem | undefined;
     context: IInstanceContext;
-    fetchList: Array<AbortController>;
-    abortFetch(): void;
     currentRouter: IRouterItem;
 }
