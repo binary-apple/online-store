@@ -5,7 +5,9 @@ class Cart {
 
     render() {
         return `
-            Количество продуктов: ;        
+            <a href="/">main</a>
+            Количество продуктов: ;
+            <a href="/cart">stand</a>        
         `;
     }
 }
