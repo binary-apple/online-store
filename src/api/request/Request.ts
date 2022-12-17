@@ -34,13 +34,17 @@ class Request {
         const { signal } = controller;
         const { url, e } = apiProps;
 
+        context.isLoading = true;
+
         if (e) {
             (e.target as HTMLElement).style.pointerEvents = 'none';
         }
 
         this.fetchList.push(controller);
 
-        const response = await (await fetch(url, { signal, method: 'GET' } as object)).json().catch(() => false);
+        const response = await (await fetch(url, { signal, method: 'GET' } as object)).json();
+
+        context.isLoading = false;
 
         if (e) {
             (e.target as HTMLElement).style.pointerEvents = 'all';

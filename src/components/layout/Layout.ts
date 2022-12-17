@@ -8,7 +8,7 @@ const footer = new Footer();
 
 class Layout {
     async init(context: IInstanceContext, component: IRenderComponent | undefined) {
-        return this.render(context, component);
+        return await this.render(context, component);
     }
 
     async render(context: IInstanceContext, component: IRenderComponent | undefined) {
