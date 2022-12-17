@@ -12,7 +12,9 @@ class Cart extends Component {
 
     render() {
         return `
-            Количество продуктов: ;        
+            <a href="/">main</a>
+            Количество продуктов: ;
+            <a href="/cart">stand</a>        
         `;
     }
 }

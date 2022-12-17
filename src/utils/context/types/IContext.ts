@@ -13,5 +13,6 @@ export interface IInstanceContext {
     $store: IStore;
     $api: IAPI;
     router: IRouterItem;
-    [index: string]: IAppModule | HTMLElement | IRouterItem;
+    isLoading: boolean;
+    [index: string]: IAppModule | HTMLElement | IRouterItem | boolean;
 }

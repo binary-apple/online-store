@@ -6,6 +6,8 @@ import API from './api/api';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import './style.scss';
+
 const app = new App();
 const store = new Store();
 const router = new Router();

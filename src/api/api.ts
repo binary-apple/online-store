@@ -24,7 +24,7 @@ class API implements IAPI {
             e,
         };
 
-        const products = await request.get(apiProps);
+        const products = await request.get(context, apiProps);
 
         return products;
     }
