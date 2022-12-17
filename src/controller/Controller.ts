@@ -7,19 +7,15 @@ import { IRouter, IRouterItem } from '../router/types/IRouter';
 import { IRenderComponent } from '../components/pages/types/IRenderComponent';
 import { IInstanceContext } from '../utils/context/types/IContext';
 
-const layout = new Layout();
-const mainPage = new MainPage();
-const cart = new Cart();
-const error404 = new Error404();
-const product = new Product();
-
 class Controller {
     async init(context: IInstanceContext) {
         const { $router, root } = context;
 
-        const templateSlot = this.getTemplateSlot(($router as IRouter).currentRouter);
+        const templateSlot = this.getTemplateSlot(($router as IRouter).currentRouter, context);
 
-        const template = await layout.init(context, templateSlot);
+        const layout = new Layout(context);
+
+        const template = await layout.init(templateSlot);
 
         this.renderPage(root, template);
     }
@@ -32,8 +28,13 @@ class Controller {
         dispatchEvent(event);
     }
 
-    getTemplateSlot(router: IRouterItem) {
+    getTemplateSlot(router: IRouterItem, context: IInstanceContext) {
         let slot;
+
+        const mainPage = new MainPage(context);
+        const cart = new Cart(context);
+        const error404 = new Error404(context);
+        const product = new Product(context);
 
         if (router.name === 'main') {
             slot = mainPage;

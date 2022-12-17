@@ -10,7 +10,7 @@ const controller = new Controller();
 
 class Router implements IRouter {
     name = '$router';
-    routers = [] as Array<IRouterItem>;
+    routers = [] as Array<IRouterItem> | undefined;
     context = {} as IInstanceContext;
     currentRouter = {} as IRouterItem;
 

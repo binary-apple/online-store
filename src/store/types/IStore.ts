@@ -6,9 +6,10 @@ export interface IStore {
     init(context: IInstanceContext): void;
     required: Array<string>;
     getRouters(): Array<IRouterItem>;
-    data: IStoreData;
+    data: Partial<IStoreData>;
 }
 
 export interface IStoreData {
     routers: Array<IRouterItem>;
+    categories: Array<string>;
 }
