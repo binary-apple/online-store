@@ -1,5 +1,5 @@
-@import './colors';
-@import './typography';
+@import '../../../assets/scss/partials/colors';
+@import '../../../assets/scss/partials/typography';
 
 .header {
     position: sticky;
@@ -13,16 +13,16 @@
 .logo {
     height: 32px;
     width: 166px;
-    background: url('./assets/img/logo.svg') no-repeat;
+    background: url('../../../assets/img/logo.svg') no-repeat;
 }
 
 .cart {
     position: relative;
     height: 32px;
     width: 32px;
-    background: url('./assets/img/shopping-cart.svg') no-repeat;
+    background: url('../../../assets/img/shopping-cart.svg') no-repeat;
     background-size: 100%;
-    margin-left: 20px;
+    // margin-left: 20px;
 }
 
 .purchase-cnt {
@@ -41,6 +41,7 @@
 
 .total {
     color: $onSurface;
+    margin-right: 20px;
 }
 
 .total-amount {

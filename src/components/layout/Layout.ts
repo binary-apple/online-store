@@ -18,7 +18,7 @@ class Layout extends Component {
 
     async render(component: IRenderComponent | undefined, header: IRenderComponent, footer: IRenderComponent) {
         return `
-            <div class="container-fluid">
+            <div class="w-100">
                 ${await header.init()}
                 <main class="main">
                     ${await component?.init()}
