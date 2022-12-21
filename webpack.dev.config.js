@@ -7,6 +7,8 @@ module.exports = {
         static: {
             directory: path.join(__dirname, './dist'),
         },
-        historyApiFallback: true,
+        historyApiFallback: {
+            disableDotRule: true,
+        },
     },
 };
