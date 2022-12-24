@@ -23,7 +23,6 @@
     "homepage": "https://github.com/binary-apple/online-store#readme",
     "devDependencies": {
         "@types/jest": "^29.2.4",
-        "@types/node-fetch": "^2.6.2",
         "@typescript-eslint/eslint-plugin": "^5.46.0",
         "@typescript-eslint/parser": "^5.46.0",
         "bootstrap": "^5.2.3",
@@ -53,6 +52,6 @@
         "webpack-merge": "^5.8.0"
     },
     "dependencies": {
-        "node-fetch": "^2.6.7"
+        "vanilla-router": "^1.2.8"
     }
 }
