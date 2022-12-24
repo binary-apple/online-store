@@ -1,4 +1,4 @@
-import { Subscriber, Publisher } from "./observer_interface";
+import { Subscriber, Publisher } from './types/observer_interface';
 
 export class Store implements Publisher {
     private subscribers: Array<Subscriber> = [];
@@ -19,6 +19,6 @@ export class Store implements Publisher {
     }
 
     notify() {
-        this.subscribers.forEach((el) => el.update(this));        
+        this.subscribers.forEach((el) => el.update(this));
     }
 }

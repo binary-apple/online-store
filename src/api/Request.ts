@@ -1,4 +1,4 @@
-import { IRequestSettings } from './types/IRequest';
+import { IRequestSettings } from './types/i-request';
 
 class Request {
     async make(method: string, url: string, body?: BodyInit) {

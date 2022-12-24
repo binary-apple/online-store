@@ -1,15 +1,15 @@
-import Controller from '../Controller';
+import Controller from '../controller';
 import Router from 'vanilla-router';
 
-class ProductController extends Controller {
+class CartController extends Controller {
     constructor(router: Router) {
         super(router);
     }
 
     init() {
         /* eslint-disable-next-line */
-        console.log('product');
+        console.log('cart');
     }
 }
 
-export default ProductController;
+export default CartController;

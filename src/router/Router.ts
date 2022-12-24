@@ -1,10 +1,10 @@
 import Router from 'vanilla-router';
 import Routers from './routers';
-import CartController from '../controller/cart/CartController';
-import ProductsController from '../controller/products/ProductsController';
-import ProductController from '../controller/product/ProductController';
-import ErrorController from '../controller/error/ErrorController';
-import Utils from '../utils/Utils';
+import CartController from '../controller/cart/cart-controller';
+import ProductsController from '../controller/products/products-controller';
+import ProductController from '../controller/product/product-controller';
+import ErrorController from '../controller/error/error-controller';
+import Utils from '../utils/utils';
 
 const utils = new Utils();
 

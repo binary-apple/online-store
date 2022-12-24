@@ -1,4 +1,4 @@
-import Controller from '../Controller';
+import Controller from '../controller';
 import Router from 'vanilla-router';
 
 class ProductsController extends Controller {
