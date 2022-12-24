@@ -1,6 +1,6 @@
 import router from './router/router';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
-import './style.scss';
+import './assets/scss/style.scss';
 
 router();
