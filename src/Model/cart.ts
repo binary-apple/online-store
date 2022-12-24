@@ -1,15 +1,18 @@
+import { Store } from "./store";
+
 interface CartItem {
     productId: number;
     count: number;
 }
 
-export class Cart {
+export class Cart extends Store {
     public productsInCart: Array<CartItem>;
     public allPromocodes: ReadonlyMap<string, number>;
     public promoList: Array<string>;
     public totalDisc: number;
 
     constructor() {
+        super();
         this.productsInCart = [];
         this.allPromocodes = new Map<string, number>([
             ['EPM', 0.1],
@@ -33,11 +36,15 @@ export class Cart {
 
     addProductToCart(productId: number, count = 1) {
         this.productsInCart.push({ productId: productId, count: count });
+        this.notify();
     }
     
     removeProductFromCart(productId: number) {
         const productIdInCart = this.productsInCart.findIndex((el: CartItem) => (el.productId === productId));
-        if (productIdInCart >= 0) { this.productsInCart.splice(productIdInCart, 1); }
+        if (productIdInCart >= 0) {
+            this.productsInCart.splice(productIdInCart, 1);
+            this.notify();
+        }
         else { throw new Error('You are trying to remove from the cart a product that is not in the cart'); }
     }
 
@@ -45,6 +52,7 @@ export class Cart {
         const productIdInCart = this.productsInCart.findIndex((el: CartItem) => (el.productId === productId));
         if (productIdInCart >= 0) {
             this.productsInCart[productIdInCart].count += 1;
+            this.notify();
         } else {
             this.addProductToCart(productId, 1);
         }
@@ -57,6 +65,7 @@ export class Cart {
                 this.removeProductFromCart(productId);
             } else {
                 this.productsInCart[productIdInCart].count -= 1;
+                this.notify();
             }
         } else {
             throw new Error('You are trying to remove from the cart a product that is not in the cart');
@@ -68,6 +77,7 @@ export class Cart {
         if (disc && this.promoList.indexOf(promo) < 0) {
             this.promoList.push(promo);
             this.totalDisc += disc;
+            this.notify();
         }
     }
 
@@ -77,6 +87,7 @@ export class Cart {
         if (disc && promoId >= 0) {
             this.promoList.splice(promoId, 1);
             this.totalDisc -= disc;
+            this.notify();
         }
     }
 }
