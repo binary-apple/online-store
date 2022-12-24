@@ -1,9 +1,5 @@
-import { Store } from "./store";
-
-interface CartItem {
-    productId: number;
-    count: number;
-}
+import { Store } from './store';
+import { CartItem } from './types/cart';
 
 export class Cart extends Store {
     public productsInCart: Array<CartItem>;
@@ -16,14 +12,17 @@ export class Cart extends Store {
         this.productsInCart = [];
         this.allPromocodes = new Map<string, number>([
             ['EPM', 0.1],
-            ['RS', 0.1]
+            ['RS', 0.1],
         ]);
         this.promoList = [];
         this.totalDisc = 0;
     }
 
     getTotalPrice(getPriceById: (id: number) => number) {
-        return this.productsInCart.reduce((acc: number, cur: CartItem) => acc + getPriceById(cur.productId) * cur.count, 0);
+        return this.productsInCart.reduce(
+            (acc: number, cur: CartItem) => acc + getPriceById(cur.productId) * cur.count,
+            0
+        );
     }
 
     getDiscountPrice(getPriceById: (id: number) => number) {
@@ -38,18 +37,19 @@ export class Cart extends Store {
         this.productsInCart.push({ productId: productId, count: count });
         this.notify();
     }
-    
+
     removeProductFromCart(productId: number) {
-        const productIdInCart = this.productsInCart.findIndex((el: CartItem) => (el.productId === productId));
+        const productIdInCart = this.productsInCart.findIndex((el: CartItem) => el.productId === productId);
         if (productIdInCart >= 0) {
             this.productsInCart.splice(productIdInCart, 1);
             this.notify();
+        } else {
+            throw new Error('You are trying to remove from the cart a product that is not in the cart');
         }
-        else { throw new Error('You are trying to remove from the cart a product that is not in the cart'); }
     }
 
     increaseProductCount(productId: number) {
-        const productIdInCart = this.productsInCart.findIndex((el: CartItem) => (el.productId === productId));
+        const productIdInCart = this.productsInCart.findIndex((el: CartItem) => el.productId === productId);
         if (productIdInCart >= 0) {
             this.productsInCart[productIdInCart].count += 1;
             this.notify();
@@ -59,7 +59,7 @@ export class Cart extends Store {
     }
 
     decreaseProductCount(productId: number) {
-        const productIdInCart = this.productsInCart.findIndex((el: CartItem) => (el.productId === productId));
+        const productIdInCart = this.productsInCart.findIndex((el: CartItem) => el.productId === productId);
         if (productIdInCart >= 0) {
             if (this.productsInCart[productIdInCart].count === 1) {
                 this.removeProductFromCart(productId);

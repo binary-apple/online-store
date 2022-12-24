@@ -1,8 +1,8 @@
-import { IRequestSettings } from './types/i-request';
+import { RequestSettings } from './types/request';
 
 class Request {
     async make(method: string, url: string, body?: BodyInit) {
-        const settings: IRequestSettings = {
+        const settings: RequestSettings = {
             method,
         };
 

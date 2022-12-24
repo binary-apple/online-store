@@ -1,4 +1,4 @@
-export interface IRequestSettings {
+export interface RequestSettings {
     method: string;
     body?: BodyInit;
 }
