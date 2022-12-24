@@ -3,9 +3,8 @@
     font-family: 'Rubik';
     font-style: normal;
     font-weight: 400;
-    src: local(''),
-    url('../../fonts/rubik-v23-latin_cyrillic-regular.woff2') format('woff2'),
-    url('../../fonts/rubik-v23-latin_cyrillic-regular.woff') format('woff'),
+    src: local(''), url('../../fonts/rubik-v23-latin_cyrillic-regular.woff2') format('woff2'),
+        url('../../fonts/rubik-v23-latin_cyrillic-regular.woff') format('woff');
 }
 
 /* rubik-700 - latin_cyrillic */
@@ -13,7 +12,6 @@
     font-family: 'Rubik';
     font-style: normal;
     font-weight: 700;
-    src: local(''),
-    url('../../fonts/rubik-v23-latin_cyrillic-700.woff2') format('woff2'),
-    url('../../fonts/rubik-v23-latin_cyrillic-700.woff') format('woff'),
+    src: local(''), url('../../fonts/rubik-v23-latin_cyrillic-700.woff2') format('woff2'),
+        url('../../fonts/rubik-v23-latin_cyrillic-700.woff') format('woff');
 }

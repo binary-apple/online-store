@@ -1,39 +1,41 @@
 import Router from 'vanilla-router';
-import Utils from '../utils/Utils';
 import Routers from './routers';
-import Controller from '../controller/Controller';
+import CartController from '../controller/cart/CartController';
+import ProductsController from '../controller/products/ProductsController';
+import ProductController from '../controller/product/ProductController';
+import ErrorController from '../controller/error/ErrorController';
+import Utils from '../utils/Utils';
 
 const utils = new Utils();
-const controller = new Controller();
-
-const pathname = utils.getPathName(window.location.href);
+const cartController = new CartController();
+const productsController = new ProductsController();
+const productController = new ProductController();
+const errorController = new ErrorController();
 
 const router = new Router({
     mode: 'history',
     page404: () => {
-        controller.init();
+        errorController.init();
     },
 });
 
-router.add(Routers.MAIN, () => {
-    controller.init('main');
-});
-
 router.add(Routers.PRODUCTS, () => {
-    controller.init('products');
+    productsController.init();
 });
 
 router.add(Routers.PRODUCT, () => {
-    controller.init('product');
+    productController.init();
 });
 
 router.add(Routers.CART, () => {
-    controller.init('cart');
+    cartController.init();
 });
 
 router.addUriListener();
 
 function activateRouter(router: Router) {
+    const pathname = utils.getPathName(window.location.href);
+
     router.navigateTo(pathname);
 }
 
