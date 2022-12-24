@@ -1,4 +1,11 @@
-class ProductController {
+import Controller from '../Controller';
+import Router from 'vanilla-router';
+
+class ProductController extends Controller {
+    constructor(router: Router) {
+        super(router);
+    }
+
     init() {
         /* eslint-disable-next-line */
         console.log('product');

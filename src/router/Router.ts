@@ -7,27 +7,31 @@ import ErrorController from '../controller/error/ErrorController';
 import Utils from '../utils/Utils';
 
 const utils = new Utils();
-const cartController = new CartController();
-const productsController = new ProductsController();
-const productController = new ProductController();
-const errorController = new ErrorController();
 
 const router = new Router({
     mode: 'history',
     page404: () => {
+        const errorController = new ErrorController(router);
+
         errorController.init();
     },
 });
 
 router.add(Routers.PRODUCTS, () => {
+    const productsController = new ProductsController(router);
+
     productsController.init();
 });
 
 router.add(Routers.PRODUCT, () => {
+    const productController = new ProductController(router);
+
     productController.init();
 });
 
 router.add(Routers.CART, () => {
+    const cartController = new CartController(router);
+
     cartController.init();
 });
 
