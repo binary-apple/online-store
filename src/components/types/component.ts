@@ -12,14 +12,10 @@ function isSubscriber(component: ComponentType) {
 
 export abstract class Component implements IComponent {
     protected container: HTMLElement;
-    protected containerTag = 'div';
-    protected className: null | string = null;
 
-    public constructor() {
-        this.container = document.createElement(this.containerTag);
-        if (this.className) {
-            this.container.classList.add(this.className);
-        }
+    public constructor(containerTag: string = 'div', ...className: Array<string>) {
+        this.container = document.createElement(containerTag);
+        this.container.classList.add(...className);
     }
 
     protected observer(...publishers: Array<Publisher>): void

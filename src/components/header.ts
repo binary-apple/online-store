@@ -1,9 +1,13 @@
 import { Component } from "./types/component";
 
 export class Header extends Component{
-    protected template(): HTMLElement {
-        const header = document.createElement('div');
-        header.innerHTML = `Header`;
+    constructor() {
+        super('header');
+    }
+
+    protected template(): DocumentFragment {
+        const header = new DocumentFragment();
+        header.append(`Header`);
         return header;
     }
 }
