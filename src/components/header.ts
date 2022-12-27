@@ -2,7 +2,7 @@ import { Component } from "./types/component";
 
 export class Header extends Component{
     constructor() {
-        super('header');
+        super({containerTag: 'header'});
     }
 
     protected template(): DocumentFragment {

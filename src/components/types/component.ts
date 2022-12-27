@@ -7,23 +7,29 @@ interface IComponent {
 export type ComponentType = IComponent | (IComponent & Subscriber);
 
 function isSubscriber(component: ComponentType) {
-    return (<Subscriber>component).update !== undefined;
+    return 'update' in component;
+}
+
+interface ComponentElementParams {
+    containerTag: string;
+    className?: Array<string>;
 }
 
 export abstract class Component implements IComponent {
     protected container: HTMLElement;
 
-    public constructor(containerTag: string = 'div', ...className: Array<string>) {
-        this.container = document.createElement(containerTag);
-        this.container.classList.add(...className);
+    public constructor(componentElementParams: ComponentElementParams = { containerTag: 'div' }) {
+        this.container = document.createElement(componentElementParams.containerTag);
+        if (componentElementParams.className) {
+            this.container.classList.add(...componentElementParams.className);
+        }
     }
 
-    protected observer(...publishers: Array<Publisher>): void
+    protected subscribe(...publishers: Array<Publisher>): void
     {
         if (publishers && publishers.length) {
-            return;
+            publishers.forEach((store) => isSubscriber(this) && store && store.attach(this as unknown as Subscriber));
         }
-        publishers.forEach((store) => isSubscriber(this) && store && store.attach(this as unknown as Subscriber));
     }
 
     public render():HTMLElement{
