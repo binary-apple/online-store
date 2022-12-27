@@ -6,8 +6,8 @@ export class Footer extends Component{
     }
 
     protected template(): DocumentFragment {
-        const footer = new DocumentFragment();
-        footer.append(`Footer`);
-        return footer;
+        const temp = document.createElement('template');
+        temp.innerHTML = `<div>Footer</div>`;
+        return temp.content;
     }
 }

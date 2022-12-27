@@ -32,10 +32,10 @@ export abstract class Component implements IComponent {
         }
     }
 
-    public render():HTMLElement{
+    public render():HTMLElement {
         this.container.append(this.template());
         return this.container;
     }
 
-    protected abstract template(): HTMLElement|DocumentFragment;
+    protected abstract template(): HTMLElement | DocumentFragment;
 }
