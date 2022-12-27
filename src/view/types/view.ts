@@ -1,0 +1,3 @@
+interface View {
+    init(root: HTMLElement): void;
+}

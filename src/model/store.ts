@@ -1,4 +1,4 @@
-import { Subscriber, Publisher } from './types/observer-interface';
+import { Subscriber, Publisher } from '../utils/observer-interface';
 
 export class Store implements Publisher {
     private subscribers: Array<Subscriber> = [];

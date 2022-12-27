@@ -1,0 +1,13 @@
+import { Component } from "./types/component";
+
+export class Header extends Component{
+    constructor() {
+        super({containerTag: 'header'});
+    }
+
+    protected template(): DocumentFragment {
+        const header = new DocumentFragment();
+        header.append(`Header`);
+        return header;
+    }
+}
