@@ -23,12 +23,6 @@ export class Footer extends Component{
                 <div class="col flex-grow-0">
                     <a href="https://rs.school/js/" class="rsschool d-block"></a>
                 </div>
-                <div class="col flex-grow-0">
-                    <div>
-                        <div class="designed text-nowrap lh-sm">Designed by</div>
-                        <a href="https://zasovskiy.ru/dizajn-prilozheniya-severyanochka/" class="zasovskiy d-block"></a>
-                    </div>
-                </div>
             </div>
         </div>
         `;

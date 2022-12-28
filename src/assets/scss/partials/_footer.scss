@@ -27,16 +27,3 @@
         color: $onSurface;
     }
 }
-
-.designed::before {
-    content: '©';
-}
-
-.zasovskiy {
-    height: 10px;
-    width: 100px;
-    background: url('../img/logo-zasovskiy.svg') no-repeat;
-    background-size: 100%;
-    margin-top: 7px;
-    margin-left: 2px;
-}
