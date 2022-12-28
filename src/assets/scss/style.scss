@@ -1,6 +1,11 @@
 @import './partials/settings';
 @import './partials/colors';
+@import './partials/buttons';
 
 body {
     background: $background;
+}
+
+button {
+    @include button;
 }
