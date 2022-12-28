@@ -25,6 +25,11 @@ export class Cart extends Store {
         );
     }
 
+    getPriceById(id: number) {
+        // TODO: implement
+        return 100 * id;
+    }
+
     getDiscountPrice(getPriceById: (id: number) => number) {
         return this.getTotalPrice(getPriceById) * (1 - this.totalDisc);
     }

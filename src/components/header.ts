@@ -1,8 +1,13 @@
+import { Cart } from "../model/cart";
+import { Publisher, Subscriber } from "../utils/observer-interface";
 import { Component } from "./types/component";
 
-export class Header extends Component{
-    constructor() {
+export class Header extends Component implements Subscriber {
+    private readonly cart: Cart;
+    constructor(cart: Cart) {
         super({containerTag: 'header', className: 'header w-100 d-flex align-items-center sticky-top mb-2'.split(' ')});
+        this.cart = cart;
+        this.subscribe(this.cart);
     }
 
     protected template(): DocumentFragment {
@@ -27,5 +32,22 @@ export class Header extends Component{
         </div>
         `;
         return temp.content;
+    }
+
+    update(): void {
+        this.setProdsCount(this.container.querySelector('.purchase-cnt'));
+        this.setTotalSum(this.container.querySelector('.total-amount'));
+    }
+
+    private setProdsCount(element: HTMLElement | null) {
+        if (element) {
+            element.innerHTML = `${this.cart.getTotalCount()}`;
+        }
+    }
+
+    private setTotalSum(element: HTMLElement | null) {
+        if (element) {
+            element.innerHTML = `${this.cart.getTotalPrice(this.cart.getPriceById)}`;
+        }
     }
 }
