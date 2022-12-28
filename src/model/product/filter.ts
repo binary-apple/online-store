@@ -16,18 +16,22 @@ class Filter extends Store {
 
     byCategory(category: string) {
         this.products = this.products.filter((el) => el.category === category);
+        this.notify();
     }
 
     byBrand(brand: string) {
         this.products = this.products.filter((el) => el.brand === brand);
+        this.notify();
     }
 
     byPrice(priceFrom: number, priceTo: number) {
         this.products = this.products.filter((el) => el.price >= priceFrom && el.price <= priceTo);
+        this.notify();
     }
 
     byStock(stockFrom: number, stockTo: number) {
         this.products = this.products.filter((el) => el.stock >= stockFrom && el.stock <= stockTo);
+        this.notify();
     }
 }
 
