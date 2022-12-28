@@ -14,12 +14,12 @@ export class Header extends Component{
                     <a href="/" class="logo d-block"></a>
                 </div>
                 <div class="col flex-grow-0">
-                    <div class="shopping-cart d-flex align-items-center">
+                    <div class="shopping-cart d-flex gap-2 align-items-center">
                         <div class="total text-nowrap">
                             Total: <span class="total-amount d-inline-block">0</span>
                         </div>
-                        <a class="cart d-block" href="/cart">
-                            <div class="purchase-cnt">0</div>
+                        <a class="cart d-block position-relative" href="/cart">
+                            <div class="purchase-cnt position-absolute lh-1 text-center">0</div>
                         </a>
                     </div>
                 </div>

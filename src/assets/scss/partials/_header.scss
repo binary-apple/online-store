@@ -5,7 +5,6 @@
     min-height: 72px;
     background-color: $surface;
     box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
-    // margin-bottom: 10px;
 }
 
 .logo {
@@ -15,7 +14,6 @@
 }
 
 .cart {
-    position: relative;
     height: 32px;
     width: 32px;
     background: url('../img/shopping-cart.svg') no-repeat;
@@ -23,7 +21,6 @@
 }
 
 .purchase-cnt {
-    position: absolute;
     background-color: $primary;
     padding: 2px;
     color: $onPrimary;
@@ -31,18 +28,11 @@
     border-radius: 7px;
     top: -4px;
     left: 19px;
-    line-height: 1;
-    text-align: center;
     font-size: 12px;
 }
 
-.total {
-    color: $onSurface;
-    margin-right: 20px;
-}
-
 .total-amount {
-    width: 70px;
+    min-width: 70px;
     &::before {
         content: '€';
     }
