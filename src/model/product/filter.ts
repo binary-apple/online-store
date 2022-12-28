@@ -1,13 +1,17 @@
-import { Store } from './store';
-import { Product } from './types/product';
+import { Store } from '../store';
+import { Product } from '../types/product';
 
 class Filter extends Store {
-    products = [] as Array<Product>
+    products = [] as Array<Product>;
 
     constructor(products: Array<Product>) {
         super();
-    
+
         this.products = products;
+    }
+
+    get getProducts() {
+        return this.products;
     }
 
     byCategory(category: string) {
@@ -27,4 +31,4 @@ class Filter extends Store {
     }
 }
 
-export default  Filter;
+export default Filter;
