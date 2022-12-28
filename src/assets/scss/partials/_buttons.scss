@@ -1,7 +1,7 @@
 @import './colors';
 @import './typography';
 
-@mixin button {
+button {
     width: 193px;
     height: 60px;
     background: $primary;
