@@ -3,11 +3,13 @@ import { Product } from '../types/product';
 
 class Filter extends Store {
     products = [] as Array<Product>;
+    inititalProducts = [] as Array<Product>;
 
     constructor(products: Array<Product>) {
         super();
 
         this.products = products;
+        this.inititalProducts = products;
     }
 
     get getProducts() {
@@ -31,6 +33,11 @@ class Filter extends Store {
 
     byStock(stockFrom: number, stockTo: number) {
         this.products = this.products.filter((el) => el.stock >= stockFrom && el.stock <= stockTo);
+        this.notify();
+    }
+
+    reset() {
+        this.products = this.inititalProducts;
         this.notify();
     }
 }
