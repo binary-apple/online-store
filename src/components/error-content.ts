@@ -12,7 +12,6 @@ export class Error extends Component{
             <div class="d-flex flex-column align-items-center py-5">
                 <div class="e404">404</div>
                 <div class="e404-text">Oooops... Page not found</div>
-                <button onclick="document.location='/'">Go home</button>
             </div>
         </div>
         `;
