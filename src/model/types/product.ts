@@ -7,4 +7,5 @@ export interface Product {
     discountPercentage: number;
     description: string;
     title: string;
+    [index: string]: number | string;
 }

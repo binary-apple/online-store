@@ -1,7 +1,7 @@
 import Controller from '../controller';
 import Router from 'vanilla-router';
 
-class ProductsController extends Controller {
+class MainController extends Controller {
     constructor(router: Router) {
         super(router);
     }
@@ -12,4 +12,4 @@ class ProductsController extends Controller {
     }
 }
 
-export default ProductsController;
+export default MainController;
