@@ -1,25 +1,43 @@
 import { IFilter } from '../types/filter';
+import { Store } from '../store';
 
-const filterObj: IFilter = {
-    sort: {
-        order: '',
-        value: '',
-    },
-    categories: [],
-    brands: [],
-    price: {
-        from: 0,
-        to: 0,
-        max: 0,
-        min: 0,
-    },
-    stock: {
-        from: 0,
-        to: 0,
-        max: 0,
-        min: 0,
-    },
-    search: '',
-};
+class Filter extends Store {
+    private filter: IFilter = {
+        sort: {
+            order: '',
+            value: '',
+        },
+        categories: [],
+        brands: [],
+        price: {
+            from: 0,
+            to: 0,
+            max: 0,
+            min: 0,
+        },
+        stock: {
+            from: 0,
+            to: 0,
+            max: 0,
+            min: 0,
+        },
+        search: '',
+    };
 
-export default filterObj;
+    constructor(filter: IFilter) {
+        super();
+
+        this.filter = Object.assign(this.filter, filter);
+    }
+
+    public get() {
+        return this.filter;
+    }
+
+    public setFilter(filter: IFilter) {
+        this.filter = Object.assign(this.filter, filter);
+        this.notify();
+    }
+}
+
+export default Filter;

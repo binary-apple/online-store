@@ -1,12 +1,11 @@
 import { IFilter, FilterMetric } from '../types/filter';
 import { Product } from '../types/product';
 import { Store } from '../store';
-import filterObj from './filter';
 
-class CollectionProducts extends Store {
+class Products extends Store {
     initialItems: Array<Product>;
     filtred: Array<Product>;
-    filterItem: IFilter = filterObj;
+    filterItem: IFilter;
 
     constructor(items: Array<Product>) {
         super();
@@ -14,14 +13,11 @@ class CollectionProducts extends Store {
         this.initialItems = items;
 
         this.filter = this.filter;
+        this.filterItem = {} as IFilter;
     }
 
     public get() {
         return this.filtred;
-    }
-
-    public reset() {
-        this.filtred = this.initialItems;
     }
 
     public getMetrics() {
@@ -73,8 +69,6 @@ class CollectionProducts extends Store {
                 })
                 .sort(sortItems);
 
-            this.notify();
-
             return;
         }
 
@@ -124,8 +118,6 @@ class CollectionProducts extends Store {
                     : null;
             })
             .sort(sortItems);
-
-        this.notify();
     }
 
     private sortItems(filter: IFilter, a: Product, b: Product) {
@@ -211,4 +203,4 @@ class CollectionProducts extends Store {
     }
 }
 
-export default CollectionProducts;
+export default Products;
