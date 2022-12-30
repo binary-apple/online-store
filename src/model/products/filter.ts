@@ -1,4 +1,6 @@
-const filterObj = {
+import { IFilter } from '../types/filter';
+
+const filterObj: IFilter = {
     sort: {
         order: '',
         value: '',

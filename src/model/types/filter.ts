@@ -8,7 +8,7 @@ export interface IFilter {
     price: {
         from: number;
         to: number;
-        man: number;
+        max: number;
         min: number;
     };
     stock: {
@@ -18,4 +18,11 @@ export interface IFilter {
         min: number;
     };
     search: string;
+}
+
+export interface FilterMetric {
+    [index: string]: {
+        available: number;
+        total: number;
+    };
 }

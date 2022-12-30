@@ -1,10 +1,12 @@
-import { IFilter } from '../types/filter';
+import { IFilter, FilterMetric } from '../types/filter';
 import { Product } from '../types/product';
 import { Store } from '../store';
+import filterObj from './filter';
 
 class CollectionProducts extends Store {
-    filtred: Array<Product>;
     initialItems: Array<Product>;
+    filtred: Array<Product>;
+    filterItem: IFilter = filterObj;
 
     constructor(items: Array<Product>) {
         super();
@@ -18,12 +20,58 @@ class CollectionProducts extends Store {
         return this.filtred;
     }
 
+    public reset() {
+        this.filtred = this.initialItems;
+    }
+
+    public getMetrics() {
+        const cats = [...new Set(this.initialItems.map((item) => item.category.toLowerCase().trim()))];
+        const brs = [...new Set(this.initialItems.map((item) => item.brand.toLowerCase().trim()))];
+
+        const categories: FilterMetric = {};
+
+        const brands: FilterMetric = {};
+
+        cats.forEach((item) => {
+            categories[item] = {
+                available: this.filtred.filter((el) => el.category.toLowerCase().trim() === item.toLowerCase().trim())
+                    .length,
+                total: this.initialItems.filter((el) => el.category.toLowerCase().trim() === item.toLowerCase().trim())
+                    .length,
+            };
+        });
+
+        brs.forEach((item) => {
+            brands[item] = {
+                available: this.filtred.filter((el) => el.brand.toLowerCase().trim() === item.toLowerCase().trim())
+                    .length,
+                total: this.initialItems.filter((el) => el.brand.toLowerCase().trim() === item.toLowerCase().trim())
+                    .length,
+            };
+        });
+
+        return {
+            categories,
+            brands,
+        };
+    }
+
     public filter(filter: IFilter) {
+        this.filterItem = filter;
         const isEmpty = this.emptyCheck(filter);
         const sortItems = this.sortItems.bind(this, filter);
 
         if (isEmpty) {
-            this.filtred = this.initialItems.sort(sortItems);
+            this.filtred = this.initialItems
+                .filter((el) => {
+                    return (
+                        filter.price.to >= el.price &&
+                        filter.price.from <= el.price &&
+                        filter.stock.from <= el.stock &&
+                        filter.stock.to >= el.stock
+                    );
+                })
+                .sort(sortItems);
 
             this.notify();
 
