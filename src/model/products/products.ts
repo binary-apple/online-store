@@ -14,11 +14,11 @@ class CollectionProducts extends Store {
         this.filter = this.filter;
     }
 
-    get() {
+    public get() {
         return this.filtred;
     }
 
-    filter(filter: IFilter) {
+    public filter(filter: IFilter) {
         const isEmpty = this.emptyCheck(filter);
         const sortItems = this.sortItems.bind(this, filter);
 
@@ -66,13 +66,13 @@ class CollectionProducts extends Store {
                     : brandsOnly
                     ? searchBrands && searchPrice && searchStock
                     : searchAndCategories
-                    ? searchBySearchAndCategories
+                    ? searchBySearchAndCategories && searchPrice && searchStock
                     : seachByAll
-                    ? searchByAllParams
+                    ? searchByAllParams && searchPrice && searchStock
                     : searchAndBrand
-                    ? searchAndBrandFilter
+                    ? searchAndBrandFilter && searchPrice && searchStock
                     : categoriesAndBrands
-                    ? categoriesAndBrandsFilter
+                    ? categoriesAndBrandsFilter && searchPrice && searchStock
                     : null;
             })
             .sort(sortItems);
@@ -80,7 +80,7 @@ class CollectionProducts extends Store {
         this.notify();
     }
 
-    sortItems(filter: IFilter, a: Product, b: Product) {
+    private sortItems(filter: IFilter, a: Product, b: Product) {
         const { value, order } = filter.sort;
 
         let sorting;
@@ -94,20 +94,20 @@ class CollectionProducts extends Store {
         return sorting;
     }
 
-    categoriesAndBrandsFilter(filter: IFilter, el: Product) {
+    private categoriesAndBrandsFilter(filter: IFilter, el: Product) {
         const category = el.category.toLowerCase().trim();
         const brand = el.brand.toLowerCase().trim();
 
         return filter.categories.includes(category) && filter.brands.includes(brand);
     }
 
-    searchAndBrand(filter: IFilter, el: Product) {
+    private searchAndBrand(filter: IFilter, el: Product) {
         const brand = el.brand.toLowerCase().trim();
 
         return this.searchItems(el, filter.search) && filter.brands.includes(brand);
     }
 
-    byAllParams(filter: IFilter, el: Product) {
+    private byAllParams(filter: IFilter, el: Product) {
         const category = el.category.toLowerCase().trim();
         const brand = el.brand.toLowerCase().trim();
 
@@ -116,34 +116,34 @@ class CollectionProducts extends Store {
         );
     }
 
-    bySearchAndCategories(filter: IFilter, el: Product) {
+    private bySearchAndCategories(filter: IFilter, el: Product) {
         const title = el.title.toLowerCase().trim();
         const category = el.category.toLowerCase().trim();
 
         return this.searchItems(el, filter.search) && filter.categories.includes(category);
     }
 
-    emptyCheck(filter: IFilter) {
+    private emptyCheck(filter: IFilter) {
         const isEmpty = !filter.search && !filter.categories.length && !filter.brands.length;
 
         return isEmpty;
     }
 
-    initializeFilter(filter: IFilter) {
+    private initializeFilter(filter: IFilter) {
         filter.categories = filter.categories.map((item) => item.toLowerCase().trim());
         filter.brands = filter.brands.map((item) => item.toLowerCase().trim());
         filter.search = filter.search.toLowerCase().trim();
     }
 
-    searchByPrice(filter: IFilter, el: Product) {
+    private searchByPrice(filter: IFilter, el: Product) {
         return filter.price.to >= el.price && filter.price.from <= el.price;
     }
 
-    searchByStock(filter: IFilter, el: Product) {
+    private searchByStock(filter: IFilter, el: Product) {
         return filter.stock.to >= el.stock && filter.stock.from <= el.stock;
     }
 
-    searchItems(el: Product, value: string) {
+    private searchItems(el: Product, value: string) {
         if (!value) {
             return;
         }
@@ -160,14 +160,6 @@ class CollectionProducts extends Store {
             : description.includes(value)
             ? el
             : brand.includes(value);
-    }
-
-    filterItemsCategory(categories: Array<string>, initial: Array<Product>) {
-        this.filtred = initial.filter((el) => categories.includes(el.category));
-    }
-
-    filterItemsBrand(brands: Array<string>, initial: Array<Product>) {
-        this.filtred = initial.filter((el) => brands.includes(el.brand));
     }
 }
 
