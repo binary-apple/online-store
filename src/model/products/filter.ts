@@ -24,7 +24,7 @@ class Filter extends Store {
         search: '',
     };
 
-    constructor(filter: IFilter) {
+    constructor(filter: Partial<IFilter>) {
         super();
 
         this.filter = Object.assign(this.filter, filter);
@@ -34,7 +34,7 @@ class Filter extends Store {
         return this.filter;
     }
 
-    public setFilter(filter: IFilter) {
+    public setFilter(filter: Partial<IFilter>) {
         this.filter = Object.assign(this.filter, filter);
         this.notify();
     }
