@@ -17,7 +17,7 @@ const router = new Router({
     },
 });
 
-router.add(Routers.PRODUCTS, () => {
+router.add(Routers.MAIN, () => {
     const mainController = new MainController(router);
 
     mainController.init();
