@@ -24,7 +24,7 @@ class SelectAllProducts extends Component {
     private getSelectAllProducts() {
         const selectAll = new Checkbox({
             id: 'select-all',
-            text: 'Выделить все',
+            text: 'Select all',
             value: 'select-all',
         });
 
@@ -35,7 +35,7 @@ class SelectAllProducts extends Component {
                 </div>
                 <div class="d-flex">
                     <button class="cart-remove-selected__btn" type="button">
-                        Удалить выбранные
+                        Remove selected
                     </button>
                 </div>
             </div>

@@ -43,7 +43,7 @@ class CartContent extends Component {
     templateCart() {
         return `
             <div class="row d-flex cart-content__title">
-                <h1 class="col-3 cart-title__text">Корзина</h1>
+                <h1 class="col-2 cart-title__text">Cart</h1>
                 ${this.cartCounter()}
             </div>
             <div class="row col-9 cart-content__remove-selected d-flex justify-content-between">

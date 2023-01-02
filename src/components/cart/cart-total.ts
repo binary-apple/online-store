@@ -34,17 +34,17 @@ class CartTotal extends Component {
                         </ul>
                     </li>
                     <li class="cart-board__item">
-                        <input class="cart-total__promo" placeholder="Введите промокод" type="text">
+                        <input class="cart-total__promo" placeholder="Enter promocode" type="text">
                         <div class="cart-total__promo-note">
                             ${this.getPromocodesTemplate()}                       
                         </div>
-                        <p class="cart-total__example">Тестовые промокоды: <span class="cart-total__example-promo">EPM, RS</span></p>
+                        <p class="cart-total__example">Test promocodes: <span class="cart-total__example-promo">EPM, RS</span></p>
                     </li>
                     <li class="cart-board__item price p d-flex justify-content-between align-items-center">
                         ${this.getTotalPrice()}
                     </li>
                     <li class="cart-board__item">
-                        <button type="button" class="cart-board__btn w-100">Оформить заказ</button>
+                        <button type="button" class="cart-board__btn w-100">Make order</button>
                     </li>
                 </ul>
             </div>
@@ -55,20 +55,22 @@ class CartTotal extends Component {
         const [resultPrice, discountValue] = this.getResultPriceAndDiscount();
 
         return `
-            Итого <span class="cart-board__total">${resultPrice - discountValue} €</span>
+            Total <span class="cart-board__total">${resultPrice - discountValue} €</span>
         `;
     }
 
     getTotalInfo() {
         const [resultPrice, discountValue] = this.getResultPriceAndDiscount();
 
+        const counter = this.cart.getProductCounter();
+
         return `
             <li class="cart-info__item d-flex justify-content-between">
-                <span>${this.cart.getProductCounter()} товаров</span>
+                <span>${counter} ${counter > 1 ? 'products' : 'product'}</span>
                 <span class="cart-board__total-price">${resultPrice} €</span>
             </li>
             <li class="cart-info__item d-flex justify-content-between">
-                Скидка 
+                Discount
                 <span class="cart-board__total-discount">${discountValue} €</span> 
             </li>
         `;
@@ -84,22 +86,23 @@ class CartTotal extends Component {
     }
 
     getPromocodesTemplate() {
+        const allPromo = this.cart.getAllPromocodes();
         const promocodes = this.cart.getPromo();
         const hasPromocodes = !!promocodes.length;
-
         return `
             ${
                 hasPromocodes
                     ? `
                         <p class="cart-total__promo-list">
-                            Введенные промокоды: ${promocodes
+                            Applied promocodes: ${promocodes
                                 .map((item) => {
                                     return `
                                     <span class="cart-total__promo-item d-inline-flex justify-content-between align-items-center">
                                         <span class="cart-total__promocode">
                                             <span class="cart-promocode__name">${item}</span>
                                             <span>
-                                            </span> €
+                                                -${allPromo.get(item)} €
+                                            </span> 
                                         </span>
                                         <span class="cart-total__promo-remove"></span>
                                     </span>`;

@@ -7,6 +7,18 @@ const utils = new Utils();
 const cartLocalStorage = new CartLocalStorage();
 
 class CartQuery {
+    init(pagination: CartPagination, router: Router) {
+        const url = new URL(window.location.href);
+
+        if (!url.search) {
+            this.changeParams(pagination, router);
+        } else {
+            const pagination = utils.queryToObject(url.search) as unknown as Partial<CartPagination>;
+
+            this.changeParams(pagination, router);
+        }
+    }
+
     changeParams(pagination: Partial<CartPagination>, router: Router) {
         const url = new URL(window.location.href);
 

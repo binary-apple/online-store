@@ -39,17 +39,9 @@ export class Cart extends Store {
 
         this.router = router;
 
-        const url = new URL(window.location.href);
+        cartQuery.init(this.pagination, router);
 
-        if (!url.search) {
-            cartQuery.changeParams(this.pagination, this.router);
-            this.setPagination(this.pagination);
-        } else {
-            const pagination = utils.queryToObject(url.search) as unknown as Partial<CartPagination>;
-
-            cartQuery.changeParams(pagination, this.router);
-            this.setPagination(pagination);
-        }
+        this.setPagination(this.pagination);
     }
 
     public getProductCounter() {

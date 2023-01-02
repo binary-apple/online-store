@@ -39,7 +39,7 @@ class BreadCrumbs extends Component {
     linksTemplate(item: string, index: number, array: Array<string>) {
         const isLast = index === array.length - 1;
         const isActive = isLast ? ' active' : '';
-        const linkText = item === '/' ? 'Главная' : item === 'cart' ? 'Корзина' : item;
+        const linkText = item === '/' ? 'Main' : item === 'cart' ? 'Cart' : item;
         const glue = !isLast ? '<li class="breadcrumbs__item glue">></li>' : '';
 
         return `

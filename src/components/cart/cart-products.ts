@@ -62,7 +62,7 @@ class CartProducts extends Component {
                                 </p>
                                 <p class="cart-item__one-price">
                                     <span class="cart-item__one-price--value">${item.productId} €</span>
-                                    за шт.
+                                    per item
                                 </p>
                             </div>
                         </div>
