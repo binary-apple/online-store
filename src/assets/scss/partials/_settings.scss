@@ -27,4 +27,12 @@ ul {
 
 a {
     text-decoration: none;
+
+    &:hover {
+        color: inherit;
+    }
+}
+
+.hide {
+    display: none !important;
 }

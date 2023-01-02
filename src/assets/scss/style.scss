@@ -1,6 +1,27 @@
-@import './partials/settings';
 @import './partials/colors';
+@import './partials/fonts';
+@import './partials/settings';
+@import './partials/typography';
+@import './partials/checkbox';
 
 body {
-    background: $background;
+    background: $background-app;
+    color: $onSurface;
 }
+
+.main-container {
+    max-width: 1205px;
+    margin: 0 auto;
+}
+
+/* breadcrumbs */
+
+@import './partials/breadcrumbs';
+
+/* cart */
+
+@import './partials/cart-content';
+
+/* modals */
+
+@import './partials/confirm';

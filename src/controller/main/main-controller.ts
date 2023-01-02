@@ -1,5 +1,7 @@
 import Controller from '../controller';
 import Router from 'vanilla-router';
+import { MainView } from '../../view/main-view';
+import RouterLinksController from '../router-links-controller';
 
 class MainController extends Controller {
     constructor(router: Router) {
@@ -7,8 +9,13 @@ class MainController extends Controller {
     }
 
     async init() {
-        /* eslint-disable-next-line */
-        console.log('products');
+        const mainView = new MainView();
+
+        mainView.init();
+
+        const routerLinksController = new RouterLinksController(this.router);
+
+        routerLinksController.init();
     }
 }
 
