@@ -21,6 +21,8 @@ class MainController extends Controller {
         view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
         view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
+        view.handleSliderInput(this.handleSliderInput.bind(this));
+
     }
 
     private handleClickToCartIcon(e: Event){
@@ -29,6 +31,10 @@ class MainController extends Controller {
 
     private handleClickToLogoIcon(e: Event){
         this.router.navigateTo(Routers.MAIN);
+    }
+
+    private handleSliderInput(e: Event) {
+        // console.log(e);
     }
 }
 

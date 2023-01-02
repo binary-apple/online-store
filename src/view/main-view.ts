@@ -1,23 +1,29 @@
 import { Header } from "../components/header";
 import { Footer } from "../components/footer";
-import { Content } from "../components/main";
 import { View } from "./types/view";
 import { Cart } from "../model/cart";
+import { Slider } from "../components/products/slider";
+
 
 export class MainView implements View {
     private header: Header;
     private footer: Footer;
-    private content: Content;
+    private content: Slider;
     constructor(cart: Cart) {
         this.header = new Header(cart);
         this.footer = new Footer();
-        this.content = new Content();
+        this.content = new Slider();
     }
 
-    init(root: HTMLElement): void {
-        root.append(this.header.render())
-        root.append(this.content.render())
-        root.append(this.footer.render())
+    init(root: HTMLElement) {
+        root.append(this.header.render());
+        root.append(this.content.render());
+        root.append(this.footer.render());
+        this.content.handleSliderInput(this.content.setSliderTrack.bind(this.content));
+    }
+
+    public handleSliderInput(callback: (e: Event)=>void){
+        this.content.handleSliderInput(callback);
     }
 
     public handleClickToCartIcon(callback: (e: Event)=>void){
