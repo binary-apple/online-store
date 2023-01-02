@@ -26,7 +26,6 @@ export class Slider extends Component {
     public setSliderTrack() {
         const sliders = this.container.getElementsByClassName('slider');
         const track = this.container.querySelector('.slider-track');
-        console.log(sliders, track)
         if (track instanceof HTMLElement && sliders[0] instanceof HTMLInputElement && sliders[1] instanceof HTMLInputElement) {
             const trackLen = sliders[0].getBoundingClientRect().width;
             const trackValue = Math.abs(Number(sliders[0].value) - Number(sliders[1].value));
@@ -40,7 +39,6 @@ export class Slider extends Component {
     public handleSliderInput(callback: (e: Event)=>void) {
         // const track = this.container.querySelector('.slider-track');
         const sliders = this.container.querySelectorAll('.slider');
-        console.log(sliders);
         if (sliders) {
             sliders.forEach(element => {
                 element.addEventListener('input', callback)
