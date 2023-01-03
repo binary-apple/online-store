@@ -2,22 +2,21 @@ import { Component } from "../types/component";
 
 export class Slider extends Component {
     constructor() {
-        super({containerTag: 'div', className: 'slider'.split(' ')});
-        // this.handleSliderInput(this.setSliderTrack.bind(this));
+        super({containerTag: 'div', className: 'slider flex-grow-1'.split(' ')});
     }
 
     protected template(): DocumentFragment {
         const temp = document.createElement('template');
         temp.innerHTML = `
         <form oninput="min.value=Math.min(first.value, second.value);max.value=Math.max(second.value, first.value)" class="input-form pb-4">
-            <div class="d-flex justify-content-center lh-base">Price</div>
-            <div class="d-flex justify-content-between w-100 mb-3">
-                <output for="first" name="min" class="price px-3 lh-sm">0</output>
-                <output for="second" name="max" class="price px-3 lh-sm">100</output>
-            </div>
-            <input type="range" name="first" min="0" max="100" value="0" class="slider">
-            <input type="range" name="second" min="0" max="100" value="100" class="slider">
-            <div class="slider-track"></div>
+        <div class="d-flex justify-content-center lh-base">Price</div>
+        <div class="d-flex justify-content-between w-100 mb-3">
+        <output for="first" name="min" class="price px-3 lh-sm">0</output>
+        <output for="second" name="max" class="price px-3 lh-sm">100</output>
+        </div>
+        <input type="range" name="first" min="0" max="100" value="0" class="slider">
+        <input type="range" name="second" min="0" max="100" value="100" class="slider">
+        <div class="slider-track"></div>
         </form>
         `;
         return temp.content;

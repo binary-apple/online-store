@@ -25,7 +25,6 @@ class MainController extends Controller {
 
         view.handleSliderInput(this.handleSliderInput.bind(this));
         this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
-
     }
 
     private handleClickToCartIcon(e: Event){
@@ -42,6 +41,10 @@ class MainController extends Controller {
 
     private handleResizeWindow(e: Event) {
         this.view.setSliderTrack();
+    }
+
+    private handleViewIconClick(e: Event) {
+        this.view.toggleView(e);
     }
 }
 
