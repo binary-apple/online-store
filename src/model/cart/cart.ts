@@ -1,14 +1,6 @@
 import { CartPagination } from '../types/cart';
 import { Store } from '../store';
 import { CartItem } from '../types/cart';
-import CartQuery from './cart-query';
-import Router from 'vanilla-router';
-import Utils from '../../utils/utils';
-import CartLocalStorage from './cart-local-storage';
-
-const cartQuery = new CartQuery();
-const utils = new Utils();
-const cartLocalStorage = new CartLocalStorage();
 
 export class Cart extends Store {
     public productsInCart: Array<CartItem>;
@@ -17,12 +9,11 @@ export class Cart extends Store {
     public totalDisc: number;
     renderedProducts: Array<CartItem>;
     pagination: CartPagination;
-    router: Router;
     waitPromo: Array<string>;
 
-    constructor(router: Router) {
+    constructor() {
         super();
-        this.productsInCart = cartLocalStorage.get()?.products || [];
+        this.productsInCart = [];
         this.allPromocodes = new Map<string, number>([
             ['EPM', 0.1],
             ['RS', 0.1],
@@ -36,10 +27,6 @@ export class Cart extends Store {
             limit: 3,
             page: 1,
         };
-
-        this.router = router;
-
-        cartQuery.init(this.pagination, router);
 
         this.setPagination(this.pagination);
     }
@@ -60,8 +47,6 @@ export class Cart extends Store {
 
             const [startIndex, endIndex] = this.getStartAndEnd(true);
 
-            cartQuery.changeParams(this.pagination, this.router);
-
             this.renderedProducts = this.productsInCart.slice(startIndex, endIndex);
 
             return this.renderedProducts;
@@ -71,8 +56,7 @@ export class Cart extends Store {
     }
 
     private getStartAndEnd(isLastPage?: boolean) {
-        const searchObj = cartQuery.getSearchObj(this.pagination, isLastPage);
-        this.pagination = Object.assign(this.pagination, searchObj);
+        this.pagination = Object.assign(this.pagination);
 
         const pageSize = this.pagination.limit;
 
@@ -109,8 +93,6 @@ export class Cart extends Store {
             this.pagination.page = 1;
         }
 
-        cartQuery.changeParams(this.pagination, this.router);
-
         this.notify();
     }
 
@@ -133,8 +115,6 @@ export class Cart extends Store {
         const product = { productId: productId, count: count, order: this.productsInCart.length + 1 };
         this.productsInCart.push(product);
 
-        cartLocalStorage.updateProducts(product, 'push');
-
         this.notify();
     }
 
@@ -142,12 +122,6 @@ export class Cart extends Store {
         const productIdInCart = this.productsInCart.findIndex((el: CartItem) => el.productId === productId);
 
         if (productIdInCart >= 0) {
-            const productInCart = this.productsInCart.find((el) => el.productId === productId);
-
-            if (productInCart) {
-                cartLocalStorage.updateProducts(productInCart, 'remove');
-            }
-
             this.productsInCart.splice(productIdInCart, 1);
 
             this.productsInCart.map((item, index) => (item.order = index + 1));
@@ -163,11 +137,8 @@ export class Cart extends Store {
         if (productIdInCart >= 0) {
             this.productsInCart[productIdInCart].count += 1;
 
-            cartLocalStorage.updateProducts(this.productsInCart[productIdInCart], 'replace');
-
             this.notify();
         } else {
-            cartLocalStorage.updateProducts({} as CartItem, 'push');
             this.addProductToCart(productId, 1);
         }
     }
@@ -180,7 +151,6 @@ export class Cart extends Store {
             } else {
                 this.productsInCart[productIdInCart].count -= 1;
 
-                cartLocalStorage.updateProducts(this.productsInCart[productIdInCart], 'replace');
                 this.notify();
             }
         } else {

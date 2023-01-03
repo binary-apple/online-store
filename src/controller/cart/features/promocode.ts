@@ -39,11 +39,10 @@ class PromoCode {
     }
 
     public applyPromo() {
-        const cart = this as unknown as Cart;
-        const [promo] = cart.getWaitPromo();
+        const [promo] = this.cart.getWaitPromo();
 
-        cart.addPromocode(promo);
-        cart.removePromoFromWait(promo);
+        this.cart.addPromocode(promo);
+        this.cart.removePromoFromWait(promo);
 
         const confirm = document.querySelector('.confirm');
 
