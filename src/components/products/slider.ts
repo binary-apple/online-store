@@ -37,11 +37,10 @@ export class Slider extends Component {
     }
 
     public handleSliderInput(callback: (e: Event)=>void) {
-        // const track = this.container.querySelector('.slider-track');
         const sliders = this.container.querySelectorAll('.slider');
         if (sliders) {
             sliders.forEach(element => {
-                element.addEventListener('input', callback)
+                element.addEventListener('input', callback);
             });
         }
     }

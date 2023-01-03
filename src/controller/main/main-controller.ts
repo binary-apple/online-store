@@ -5,8 +5,10 @@ import { Cart } from '../../model/cart';
 import { MainView } from '../../view/main-view';
 
 class MainController extends Controller {
+    view = new MainView(new Cart());
     constructor(router: Router) {
         super(router);
+        console.log(this.view);
     }
 
     async init() {
@@ -34,7 +36,7 @@ class MainController extends Controller {
     }
 
     private handleSliderInput(e: Event) {
-        // console.log(e);
+        this.view.setSliderTrack();
     }
 }
 

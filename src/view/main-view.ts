@@ -19,7 +19,6 @@ export class MainView implements View {
         root.append(this.header.render());
         root.append(this.content.render());
         root.append(this.footer.render());
-        this.content.handleSliderInput(this.content.setSliderTrack.bind(this.content));
     }
 
     public handleSliderInput(callback: (e: Event)=>void){
@@ -32,5 +31,9 @@ export class MainView implements View {
 
     public handleClickToLogoIcon(callback: (e: Event)=>void){
         this.header.handleClickToLogoIcon(callback);
+    }
+
+    public setSliderTrack() {
+        this.content.setSliderTrack();
     }
 }
