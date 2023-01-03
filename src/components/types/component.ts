@@ -1,4 +1,4 @@
-import { Subscriber, Publisher } from "../../utils/observer-interface";
+import { Subscriber, Publisher } from '../../utils/observer-interface';
 
 interface IComponent {
     render(): HTMLElement;
@@ -25,15 +25,18 @@ export abstract class Component implements IComponent {
         }
     }
 
-    protected subscribe(...publishers: Array<Publisher>): void
-    {
+    protected subscribe(...publishers: Array<Publisher>): void {
         if (publishers && publishers.length) {
             publishers.forEach((store) => isSubscriber(this) && store && store.attach(this as unknown as Subscriber));
         }
     }
 
-    public render():HTMLElement {
+    public render(): HTMLElement {
         this.container.append(this.template());
+
+        const event = new Event('render-component');
+        dispatchEvent(event);
+
         return this.container;
     }
 

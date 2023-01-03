@@ -95,6 +95,10 @@
         margin: 5px 0;
         color: $hard;
     }
+
+    &__link {
+        color: inherit;
+    }
 }
 
 .cart-item {

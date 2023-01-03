@@ -1,35 +1,30 @@
 import { Component } from '../types/component';
-import { Cart } from '../../model/cart/cart';
 import CartProducts from './cart-products';
 import SelectAllProducts from './select-all-products';
 import CartTotal from './cart-total';
-import CartLocalStorage from '../../model/cart/cart-local-storage';
-
-const cartLocalStorage = new CartLocalStorage();
+import CartFacade from '../../model/cart/cart-facade';
+import CartPagination from './cart-pagination';
+import { Product } from '../../model/types/product';
 
 class CartContent extends Component {
-    cart: Cart;
+    cart: CartFacade;
     cartProducts: CartProducts;
     selectAllProducts: SelectAllProducts;
     cartTotal: CartTotal;
+    cartPagination: CartPagination;
+    products: Array<Product> = [];
 
-    constructor(cart: Cart) {
+    constructor(cart: CartFacade) {
         super({ containerTag: 'section', className: ['row', 'cart-content'] });
 
         this.cart = cart;
         this.cartProducts = new CartProducts(this.cart);
         this.selectAllProducts = new SelectAllProducts(this.cart);
         this.cartTotal = new CartTotal(this.cart);
+        this.cartPagination = new CartPagination(this.cart);
 
-        this.subscribe(this.cart);
-
-        if (!cartLocalStorage.get()?.products?.length) {
-            this.cart.addProductToCart(1, 1);
-            this.cart.addProductToCart(2, 1);
-            this.cart.addProductToCart(3, 1);
-            this.cart.addProductToCart(4, 1);
-            this.cart.addProductToCart(5, 1);
-        }
+        this.subscribe(this.cart.paginationStore);
+        this.subscribe(this.cart.cartStore);
     }
 
     protected template() {
@@ -48,6 +43,7 @@ class CartContent extends Component {
             </div>
             <div class="row col-9 cart-content__remove-selected d-flex justify-content-between">
                 ${this.selectAllProducts.toString()}
+                ${this.cartPagination.toString()}
             </div>
             <div class="row cart-content__products">
                 <ul class="col-9 cart-products">
@@ -61,14 +57,12 @@ class CartContent extends Component {
     }
 
     cartCounter() {
-        const cartNoEmpty = this.cart.getTotalCount() !== 0;
+        const cartNoEmpty = this.cart.quantityProducts !== 0;
 
-        return cartNoEmpty ? `<span class="col-1 cart-title__cart-counter">${this.cart.getTotalCount()}</span>` : '';
+        return cartNoEmpty ? `<span class="col-1 cart-title__cart-counter">${this.cart.quantityProducts}</span>` : '';
     }
 
     update() {
-        const products = this.cart.getProducts();
-
         const counter = document.querySelector('.cart-title__cart-counter');
 
         if (counter) {
@@ -78,21 +72,6 @@ class CartContent extends Component {
             if (title) {
                 title.insertAdjacentHTML('beforeend', this.cartCounter());
             }
-        }
-
-        const cart = document.querySelector('.cart-content__remove-selected');
-        const content = document.querySelector('.cart-content__products');
-
-        if (cart && content && products.length) {
-            cart.classList.remove('hide');
-            content.classList.remove('hide');
-        } else if (cart && content && !products.length) {
-            cart.classList.add('hide');
-            content.classList.add('hide');
-
-            const wrapper = document.querySelector('.cart-content');
-
-            wrapper?.insertAdjacentHTML('beforeend', '<div class="cart-content__placeholder">Cart is Empty</div>');
         }
     }
 }

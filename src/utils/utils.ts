@@ -1,3 +1,5 @@
+import { CartItem } from '../model/types/cart';
+import { Product } from '../model/types/product';
 import { IterableObject } from './types/utils';
 
 class Utils {
@@ -44,6 +46,16 @@ class Utils {
         }
 
         return paramsObj;
+    }
+
+    createProduct(product: Product, count = 1, products: Array<CartItem>) {
+        const productItem = {
+            ...product,
+            count,
+            order: (products?.length || 0) + 1,
+        };
+
+        return productItem;
     }
 }
 

@@ -1,65 +1,88 @@
 import Router from 'vanilla-router';
-import Utils from '../../utils/utils';
-import { CartPagination } from '../types/cart';
+import { ICartLocalStorage, ICartPagination } from '../types/cart';
+import CartPaginationState from './cart-pagination-state';
 import CartLocalStorage from './cart-local-storage';
+import Utils from '../../utils/utils';
 
 const utils = new Utils();
-const cartLocalStorage = new CartLocalStorage();
 
 class CartQuery {
-    init(pagination: CartPagination, router: Router) {
-        const url = new URL(window.location.href);
+    cartPagination: CartPaginationState;
+    router: Router;
+    cartLocalStorage: CartLocalStorage;
 
-        if (!url.search) {
-            this.changeParams(pagination, router);
-        } else {
-            const pagination = utils.queryToObject(url.search) as unknown as Partial<CartPagination>;
+    constructor(cartPagination: CartPaginationState, cartLocalStorage: CartLocalStorage, router: Router) {
+        this.cartPagination = cartPagination;
+        this.router = router;
+        this.cartLocalStorage = cartLocalStorage;
 
-            this.changeParams(pagination, router);
-        }
+        this.changeQuery();
     }
 
-    changeParams(pagination: Partial<CartPagination>, router: Router) {
+    changeQuery(pagination?: ICartPagination) {
         const url = new URL(window.location.href);
 
-        if (pagination.limit) {
-            url.searchParams.set('limit', '' + pagination.limit);
-        }
+        const initialize = !pagination;
 
-        if (pagination.page) {
-            url.searchParams.set('page', '' + pagination.page);
-        }
+        if (initialize) {
+            const loadCart = this.cartLocalStorage.cart;
 
-        cartLocalStorage.setFilter(url.search);
-
-        router.navigateTo(url.pathname + url.search, null, true);
-    }
-
-    getSearchObj(pagination: CartPagination, isLastPage?: boolean) {
-        const search = utils.getSearchString(window.location.href);
-
-        const searchObj: Partial<CartPagination> = {};
-
-        if (search) {
-            const searchArr = search.split('?')[search.split('?').length - 1].split('&');
-
-            if (searchArr.length) {
-                searchArr.forEach((item) => {
-                    const [key, value] = item.split('=');
-
-                    if (key === 'page' && isLastPage) {
-                        searchObj[key] = +value - 1;
-                    } else {
-                        searchObj[key] = +value;
-                    }
-                });
+            if (!url.search) {
+                this.emptyQuery(loadCart);
+            } else {
+                this.hasQuery();
             }
         } else {
-            searchObj.limit = pagination.limit;
-            searchObj.page = pagination.page;
-        }
+            if (pagination?.limit) {
+                url.searchParams.set('limit', '' + pagination.limit);
+            }
 
-        return searchObj;
+            if (pagination?.page) {
+                url.searchParams.set('page', '' + pagination.page);
+            }
+
+            this.router.navigateTo(url.pathname + url.search, '', true);
+        }
+    }
+
+    emptyQuery(loadCart: ICartLocalStorage) {
+        const url = new URL(window.location.href);
+
+        const paginationDefault = {
+            limit: 3,
+            page: 1,
+            newPage: 1,
+        };
+
+        if (!loadCart.params) {
+            const paginationItem = this.cartPagination.setPagination(paginationDefault);
+            this.cartLocalStorage.savePagination(paginationItem);
+
+            url.searchParams.set('limit', '' + paginationItem.limit);
+            url.searchParams.set('page', '' + paginationItem.page);
+            this.router.navigateTo(url.pathname + url.search, '', true);
+        } else {
+            const cart = this.cartLocalStorage.cart;
+            url.searchParams.set('limit', '' + cart.params.limit);
+            url.searchParams.set('page', '' + cart.params.page);
+
+            this.router.navigateTo(url.pathname + url.search, '', true);
+        }
+    }
+
+    hasQuery() {
+        const url = new URL(window.location.href);
+
+        const searchParams = utils.queryToObject(url.search) as unknown as ICartPagination;
+        searchParams.newPage = searchParams.page;
+
+        const search = this.cartPagination.setPagination(searchParams);
+        this.cartLocalStorage.savePagination(search);
+
+        url.searchParams.set('limit', '' + searchParams.limit);
+        url.searchParams.set('page', '' + searchParams.page);
+
+        this.router.navigateTo(url.pathname + url.search, '', true);
     }
 }
 

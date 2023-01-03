@@ -2,27 +2,19 @@ import Router from 'vanilla-router';
 import Controller from './controller';
 
 class ConfirmController extends Controller {
-    apply: () => void;
-
-    constructor(router: Router, apply: () => void) {
+    constructor(router: Router) {
         super(router);
-
-        this.apply = apply;
     }
 
     init() {
         const openConfirm = this.openConfirm.bind(this);
         const closeConfirm = this.closeConfirm.bind(this);
-        const applyConfirm = this.apply.bind(this);
 
         window.removeEventListener('open-confirm', openConfirm);
         window.addEventListener('open-confirm', openConfirm);
 
         window.removeEventListener('close-confirm', closeConfirm);
         window.addEventListener('close-confirm', closeConfirm);
-
-        window.removeEventListener('apply-confirm', applyConfirm);
-        window.addEventListener('apply-confirm', applyConfirm);
     }
 
     openConfirm() {

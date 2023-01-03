@@ -1,11 +1,11 @@
-import { Cart } from '../../model/cart/cart';
+import CartFacade from '../../model/cart/cart-facade';
 import { Component } from '../types/component';
 import Checkbox from '../ui/checkbox';
 
 class SelectAllProducts extends Component {
-    cart: Cart;
+    cart: CartFacade;
 
-    constructor(cart: Cart) {
+    constructor(cart: CartFacade) {
         super();
 
         this.cart = cart;
@@ -39,42 +39,11 @@ class SelectAllProducts extends Component {
                     </button>
                 </div>
             </div>
-            <div class="d-inline-flex cart-content__pagination">
-                <div class="d-flex align-items-center">
-                    Limit: 
-                    <input type="number" value="${this.cart.getPagination().limit}" class="cart-pagination__value">
-                </div>
-                <div class="cart-pagination__nav d-flex align-items-center">
-                    Page:
-                    <span class="cart-pagination__wrapper">
-                        ${this.getPaginationTemplate()}
-                    </span>
-                </div>
-            </div>
-        `;
-    }
-
-    getPaginationTemplate() {
-        return `
-            <span>
-                <span class="cart-pagination__back"><</span>
-                <span class="cart-pagination__page">${this.cart.getPagination().page}</span>
-                <span class="cart-pagination__forward">></span>
-            </span>
         `;
     }
 
     toString() {
         return this.getSelectAllProducts();
-    }
-
-    update() {
-        const pagination = document.querySelector('.cart-pagination__wrapper');
-
-        if (pagination) {
-            pagination.innerHTML = '';
-            pagination.innerHTML = this.getPaginationTemplate();
-        }
     }
 }
 

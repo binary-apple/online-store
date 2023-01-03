@@ -5,10 +5,10 @@ import MainController from '../controller/main/main-controller';
 import ProductController from '../controller/product/product-controller';
 import ErrorController from '../controller/error/error-controller';
 import Utils from '../utils/utils';
-import CartLocalStorage from '../model/cart/cart-local-storage';
+// import CartQuery from '../model/cart/cart-query';
 
 const utils = new Utils();
-const cartLocalStorage = new CartLocalStorage();
+// const cartQuery = new CartQuery();
 
 const router = new Router({
     mode: 'history',
@@ -33,18 +33,6 @@ router.add(Routers.PRODUCT, () => {
 
 router.add(Routers.CART, () => {
     const cartController = new CartController(router);
-
-    const localData = cartLocalStorage.get();
-
-    if (localData?.search) {
-        const searchString = '?limit=' + localData.search.limit + '&page=' + localData.search.page;
-
-        router.navigateTo(utils.getPathName() + searchString, null, true);
-
-        cartController.init();
-
-        return;
-    }
 
     cartController.init();
 });

@@ -1,12 +1,16 @@
 import { Component } from './types/component';
+import { IConfirm } from './types/confirm';
 
 class Confirm extends Component {
     text: string;
 
-    constructor(text: string) {
+    constructor({ text, confirm }: IConfirm) {
         super({ containerTag: 'div', className: ['confirm'] });
 
         this.text = text;
+
+        window.removeEventListener('apply-confirm', confirm);
+        window.addEventListener('apply-confirm', confirm);
     }
 
     protected template() {

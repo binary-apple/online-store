@@ -4,7 +4,7 @@ import CartContent from '../components/cart/cart-content';
 import BreadCrumbs from '../components/breadcrumbs';
 import { Header } from '../components/header';
 import { Footer } from '../components/footer';
-import { Cart } from '../model/cart/cart';
+import CartFacade from '../model/cart/cart-facade';
 
 class CartView extends BaseView implements View {
     private content: CartContent;
@@ -12,7 +12,7 @@ class CartView extends BaseView implements View {
     private header: Header;
     private footer: Footer;
 
-    constructor(cart: Cart) {
+    constructor(cart: CartFacade) {
         super();
 
         this.header = new Header();

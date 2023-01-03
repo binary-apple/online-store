@@ -7,5 +7,8 @@ export interface Product {
     discountPercentage: number;
     description: string;
     title: string;
+    order: number;
+    count: number;
+    id: number;
     [index: string]: number | string;
 }

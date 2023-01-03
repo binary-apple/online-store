@@ -1,9 +1,9 @@
-import { Cart } from '../../../model/cart/cart';
+import CartFacade from '../../../model/cart/cart-facade';
 
 class RemoveSelectedProducts {
-    cart: Cart;
+    cart: CartFacade;
 
-    constructor(cart: Cart) {
+    constructor(cart: CartFacade) {
         this.cart = cart;
     }
 
@@ -25,7 +25,7 @@ class RemoveSelectedProducts {
                                 const { value } = inputItem;
 
                                 if (value) {
-                                    this.cart.removeProductFromCart(+value);
+                                    this.cart.removeProduct(+value);
                                 }
                             }
                         });

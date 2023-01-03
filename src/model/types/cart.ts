@@ -4,7 +4,7 @@ export interface CartItem {
     order: number;
 }
 
-export interface CartPagination {
+export interface ICartPagination {
     limit: number;
     page: number;
     [index: string]: number;

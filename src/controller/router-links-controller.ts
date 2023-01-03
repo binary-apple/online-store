@@ -7,27 +7,23 @@ class RouterLinksController extends Controller {
     }
 
     init() {
-        const links = document.querySelectorAll('a');
+        document.body.addEventListener('click', (e) => {
+            const { target } = e;
 
-        if (links) {
-            links.forEach((element) => {
-                element.addEventListener('click', (e) => {
-                    e.preventDefault();
+            const htmlTarget = target as HTMLElement;
 
-                    const { target } = e;
+            const isRedirect = !htmlTarget.dataset.exception && (htmlTarget.tagName === 'A' || htmlTarget.closest('a'));
 
-                    const htmlTarget = target as HTMLElement;
+            if (isRedirect) {
+                e.preventDefault();
 
-                    if (htmlTarget.tagName === 'A') {
-                        const { href } = htmlTarget.dataset;
+                const { href } = htmlTarget.tagName === 'A' ? htmlTarget.dataset : htmlTarget.closest('a')!.dataset;
 
-                        if (href) {
-                            this.router.navigateTo(href);
-                        }
-                    }
-                });
-            });
-        }
+                if (href) {
+                    this.router.navigateTo(href);
+                }
+            }
+        });
     }
 }
 

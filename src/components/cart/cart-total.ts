@@ -1,15 +1,16 @@
-import { Cart } from '../../model/cart/cart';
+import CartFacade from '../../model/cart/cart-facade';
 import { Component } from '../types/component';
 
 class CartTotal extends Component {
-    cart: Cart;
+    cart: CartFacade;
 
-    constructor(cart: Cart) {
+    constructor(cart: CartFacade) {
         super();
 
         this.cart = cart;
 
-        this.subscribe(this.cart);
+        this.subscribe(this.cart.cartStore);
+        this.subscribe(this.cart.cartLS);
     }
 
     protected template() {
@@ -25,6 +26,7 @@ class CartTotal extends Component {
     }
 
     getTotalInformation() {
+        const promos = this.getPromocodesTemplate.bind(this);
         return `
             <div class="cart-total__board">
                 <ul class="cart-board__list">
@@ -36,7 +38,7 @@ class CartTotal extends Component {
                     <li class="cart-board__item">
                         <input class="cart-total__promo" placeholder="Enter promocode" type="text">
                         <div class="cart-total__promo-note">
-                            ${this.getPromocodesTemplate()}                       
+                            ${promos()}                       
                         </div>
                         <p class="cart-total__example">Test promocodes: <span class="cart-total__example-promo">EPM, RS</span></p>
                     </li>
@@ -62,7 +64,7 @@ class CartTotal extends Component {
     getTotalInfo() {
         const [resultPrice, discountValue] = this.getResultPriceAndDiscount();
 
-        const counter = this.cart.getProductCounter();
+        const counter = this.cart.quantityProducts;
 
         return `
             <li class="cart-info__item d-flex justify-content-between">
@@ -77,41 +79,47 @@ class CartTotal extends Component {
     }
 
     getResultPriceAndDiscount() {
-        const calculatePrice = (id: number) => id;
-
-        const discountValue = this.cart.getDiscount();
-        const resultPrice = this.cart.getTotalPrice(calculatePrice);
+        const discountValue = this.cart.discount;
+        const resultPrice = this.cart.cartCost;
 
         return [resultPrice, discountValue];
     }
 
     getPromocodesTemplate() {
-        const allPromo = this.cart.getAllPromocodes();
-        const promocodes = this.cart.getPromo();
+        const [promocodes, existPromo] = this.cart.promocodes;
+
         const hasPromocodes = !!promocodes.length;
+
+        const promocodeItem = this.promocodeItem.bind(this, existPromo);
+
+        const promocodesTemplates = promocodes.map(promocodeItem).join('');
+
         return `
             ${
                 hasPromocodes
                     ? `
                         <p class="cart-total__promo-list">
-                            Applied promocodes: ${promocodes
-                                .map((item) => {
-                                    return `
-                                    <span class="cart-total__promo-item d-inline-flex justify-content-between align-items-center">
-                                        <span class="cart-total__promocode">
-                                            <span class="cart-promocode__name">${item}</span>
-                                            <span>
-                                                -${allPromo.get(item)} €
-                                            </span> 
-                                        </span>
-                                        <span class="cart-total__promo-remove"></span>
-                                    </span>`;
-                                })
-                                .join('')}
+                            Applied promocodes:
+                            ${promocodesTemplates}
                         </p>`
                     : ''
             }
         `;
+    }
+
+    promocodeItem(existPromo: Map<string, number>, item: string) {
+        const discount = existPromo.get(item);
+
+        return `
+            <span class="cart-total__promo-item d-inline-flex justify-content-between align-items-center">
+                <span class="cart-total__promocode">
+                    <span class="cart-promocode__name">${item}</span>
+                    <span>
+                        -${discount} €
+                    </span>
+                </span>
+                <span class="cart-total__promo-remove"></span>
+            </span>`;
     }
 
     update() {

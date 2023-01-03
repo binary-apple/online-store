@@ -1,69 +1,71 @@
-import Router from 'vanilla-router';
-import { Cart } from '../../../model/cart/cart';
-import CartQuery from '../../../model/cart/cart-query';
-
-const cartQuery = new CartQuery();
+import CartFacade from '../../../model/cart/cart-facade';
 
 class CartPagination {
-    cart: Cart;
-    router: Router;
+    cart: CartFacade;
 
-    constructor(cart: Cart, router: Router) {
+    constructor(cart: CartFacade) {
         this.cart = cart;
-        this.router = router;
     }
 
     init() {
-        this.changeLimit();
-        this.changePage();
+        this.limit();
+        this.page();
     }
 
-    changeLimit() {
+    limit() {
         const limitInput = document.querySelector('.cart-pagination__value');
 
         if (limitInput) {
-            limitInput.addEventListener('change', (e) => {
-                if (+(e.target as HTMLInputElement).value < 1) {
-                    (e.target as HTMLInputElement).value = '1';
-                }
-
-                const value = +(e.target as HTMLInputElement).value;
-
-                const pagination = {
-                    limit: value,
-                };
-
-                this.cart.setPagination(pagination);
-            });
+            const changeLimit = this.changeLimit.bind(this);
+            limitInput.addEventListener('change', changeLimit);
+            limitInput.addEventListener('keyup', changeLimit);
         }
     }
 
-    changePage() {
+    changeLimit(e: Event) {
+        const htmlTarget = e.target as HTMLInputElement;
+
+        if (!htmlTarget.value) {
+            return;
+        }
+
+        if (+htmlTarget.value < 1) {
+            htmlTarget.value = '1';
+        }
+
+        const pagination = this.cart.pagination;
+        pagination.limit = +htmlTarget.value;
+        pagination.newPage = pagination.page;
+
+        this.cart.setPagination(pagination);
+    }
+
+    page() {
         const nav = document.querySelector('.cart-pagination__nav');
 
         if (nav) {
-            nav.addEventListener('click', (e) => {
-                const htmlTarget = e.target as HTMLElement;
+            const changePage = this.changePage.bind(this);
+            nav.addEventListener('click', changePage);
+        }
+    }
 
-                const isPageUp = htmlTarget.classList.contains('cart-pagination__forward');
+    changePage(e: Event) {
+        const htmlTarget = e.target as HTMLElement;
 
-                if (isPageUp) {
-                    const pagination = this.cart.getPagination();
-                    pagination.page += 1;
+        const isPageUp = htmlTarget.classList.contains('cart-pagination__forward');
 
-                    this.cart.setPagination(pagination);
-                }
+        if (isPageUp) {
+            const pagination = this.cart.pagination;
+            pagination.newPage = pagination.page + 1;
+            this.cart.setPagination(pagination);
+        }
 
-                const isPageDown = htmlTarget.classList.contains('cart-pagination__back');
+        const isPageDown = htmlTarget.classList.contains('cart-pagination__back');
 
-                if (isPageDown) {
-                    const pagination = this.cart.getPagination();
-
-                    pagination.page -= 1;
-
-                    this.cart.setPagination(pagination);
-                }
-            });
+        if (isPageDown) {
+            const pagination = this.cart.pagination;
+            pagination.newPage = pagination.page - 1;
+            this.cart.setPagination(pagination);
         }
     }
 }
