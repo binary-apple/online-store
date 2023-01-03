@@ -50,4 +50,24 @@ export class Header extends Component implements Subscriber {
             element.innerHTML = `${this.cart.getTotalPrice(this.cart.getPriceById)}`;
         }
     }
+
+    public handleClickToCartIcon(callback: (e: Event)=>void){
+        const cart = this.container.querySelector('.cart');
+        if (cart) {
+            cart.addEventListener('click', function (e){
+                e.preventDefault();
+                callback(e);
+            })
+        }
+    }
+
+    public handleClickToLogoIcon(callback: (e: Event)=>void){
+        const logo = this.container.querySelector('.logo');
+        if (logo) {
+            logo.addEventListener('click', function (e){
+                e.preventDefault();
+                callback(e);
+            })
+        }
+    }
 }

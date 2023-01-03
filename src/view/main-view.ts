@@ -19,4 +19,12 @@ export class MainView implements View {
         root.append(this.content.render())
         root.append(this.footer.render())
     }
+
+    public handleClickToCartIcon(callback: (e: Event)=>void){
+        this.header.handleClickToCartIcon(callback);
+    }
+
+    public handleClickToLogoIcon(callback: (e: Event)=>void){
+        this.header.handleClickToLogoIcon(callback);
+    }
 }
