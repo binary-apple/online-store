@@ -6,7 +6,7 @@ interface IComponent {
 
 export type ComponentType = IComponent | (IComponent & Subscriber);
 
-function isSubscriber(component: ComponentType) {
+function isSubscriber(component: ComponentType): component is (IComponent & Subscriber) {
     return 'update' in component;
 }
 
@@ -28,7 +28,7 @@ export abstract class Component implements IComponent {
     protected subscribe(...publishers: Array<Publisher>): void
     {
         if (publishers && publishers.length) {
-            publishers.forEach((store) => isSubscriber(this) && store && store.attach(this as unknown as Subscriber));
+            publishers.forEach((store) => isSubscriber(this) && store && store.attach(this));
         }
     }
 
