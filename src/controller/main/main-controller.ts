@@ -24,6 +24,7 @@ class MainController extends Controller {
         view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
         view.handleSliderInput(this.handleSliderInput.bind(this));
+        this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
 
     }
 
@@ -36,6 +37,10 @@ class MainController extends Controller {
     }
 
     private handleSliderInput(e: Event) {
+        this.view.setSliderTrack();
+    }
+
+    private handleResizeWindow(e: Event) {
         this.view.setSliderTrack();
     }
 }

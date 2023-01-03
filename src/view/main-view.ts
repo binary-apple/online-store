@@ -36,4 +36,8 @@ export class MainView implements View {
     public setSliderTrack() {
         this.content.setSliderTrack();
     }
+
+    public handleResizeWindow(callback: (e: Event)=> void) {
+        window.addEventListener(`resize`, callback, false);
+    }
 }
