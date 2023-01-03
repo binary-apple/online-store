@@ -25,6 +25,7 @@ class CartContent extends Component {
 
         this.subscribe(this.cart.paginationStore);
         this.subscribe(this.cart.cartStore);
+        this.subscribe(this.cart.cartLS);
     }
 
     protected template() {

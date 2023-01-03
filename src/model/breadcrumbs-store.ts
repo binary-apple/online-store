@@ -1,11 +1,5 @@
-import { Store } from './store';
-
-class BreadCrumbsStore extends Store {
+class BreadCrumbsStore {
     breadcrumbs: Array<string> = ['/'];
-
-    constructor() {
-        super();
-    }
 
     get() {
         return this.breadcrumbs;

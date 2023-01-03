@@ -54,7 +54,8 @@ class CartTotal extends Component {
     }
 
     getTotalPrice() {
-        const [resultPrice, discountValue] = this.getResultPriceAndDiscount();
+        const resultPrice = this.cart.cartCost;
+        const discountValue = this.cart.discount;
 
         return `
             Total <span class="cart-board__total">${resultPrice - discountValue} €</span>
@@ -62,7 +63,8 @@ class CartTotal extends Component {
     }
 
     getTotalInfo() {
-        const [resultPrice, discountValue] = this.getResultPriceAndDiscount();
+        const resultPrice = this.cart.cartCost;
+        const discountValue = this.cart.discount;
 
         const counter = this.cart.quantityProducts;
 
@@ -76,13 +78,6 @@ class CartTotal extends Component {
                 <span class="cart-board__total-discount">${discountValue} €</span> 
             </li>
         `;
-    }
-
-    getResultPriceAndDiscount() {
-        const discountValue = this.cart.discount;
-        const resultPrice = this.cart.cartCost;
-
-        return [resultPrice, discountValue];
     }
 
     getPromocodesTemplate() {

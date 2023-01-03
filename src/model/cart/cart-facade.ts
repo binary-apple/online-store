@@ -49,7 +49,7 @@ class CartFacade extends Store {
     }
 
     public get quantityProducts() {
-        return this.cart.getTotalCount();
+        return this.cartLS.getTotalCount();
     }
 
     public get pagination() {
@@ -68,30 +68,18 @@ class CartFacade extends Store {
     public setPagination(paginationItem: ICartPagination) {
         const pagination = this.cartPagination.setPagination(paginationItem);
         this.cartLocalStorage.savePagination(pagination);
-
-        const changed = this.cartPagination.showProducts(this.productsItems, this.cart.products);
-
-        if (changed) {
-            this.cartQuery.changeQuery(changed);
-        } else {
-            this.cartQuery.changeQuery(pagination);
-        }
+        this.cartQuery.toPrevPage(pagination);
     }
 
     public addProduct(product: Product, count = 1) {
-        this.cartLocalStorage.saveProduct(product, count);
         this.cart.addProductToCart(product, count);
+        this.cartLocalStorage.saveProduct(product, count);
     }
 
     public removeProduct(id: number) {
         this.cart.removeProductFromCart(id);
         this.cartLocalStorage.removeProduct(id);
-
-        const changed = this.cartPagination.showProducts(this.productsItems, this.cart.products);
-
-        if (changed) {
-            this.cartQuery.changeQuery(changed);
-        }
+        this.cartQuery.toPrevPage();
     }
 
     public addPromocode(promo: string) {
@@ -110,15 +98,7 @@ class CartFacade extends Store {
     public decreaseProductQuntity(id: number) {
         this.cart.decreaseProductCount(id);
         this.cartLocalStorage.decreaseProduct(id);
-
-        const changed = this.cartPagination.showProducts(
-            this.cartPagination.getProducts(this.cartLocalStorage.cart.products),
-            this.cartLocalStorage.cart.products
-        );
-
-        if (changed) {
-            this.cartQuery.changeQuery(changed);
-        }
+        this.cartQuery.toPrevPage();
     }
 }
 

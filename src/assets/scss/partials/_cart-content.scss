@@ -150,7 +150,10 @@
         background-color: $secondary;
         border-radius: 4px;
         color: white;
-        width: 110px;
+        width: 132px;
+        height: 41px;
+        min-width: 132px;
+        max-width: 132px;
     }
 }
 
@@ -159,12 +162,13 @@
         background-color: transparent;
         border: 0;
         color: white;
-        height: 25px;
-        width: 25px;
+        height: 41px;
+        min-width: 35px;
         display: flex;
         justify-content: center;
         align-items: center;
         position: relative;
+        background-color: rgba($success, 0.3);
 
         &::after {
             content: '';
@@ -175,6 +179,11 @@
         }
 
         &--plus {
+            position: relative;
+            right: -8px;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+
             &::before {
                 content: '';
                 width: 15px;
@@ -186,13 +195,19 @@
                 top: 50%;
             }
         }
+
+        &--minus {
+            position: relative;
+            left: -8px;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
     }
 
     &__value {
         font-weight: 400;
         font-size: 16px;
         line-height: 150%;
-        margin: 0 10px;
     }
 }
 

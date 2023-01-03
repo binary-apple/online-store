@@ -16,13 +16,15 @@ import CartQuery from '../../model/cart/cart-query';
 import ConfirmController from '../confirm-controller';
 import { Product } from '../../model/types/product';
 
+const ONLINE_STORE_APPLE_NEPO = process.env.LOCAL_STORAGE_NAME as string;
+
 class CartController extends Controller {
     constructor(router: Router) {
         super(router);
     }
 
     init() {
-        const cartLocalStorage = new CartLocalStorage();
+        const cartLocalStorage = new CartLocalStorage(ONLINE_STORE_APPLE_NEPO);
         const cart = new Cart(cartLocalStorage);
 
         const cartPagination = new CartPaginationState(cart, cartLocalStorage);
@@ -34,7 +36,7 @@ class CartController extends Controller {
             new CartQuery(cartPagination, cartLocalStorage, this.router)
         );
 
-        if (!cartLocalStorage.cart.products?.length) {
+        if (!cartLocalStorage.cart?.products?.length) {
             cartFacade.addProduct({ id: 1 } as Product, 1);
             cartFacade.addProduct({ id: 2 } as Product, 1);
             cartFacade.addProduct({ id: 3 } as Product, 1);

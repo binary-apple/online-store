@@ -1,5 +1,6 @@
 import { Component } from './types/component';
 import BreadCrumbsStore from '../model/breadcrumbs-store';
+import { BreadCrumbsNames, IBreadcrumbsNames } from './types/breadcrumbs';
 
 class BreadCrumbs extends Component {
     breadcrumbsStore: BreadCrumbsStore;
@@ -8,8 +9,6 @@ class BreadCrumbs extends Component {
         super({ containerTag: 'nav', className: ['row', 'breadcrumbs'] });
 
         this.breadcrumbsStore = new BreadCrumbsStore();
-
-        this.subscribe(this.breadcrumbsStore);
 
         this.breadcrumbsStore.set();
     }
@@ -39,7 +38,8 @@ class BreadCrumbs extends Component {
     linksTemplate(item: string, index: number, array: Array<string>) {
         const isLast = index === array.length - 1;
         const isActive = isLast ? ' active' : '';
-        const linkText = item === '/' ? 'Main' : item === 'cart' ? 'Cart' : item;
+        const linkText = (BreadCrumbsNames as IBreadcrumbsNames)[item];
+
         const glue = !isLast ? '<li class="breadcrumbs__item glue">></li>' : '';
 
         return `
@@ -48,15 +48,6 @@ class BreadCrumbs extends Component {
             </li>
             ${glue}
         `;
-    }
-
-    update() {
-        const breadcrumbsContainer = document.querySelector('.breadcrumbs');
-
-        if (breadcrumbsContainer) {
-            breadcrumbsContainer.innerHTML = '';
-            this.template();
-        }
     }
 }
 

@@ -7,7 +7,7 @@ class CartProducts extends Component {
     cart: CartFacade;
 
     constructor(cart: CartFacade) {
-        super();
+        super({ containerTag: 'div', className: ['cart-products'] });
 
         this.cart = cart;
 
@@ -36,7 +36,7 @@ class CartProducts extends Component {
     }
 
     private getProductsTemplate() {
-        const products = this.cart.paginationStore.getProducts(this.cart.cartLS.cart.products);
+        const products = this.cart.paginationStore.getProducts(this.cart.cartLS.cart?.products);
 
         if (products.length) {
             const productTemplate = this.getProductTemplate.bind(this);
@@ -93,13 +93,13 @@ class CartProducts extends Component {
     }
 
     update() {
-        const products = this.cart.cartPagination.getProducts(this.cart.cartLS.cart.products);
+        const products = this.cart.cartPagination.getProducts(this.cart.cartLS.cart?.products);
 
         this.updateProductsList(products);
     }
 
     rendered() {
-        const products = this.cart.paginationStore.getProducts(this.cart.cartLS.cart.products);
+        const products = this.cart.paginationStore.getProducts(this.cart.cartLS.cart?.products);
 
         this.updateProductsList(products);
     }

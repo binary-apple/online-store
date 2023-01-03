@@ -6,14 +6,18 @@ import { Product } from '../types/product';
 const utils = new Utils();
 
 class CartLocalStorage extends Store {
-    constructor() {
+    name: string;
+
+    constructor(name: string) {
         super();
+
+        this.name = name;
 
         this.init();
     }
 
     init() {
-        const cart = localStorage.getItem('online-store-apple-nepo');
+        const cart = localStorage.getItem(this.name);
 
         if (!cart) {
             const jsonCart = JSON.stringify({});
@@ -22,8 +26,20 @@ class CartLocalStorage extends Store {
         }
     }
 
+    public getTotalCount() {
+        const cartJSON = localStorage.getItem(this.name);
+
+        if (cartJSON) {
+            const cart = JSON.parse(cartJSON);
+
+            return cart.products?.reduce((acc: number, cur: Product) => acc + cur.count, 0);
+        }
+
+        return 0;
+    }
+
     public get cart() {
-        const cart = localStorage.getItem('online-store-apple-nepo');
+        const cart = localStorage.getItem(this.name);
 
         if (cart) {
             return JSON.parse(cart);
@@ -33,7 +49,7 @@ class CartLocalStorage extends Store {
     }
 
     public get paginationParams() {
-        const jsonCart = localStorage.getItem('online-store-apple-nepo');
+        const jsonCart = localStorage.getItem(this.name);
 
         if (jsonCart) {
             const localStorageCart = JSON.parse(jsonCart);
@@ -43,7 +59,7 @@ class CartLocalStorage extends Store {
     }
 
     saveProduct(product: Product, count = 1) {
-        const jsonCart = localStorage.getItem('online-store-apple-nepo');
+        const jsonCart = localStorage.getItem(this.name);
 
         if (jsonCart) {
             const localStorageCart = JSON.parse(jsonCart);
@@ -58,11 +74,13 @@ class CartLocalStorage extends Store {
             }
 
             this.update(localStorageCart);
+
+            this.notify();
         }
     }
 
     savePagination(pagination: ICartPagination) {
-        const jsonCart = localStorage.getItem('online-store-apple-nepo');
+        const jsonCart = localStorage.getItem(this.name);
 
         if (jsonCart) {
             const localStorageCart = JSON.parse(jsonCart);
@@ -73,7 +91,7 @@ class CartLocalStorage extends Store {
     }
 
     removeProduct(id: number) {
-        const jsonCart = localStorage.getItem('online-store-apple-nepo');
+        const jsonCart = localStorage.getItem(this.name);
 
         if (jsonCart) {
             const localStorageCart = JSON.parse(jsonCart);
@@ -89,7 +107,7 @@ class CartLocalStorage extends Store {
     }
 
     increaseProduct(product: Product) {
-        const jsonCart = localStorage.getItem('online-store-apple-nepo');
+        const jsonCart = localStorage.getItem(this.name);
 
         if (jsonCart) {
             const localStorageCart = JSON.parse(jsonCart);
@@ -112,7 +130,7 @@ class CartLocalStorage extends Store {
     }
 
     decreaseProduct(id: number) {
-        const jsonCart = localStorage.getItem('online-store-apple-nepo');
+        const jsonCart = localStorage.getItem(this.name);
 
         if (jsonCart) {
             const localStorageCart = JSON.parse(jsonCart);
@@ -138,8 +156,8 @@ class CartLocalStorage extends Store {
     private update(localStorageCart: ICartLocalStorage) {
         const updatedCartJSON = JSON.stringify(localStorageCart);
 
-        localStorage.removeItem('online-store-apple-nepo');
-        localStorage.setItem('online-store-apple-nepo', updatedCartJSON);
+        localStorage.removeItem(this.name);
+        localStorage.setItem(this.name, updatedCartJSON);
     }
 }
 

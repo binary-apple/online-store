@@ -54,7 +54,7 @@ class CartQuery {
             newPage: 1,
         };
 
-        if (!loadCart.params) {
+        if (!loadCart?.params) {
             const paginationItem = this.cartPagination.setPagination(paginationDefault);
             this.cartLocalStorage.savePagination(paginationItem);
 
@@ -83,6 +83,25 @@ class CartQuery {
         url.searchParams.set('page', '' + searchParams.page);
 
         this.router.navigateTo(url.pathname + url.search, '', true);
+    }
+
+    toPrevPage(pagination?: ICartPagination) {
+        const changed = this.cartPagination.showProducts(
+            this.cartPagination.getProducts(this.cartLocalStorage.cart.products),
+            this.cartLocalStorage.cart.products
+        );
+
+        if (pagination) {
+            if (changed) {
+                this.changeQuery(changed);
+            } else {
+                this.changeQuery(pagination);
+            }
+        } else {
+            if (changed) {
+                this.changeQuery(changed);
+            }
+        }
     }
 }
 

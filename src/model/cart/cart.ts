@@ -14,7 +14,7 @@ export class Cart extends Store {
 
         this.cartLocalStorage = cartLocalStorage;
 
-        this.productsInCart = this.cartLocalStorage.cart.products || [];
+        this.productsInCart = this.cartLocalStorage.cart?.products || [];
         this.allPromocodes = new Map<string, number>([
             ['EPM', 0.1],
             ['RS', 0.1],
@@ -41,10 +41,6 @@ export class Cart extends Store {
 
     public getDiscountPrice(getPriceById: (id: number) => number) {
         return this.getTotalPrice(getPriceById) * (1 - this.totalDisc);
-    }
-
-    public getTotalCount() {
-        return this.productsInCart.reduce((acc: number, cur: Product) => acc + cur.count, 0);
     }
 
     public addProductToCart(product: Product, count = 1) {

@@ -15,7 +15,7 @@ class CartPaginationState extends Store {
 
         const storageCart = this.cartLocalStorage.cart;
 
-        if (storageCart.params) {
+        if (storageCart?.params) {
             this.paginationState = {
                 limit: storageCart.params.limit,
                 page: storageCart.params.page,
@@ -40,9 +40,9 @@ class CartPaginationState extends Store {
         const start = page === 1 ? 0 : limit * (page - 1);
         const end = page === 1 ? limit : start + limit;
 
-        const productsItems = products.slice(start, end);
+        const productsItems = products?.slice(start, end);
 
-        if (!products.length) {
+        if (!products?.length) {
             return [];
         }
 
@@ -52,7 +52,7 @@ class CartPaginationState extends Store {
     public setPagination(pagination: ICartPagination) {
         const isIncreasePage = pagination.page < pagination.newPage;
 
-        const pageProducts = this.cartLocalStorage.cart.products;
+        const pageProducts = this.cartLocalStorage.cart?.products;
         const maxPage = Math.ceil(pageProducts?.length / this.paginationState.limit);
 
         if (isIncreasePage) {
@@ -77,7 +77,7 @@ class CartPaginationState extends Store {
     }
 
     public showProducts(prodcutsOnPage: Array<Product>, products: Array<Product>) {
-        if (!prodcutsOnPage.length && products.length) {
+        if (!prodcutsOnPage?.length && products?.length) {
             this.paginationState.newPage = this.paginationState.page - 1;
 
             const paginationItem = this.setPagination(this.paginationState);
