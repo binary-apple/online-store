@@ -8,8 +8,8 @@ export class ErrorView implements View {
     private header: Header;
     private footer: Footer;
     private errorContent: Error;
-    constructor() {
-        this.header = new Header();
+    constructor(cart: Cart) {
+        this.header = new Header(cart);
         this.footer = new Footer();
         this.errorContent = new Error();
     }
