@@ -21,4 +21,12 @@ export class ErrorView implements View {
 
         return root;
     }
+
+    public handleClickToCartIcon(callback: (e: Event)=>void){
+        this.header.handleClickToCartIcon(callback);
+    }
+
+    public handleClickToLogoIcon(callback: (e: Event)=>void){
+        this.header.handleClickToLogoIcon(callback);
+    }
 }
