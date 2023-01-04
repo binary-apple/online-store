@@ -19,13 +19,7 @@ class CartController extends Controller {
     async init() {
         const cartLS = new CartLocalStorage(ONLINE_STORE_APPLE_NEPO);
 
-        const cart = new Cart({
-            params: {
-                limit: 3,
-                page: 1,
-            },
-            products: [],
-        });
+        const cart = new Cart(cartLS.get());
 
         if (!cart.get().products.length) {
             const request = new Request();
