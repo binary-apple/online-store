@@ -1,8 +1,8 @@
-import Router from 'vanilla-router';
+import { HashRouter } from '../router/router';
 import Controller from './controller';
 
 class RouterLinksController extends Controller {
-    constructor(router: Router) {
+    constructor(router: HashRouter) {
         super(router);
     }
 

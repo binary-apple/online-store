@@ -1,31 +1,27 @@
 import { Component } from '../types/component';
 import CartProducts from './cart-products';
 import SelectAllProducts from './select-all-products';
-import CartTotal from './cart-total';
-import CartFacade from '../../model/cart/cart-facade';
+import CartTotalBoard from './cart-total-board';
 import CartPagination from './cart-pagination';
 import { Product } from '../../model/types/product';
+import { Cart } from '../../model/cart/cart';
 
 class CartContent extends Component {
-    cart: CartFacade;
+    cart: Cart;
     cartProducts: CartProducts;
     selectAllProducts: SelectAllProducts;
-    cartTotal: CartTotal;
+    cartTotal: CartTotalBoard;
     cartPagination: CartPagination;
     products: Array<Product> = [];
 
-    constructor(cart: CartFacade) {
+    constructor(cart: Cart) {
         super({ containerTag: 'section', className: ['row', 'cart-content'] });
 
         this.cart = cart;
         this.cartProducts = new CartProducts(this.cart);
         this.selectAllProducts = new SelectAllProducts(this.cart);
-        this.cartTotal = new CartTotal(this.cart);
+        this.cartTotal = new CartTotalBoard(this.cart);
         this.cartPagination = new CartPagination(this.cart);
-
-        this.subscribe(this.cart.paginationStore);
-        this.subscribe(this.cart.cartStore);
-        this.subscribe(this.cart.cartLS);
     }
 
     protected template() {
@@ -36,7 +32,7 @@ class CartContent extends Component {
         return main.content;
     }
 
-    templateCart() {
+    private templateCart() {
         return `
             <div class="row d-flex cart-content__title">
                 <h1 class="col-2 cart-title__text">Cart</h1>
@@ -55,7 +51,7 @@ class CartContent extends Component {
                 </div>
             </div>
             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
+            <div class="modal-dialog modal-confirm-promo">
               <div class="modal-content">
                 <div class="modal-header">
                   <h5 class="modal-title" id="exampleModalLabel">Apply promocode</h5>
@@ -74,13 +70,15 @@ class CartContent extends Component {
         `;
     }
 
-    cartCounter() {
-        const cartNoEmpty = this.cart.quantityProducts !== 0;
+    private cartCounter() {
+        const cart = this.cart.get();
 
-        return cartNoEmpty ? `<span class="col-1 cart-title__cart-counter">${this.cart.quantityProducts}</span>` : '';
+        const cartNoEmpty = cart.products.length !== 0;
+
+        return cartNoEmpty ? `<span class="cart-title__cart-counter">${cart.products.length}</span>` : '';
     }
 
-    update() {
+    private update() {
         const counter = document.querySelector('.cart-title__cart-counter');
 
         if (counter) {

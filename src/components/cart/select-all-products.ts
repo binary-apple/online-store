@@ -1,16 +1,14 @@
-import CartFacade from '../../model/cart/cart-facade';
+import { Cart } from '../../model/cart/cart';
 import { Component } from '../types/component';
 import Checkbox from '../ui/checkbox';
 
 class SelectAllProducts extends Component {
-    cart: CartFacade;
+    cart: Cart;
 
-    constructor(cart: CartFacade) {
+    constructor(cart: Cart) {
         super();
 
         this.cart = cart;
-
-        this.subscribe(this.cart);
     }
 
     protected template() {
@@ -19,6 +17,30 @@ class SelectAllProducts extends Component {
         main.innerHTML = this.getSelectAllProducts();
 
         return main.content;
+    }
+
+    public selectAllChangeHandler(callback: (e: Event, container: HTMLElement) => void) {
+        const checkbox = document.getElementById('select-all');
+
+        if (checkbox) {
+            const productsWrapper = document.querySelector('.cart-products') as HTMLElement;
+
+            checkbox.addEventListener('change', (e: Event) => {
+                callback(e, productsWrapper);
+            });
+        }
+    }
+
+    public removeSelectedClickHandler(callback: (container: HTMLElement) => void) {
+        const removeSelectedBtn = document.querySelector('.cart-remove-selected__btn');
+
+        if (removeSelectedBtn) {
+            const productsWrapper = document.querySelector('.cart-products') as HTMLElement;
+
+            removeSelectedBtn.addEventListener('click', (e: Event) => {
+                callback(productsWrapper);
+            });
+        }
     }
 
     private getSelectAllProducts() {
@@ -42,7 +64,7 @@ class SelectAllProducts extends Component {
         `;
     }
 
-    toString() {
+    public toString() {
         return this.getSelectAllProducts();
     }
 }

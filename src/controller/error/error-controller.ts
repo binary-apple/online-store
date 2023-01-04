@@ -1,8 +1,8 @@
+import { HashRouter } from '../../router/router';
 import Controller from '../controller';
-import Router from 'vanilla-router';
 
 class ErrorController extends Controller {
-    constructor(router: Router) {
+    constructor(router: HashRouter) {
         super(router);
     }
 

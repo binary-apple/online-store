@@ -1,56 +1,58 @@
 import { Component } from './types/component';
-import BreadCrumbsStore from '../model/breadcrumbs-store';
-import { BreadCrumbsNames, IBreadcrumbsNames } from './types/breadcrumbs';
-import { Product } from '../model/types/product';
+import { BreadCrumb } from './types/breadcrumbs';
 
 class BreadCrumbs extends Component {
-    breadcrumbsStore: BreadCrumbsStore;
+    breadcrumbs: Array<BreadCrumb>;
 
-    constructor(product?: Product) {
+    constructor(data: Array<BreadCrumb>) {
         super({ containerTag: 'nav', className: ['row', 'breadcrumbs'] });
-
-        this.breadcrumbsStore = new BreadCrumbsStore();
-
-        this.breadcrumbsStore.set(product);
+        this.breadcrumbs = data;
     }
 
-    template() {
+    protected template() {
         const main = document.createElement('template');
-        const breadcrumbs = this.breadcrumbsStore.get();
 
-        if (breadcrumbs.length) {
-            main.innerHTML = this.breadCrumbsTemplate(breadcrumbs);
+        if (this.breadcrumbs.length) {
+            main.innerHTML = this.breadCrumbsTemplate(this.breadcrumbs);
         }
 
         return main.content;
     }
 
-    breadCrumbsTemplate(breadcrumbs: Array<string>) {
+    breadCrumbsClickHandler(callback: (e: Event) => void) {
+        const breadcrumbs = this.container.querySelector('.breadcrumbs__list');
+
+        if (breadcrumbs) {
+            breadcrumbs.addEventListener('click', (e) => {
+                callback(e);
+            });
+        }
+    }
+
+    private breadCrumbsTemplate(breadcrumbs: Array<BreadCrumb>) {
         const linksTemplate = this.linksTemplate.bind(this);
         const breadcrumbsItems = breadcrumbs.map(linksTemplate);
 
         return `
-            <ul class="col-12 d-flex">
+            <ul class="col-12 d-flex breadcrumbs__list">
                 ${breadcrumbsItems.join('')}
             </ul>
         `;
     }
 
-    linksTemplate(item: string, index: number, array: Array<string>) {
+    private linksTemplate(item: BreadCrumb, index: number, array: Array<BreadCrumb>) {
         const isLast = index === array.length - 1;
-        const isActive = isLast ? ' active' : '';
-        const linkText = (BreadCrumbsNames as IBreadcrumbsNames)[item] || item;
-
+        const isActive = isLast ? 'breadcrumbs__link--active' : '';
         const glue = !isLast ? '<li class="breadcrumbs__item glue">></li>' : '';
 
         return `
             <li class="breadcrumbs__item">
                 ${
-                    (BreadCrumbsNames as IBreadcrumbsNames)[item]
+                    item.link
                         ? `
-                        <a class="breadcrumbs__link${isActive}" href="" data-href="/${item}">${linkText}</a>
+                        <a class="breadcrumbs__link ${isActive}" href="" data-href="${item.link}">${item.name}</a>
                     `
-                        : `<span class="breadcrumbs__link${isActive}" href="" data-href="/${item}">${linkText}</span>`
+                        : `<span class="breadcrumbs__link ${isActive}" href="" data-href="${item.link}">${item.name}</span>`
                 }
             </li>
             ${glue}

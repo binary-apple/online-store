@@ -1,10 +1,10 @@
 import Controller from '../controller';
-import Router from 'vanilla-router';
 import { MainView } from '../../view/main-view';
 import RouterLinksController from '../router-links-controller';
+import { HashRouter } from '../../router/router';
 
 class MainController extends Controller {
-    constructor(router: Router) {
+    constructor(router: HashRouter) {
         super(router);
     }
 

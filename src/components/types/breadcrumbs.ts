@@ -1,8 +1,4 @@
-export interface IBreadcrumbsNames {
-    [index: string]: string;
-}
-
-export enum BreadCrumbsNames {
-    '/' = 'Main',
-    'cart' = 'Cart',
+export interface BreadCrumb {
+    link: string;
+    name: string;
 }

@@ -16,6 +16,7 @@
         max-height: 20px;
         display: flex;
         align-items: center;
+        text-transform: capitalize;
 
         &.glue {
             margin: 0 25px;
@@ -25,7 +26,7 @@
     &__link {
         color: $onSurface;
 
-        &.active {
+        &--active {
             color: $hard;
         }
     }

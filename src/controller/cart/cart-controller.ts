@@ -1,63 +1,255 @@
 import Controller from '../controller';
-import Router from 'vanilla-router';
 import CartView from '../../view/cart-view';
-import SelectAllProducts from './features/select-all-products';
-import RemoveSelectedProducts from './features/remove-selected-products';
-import ChangeQuanityInCart from './features/change-quantity-in-cart';
-import PromoCode from './features/promocode';
-import MakeOrder from './features/make-order';
-import CartPagination from './features/cart-pagination';
 import { Cart } from '../../model/cart/cart';
 import CartLocalStorage from '../../model/cart/cart-local-storage';
-import CartFacade from '../../model/cart/cart-facade';
-import CartPaginationState from '../../model/cart/cart-pagination-state';
-import CartQuery from '../../model/cart/cart-query';
+import { HashRouter } from '../../router/router';
 import { Product } from '../../model/types/product';
-import RouterLinksController from '../router-links-controller';
+import Request from '../../api/request';
+import { Modal } from 'bootstrap';
 
 const ONLINE_STORE_APPLE_NEPO = process.env.LOCAL_STORAGE_NAME as string;
 
 class CartController extends Controller {
-    constructor(router: Router) {
+    modalElem = {} as Modal;
+
+    constructor(router: HashRouter) {
         super(router);
     }
 
-    init() {
-        const cartLocalStorage = new CartLocalStorage(ONLINE_STORE_APPLE_NEPO);
-        const cart = new Cart(cartLocalStorage);
+    async init() {
+        const cartLS = new CartLocalStorage(ONLINE_STORE_APPLE_NEPO);
 
-        const cartPagination = new CartPaginationState(cart, cartLocalStorage);
+        const cart = new Cart({
+            params: {
+                limit: 3,
+                page: 1,
+            },
+            products: [],
+        });
 
-        const cartFacade = new CartFacade(
-            cart,
-            cartLocalStorage,
-            cartPagination,
-            new CartQuery(cartPagination, cartLocalStorage, this.router)
-        );
+        if (!cart.get().products.length) {
+            const request = new Request();
+            const response = await request.make('GET', '/products?limit=100');
 
-        if (!cartLocalStorage.cart?.products?.length) {
-            cartFacade.addProduct({ id: 1, stock: 5 } as Product, 1);
-            cartFacade.addProduct({ id: 2, stock: 10 } as Product, 1);
-            cartFacade.addProduct({ id: 3, stock: 3 } as Product, 1);
-            cartFacade.addProduct({ id: 4, stock: 15 } as Product, 1);
-            cartFacade.addProduct({ id: 5, stock: 3 } as Product, 1);
+            response.products.forEach((item: Product) => {
+                cart.addProductToCart(item, 1);
+                cartLS.set(cart.get());
+            });
         }
 
-        const cartView = new CartView(cartFacade);
+        const cartView = new CartView(cart);
         cartView.init();
 
-        const features = [
-            new RouterLinksController(this.router),
-            new SelectAllProducts(),
-            new RemoveSelectedProducts(cartFacade),
-            new ChangeQuanityInCart(cartFacade),
-            new CartPagination(cartFacade),
-            new PromoCode(cartFacade),
-            new MakeOrder(),
-        ];
+        cartView.breadCrumbsClickHandler((e: Event) => {
+            const htmlTarget = e.target as HTMLElement;
 
-        features.forEach((item) => {
-            item.init();
+            const isException = htmlTarget.dataset.exception;
+
+            if (isException) {
+                e.preventDefault();
+            }
+
+            const isLink = htmlTarget.tagName === 'A' && !isException;
+
+            if (isLink) {
+                e.preventDefault();
+
+                const { href } = htmlTarget.dataset;
+
+                if (href) {
+                    this.router.navigateTo(href);
+                }
+            }
+        });
+
+        cartView.selectAllChangeHandler((e: Event, container: HTMLElement) => {
+            const inputTarget = e.target as HTMLInputElement;
+
+            const productCbs = container.querySelectorAll('input[type="checkbox"]');
+
+            if (productCbs.length) {
+                if (inputTarget.checked) {
+                    productCbs.forEach((item) => ((item as HTMLInputElement).checked = true));
+                } else {
+                    productCbs.forEach((item) => ((item as HTMLInputElement).checked = false));
+                }
+            }
+        });
+
+        cartView.removeSelectedClickHandler((container: HTMLElement) => {
+            const productCbs = container.querySelectorAll('input[type="checkbox"]');
+
+            if (productCbs.length) {
+                productCbs.forEach((item) => {
+                    const cb = item as HTMLInputElement;
+
+                    if (cb.checked) {
+                        const productId = +cb.value;
+
+                        cart.removeProductFromCart(productId);
+
+                        cartLS.set(cart.get());
+                    }
+                });
+            }
+        });
+
+        cartView.changeLimitPaginationHandler((e: Event) => {
+            const inputTarget = e.target as HTMLInputElement;
+
+            if (!inputTarget.value) {
+                return;
+            }
+
+            if (+inputTarget.value < 1) {
+                inputTarget.value = '1';
+                cart.changeParamsLimit(+inputTarget.value);
+                cartLS.set(cart.get());
+
+                return;
+            }
+
+            cart.changeParamsLimit(+inputTarget.value);
+            cartLS.set(cart.get());
+        });
+
+        cartView.changePagePaginationClickHandler((e: Event, type: string) => {
+            cart.changeParamsPage(type);
+            cartLS.set(cart.get());
+        });
+
+        cartView.linkClickHandler((e: Event) => {
+            const htmlTarget = e.target as HTMLElement;
+
+            const isException = htmlTarget.dataset.exception;
+
+            if (isException) {
+                e.preventDefault();
+            }
+
+            const isLink = htmlTarget.tagName === 'A' || (htmlTarget.closest('a') && !isException);
+
+            if (isLink) {
+                e.preventDefault();
+                const { href } = htmlTarget.dataset;
+
+                if (href) {
+                    this.router.navigateTo(href);
+                }
+            }
+        });
+
+        cartView.changeQuntityProductInCart((e: Event, type: string) => {
+            const htmlTarget = e.target as HTMLElement;
+            const cartState = cart.get();
+
+            const productWrapper = htmlTarget.closest('.cart-item') as HTMLElement;
+
+            if (productWrapper) {
+                const checkbox = productWrapper.querySelector('.checkbox-fake__input') as HTMLInputElement;
+
+                if (checkbox) {
+                    const productId = +checkbox.value;
+
+                    const product = cartState.products.find((el) => el.id === productId);
+
+                    if (product) {
+                        if (type === 'increase') {
+                            cart.increaseProductCount(product);
+                        } else {
+                            cart.decreaseProductCount(product.id);
+                        }
+
+                        cartLS.set(cart.get());
+                    }
+                }
+            }
+        });
+
+        cartView.inputHandlerPromoCode((e: Event) => {
+            const inputTarget = e.target as HTMLInputElement;
+
+            const value = inputTarget.value;
+
+            const existPromo = cart.getExistPromocodes();
+            const currentPromos = cart.getConfirmedPromocodes();
+
+            const hasCoincedence = existPromo.get(value) && !currentPromos.map((item) => item.name).includes(value);
+
+            if (hasCoincedence) {
+                const modal = document.querySelector('.modal');
+                if (modal) {
+                    this.modalElem = new Modal(modal);
+
+                    modal.addEventListener('show.bs.modal', () => {
+                        const promoWrapper = modal.querySelector('b') as HTMLElement;
+                        if (promoWrapper) {
+                            promoWrapper.innerText = value;
+                        }
+                    });
+
+                    this.modalElem.show();
+                    inputTarget.blur();
+
+                    modal.addEventListener('hidden.bs.modal', () => {
+                        const promoWrapper = modal.querySelector('b') as HTMLElement;
+
+                        if (promoWrapper) {
+                            promoWrapper.innerText = '';
+                        }
+                    });
+                }
+            }
+        });
+
+        cartView.confirmPromoCodeClickHandler(() => {
+            const modal = document.querySelector('.modal-confirm-promo');
+
+            if (modal) {
+                const promoWrapper = modal.querySelector('b') as HTMLElement;
+
+                if (promoWrapper) {
+                    const promo = promoWrapper.innerText.trim();
+                    cart.addPromocode(promo);
+
+                    cartLS.set(cart.get());
+
+                    this.modalElem.hide();
+
+                    const total = document.querySelector('.cart-board__total-price');
+
+                    if (total) {
+                        total.classList.add('through');
+                    }
+
+                    const input = document.querySelector('.cart-total__promo') as HTMLInputElement;
+
+                    if (input) {
+                        input.value = '';
+                        input.focus();
+                    }
+                }
+            }
+        });
+
+        cartView.removePromoCodeClickHandler((e: Event) => {
+            const htmlTarget = e.target as HTMLElement;
+
+            const isRemovePromocodeBtn = htmlTarget.classList.contains('cart-total__promo-remove');
+
+            if (isRemovePromocodeBtn) {
+                const promoItem = htmlTarget.closest('.cart-total__promo-item');
+
+                if (promoItem) {
+                    const promoNameWrapper = promoItem.querySelector('.cart-promocode__name') as HTMLElement;
+
+                    if (promoNameWrapper) {
+                        const promo = promoNameWrapper.innerText.trim();
+                        cart.removePromocode(promo);
+                        cartLS.set(cart.get());
+                    }
+                }
+            }
         });
     }
 }

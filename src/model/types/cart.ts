@@ -1,8 +1,4 @@
-export interface CartItem {
-    productId: number;
-    count: number;
-    order: number;
-}
+import { Product } from './product';
 
 export interface ICartPagination {
     limit: number;
@@ -10,10 +6,12 @@ export interface ICartPagination {
     [index: string]: number;
 }
 
-export interface ICartLocalStorage {
-    params: {
-        limit: number;
-        page: number;
-    };
-    products: Array<CartItem>;
+export interface ICart {
+    params: ICartPagination;
+    products: Array<Product>;
+}
+
+export interface IPromoCode {
+    name: string;
+    discount: number;
 }

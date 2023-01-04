@@ -16,7 +16,10 @@ class ProductView extends BaseView {
 
         this.header = new Header();
         this.footer = new Footer();
-        this.breadcrumbs = new BreadCrumbs(product);
+
+        const breadcrumbs = this.getBreadcrumbs(product);
+
+        this.breadcrumbs = new BreadCrumbs(breadcrumbs);
         this.content = new ProductContent();
     }
 
@@ -26,6 +29,27 @@ class ProductView extends BaseView {
         this.container.append(this.breadcrumbs.render());
         this.container.append(this.content.render());
         this.root.append(this.footer.render());
+    }
+
+    getBreadcrumbs(product: Product) {
+        return [
+            {
+                link: '/',
+                name: 'Main',
+            },
+            {
+                link: '',
+                name: product.category.toLowerCase().trim(),
+            },
+            {
+                link: '',
+                name: product.brand.toLowerCase().trim(),
+            },
+            {
+                link: '',
+                name: product.title.toLowerCase().trim(),
+            },
+        ];
     }
 }
 

@@ -1,9 +1,9 @@
-import Router from 'vanilla-router';
+import { HashRouter } from '../router/router';
 
 class Controller {
-    protected router = {} as Router;
+    protected router = {} as HashRouter;
 
-    constructor(router: Router) {
+    constructor(router: HashRouter) {
         this.router = router;
     }
 }

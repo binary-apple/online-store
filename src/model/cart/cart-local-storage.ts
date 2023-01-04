@@ -1,92 +1,52 @@
-import Utils from '../../utils/utils';
-import { Store } from '../store';
-import { ICartLocalStorage, ICartPagination } from '../types/cart';
-import { Product } from '../types/product';
+import { Component } from '../../components/types/component';
+import { ICart } from '../types/cart';
 
-const utils = new Utils();
-
-class CartLocalStorage extends Store {
+class CartLocalStorage extends Component {
     name: string;
+    initialCart;
 
     constructor(name: string) {
         super();
-
         this.name = name;
 
-        this.init();
-    }
+        this.initialCart = {
+            params: {
+                limit: 3,
+                page: 1,
+            },
+            products: [],
+        };
 
-    init() {
-        const cart = localStorage.getItem(this.name);
+        const cart = this.get();
 
         if (!cart) {
-            const jsonCart = JSON.stringify({});
-
-            localStorage.setItem('online-store-apple-nepo', jsonCart);
+            const jsonCart = JSON.stringify(this.initialCart);
+            localStorage.setItem(this.name, jsonCart);
         }
     }
 
-    public getTotalCount() {
-        const cartJSON = localStorage.getItem(this.name);
+    protected template(): HTMLElement | DocumentFragment {
+        const main = document.createElement('template');
 
-        if (cartJSON) {
-            const cart = JSON.parse(cartJSON);
-
-            return cart.products?.reduce((acc: number, cur: Product) => acc + cur.count, 0);
-        }
-
-        return 0;
+        return main.content;
     }
 
-    public get cart() {
-        const cart = localStorage.getItem(this.name);
-
-        if (cart) {
-            return JSON.parse(cart);
-        }
-
-        return undefined;
-    }
-
-    public get paginationParams() {
-        const jsonCart = localStorage.getItem(this.name);
-
-        if (jsonCart) {
-            const localStorageCart = JSON.parse(jsonCart);
-
-            return localStorageCart.params;
-        }
-    }
-
-    savePagination(pagination: ICartPagination) {
-        const jsonCart = localStorage.getItem(this.name);
-
-        if (jsonCart) {
-            const localStorageCart = JSON.parse(jsonCart);
-            localStorageCart.params = { ...pagination };
-
-            this.update(localStorageCart);
-        }
-    }
-
-    saveProducts(products: Array<Product>) {
-        const jsonCart = localStorage.getItem(this.name);
-
-        if (jsonCart) {
-            const localStorageCart = JSON.parse(jsonCart);
-
-            localStorageCart.products = [...products];
-
-            this.update(localStorageCart);
-            this.notify();
-        }
-    }
-
-    private update(localStorageCart: ICartLocalStorage) {
-        const updatedCartJSON = JSON.stringify(localStorageCart);
-
+    set(cart: ICart) {
         localStorage.removeItem(this.name);
-        localStorage.setItem(this.name, updatedCartJSON);
+
+        const jsonCart = JSON.stringify(cart);
+
+        localStorage.setItem(this.name, jsonCart);
+    }
+
+    get() {
+        const jsonCart = localStorage.getItem(this.name);
+
+        if (jsonCart) {
+            const cart = JSON.parse(jsonCart);
+
+            return cart;
+        }
     }
 }
 
