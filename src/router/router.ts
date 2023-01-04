@@ -1,7 +1,7 @@
 import Router from 'vanilla-router';
 import Routers from './routers';
 import CartController from '../controller/cart/cart-controller';
-import ProductsController from '../controller/products/products-controller';
+import MainController from '../controller/main/main-controller';
 import ProductController from '../controller/product/product-controller';
 import ErrorController from '../controller/error/error-controller';
 import Utils from '../utils/utils';
@@ -17,10 +17,10 @@ const router = new Router({
     },
 });
 
-router.add(Routers.PRODUCTS, () => {
-    const productsController = new ProductsController(router);
+router.add(Routers.MAIN, () => {
+    const mainController = new MainController(router);
 
-    productsController.init();
+    mainController.init();
 });
 
 router.add(Routers.PRODUCT, () => {

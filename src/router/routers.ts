@@ -1,5 +1,5 @@
 enum Routers {
-    PRODUCTS = '',
+    MAIN = '',
     PRODUCT = '/product/(:any)',
     CART = '/cart',
 }
