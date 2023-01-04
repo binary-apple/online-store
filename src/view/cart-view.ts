@@ -5,15 +5,20 @@ import BreadCrumbs from '../components/breadcrumbs';
 import { Header } from '../components/header';
 import { Footer } from '../components/footer';
 import { Cart } from '../model/cart/cart';
+import { Modal } from 'bootstrap';
 
 class CartView extends BaseView implements View {
     private content: CartContent;
     private breadcrumbs: BreadCrumbs;
     private header: Header;
     private footer: Footer;
+    cart: Cart;
+    modalElem = {} as Modal;
 
     constructor(cart: Cart) {
         super();
+
+        this.cart = cart;
 
         this.header = new Header();
         this.footer = new Footer();
@@ -73,16 +78,16 @@ class CartView extends BaseView implements View {
         this.content.cartProducts.linkClickHandler(callback);
     }
 
-    public inputHandlerPromoCode(callback: (e: Event) => void) {
-        this.content.cartTotal.inputHandlerPromoCode(callback);
-    }
-
-    public confirmPromoCodeClickHandler(callback: () => void) {
+    public confirmPromoCodeClickHandler(callback: (wrapper: HTMLElement) => void) {
         this.content.cartTotal.confirmPromoCodeClickHandler(callback);
     }
 
     public removePromoCodeClickHandler(callback: (e: Event) => void) {
         this.content.cartTotal.removePromoCodeClickHandler(callback);
+    }
+
+    public inputHandlerPromoCode() {
+        this.content.cartTotal.inputHandlerPromoCode();
     }
 }
 

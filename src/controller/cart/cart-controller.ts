@@ -5,13 +5,10 @@ import CartLocalStorage from '../../model/cart/cart-local-storage';
 import { HashRouter } from '../../router/router';
 import { Product } from '../../model/types/product';
 import Request from '../../api/request';
-import { Modal } from 'bootstrap';
 
 const ONLINE_STORE_APPLE_NEPO = process.env.LOCAL_STORAGE_NAME as string;
 
 class CartController extends Controller {
-    modalElem = {} as Modal;
-
     constructor(router: HashRouter) {
         super(router);
     }
@@ -160,68 +157,17 @@ class CartController extends Controller {
             }
         });
 
-        cartView.inputHandlerPromoCode((e: Event) => {
-            const inputTarget = e.target as HTMLInputElement;
+        cartView.inputHandlerPromoCode();
 
-            const value = inputTarget.value;
-
-            const existPromo = cart.getExistPromocodes();
-            const currentPromos = cart.getConfirmedPromocodes();
-
-            const hasCoincedence = existPromo.get(value) && !currentPromos.map((item) => item.name).includes(value);
-
-            if (hasCoincedence) {
-                const modal = document.querySelector('.modal');
-                if (modal) {
-                    this.modalElem = new Modal(modal);
-
-                    modal.addEventListener('show.bs.modal', () => {
-                        const promoWrapper = modal.querySelector('b') as HTMLElement;
-                        if (promoWrapper) {
-                            promoWrapper.innerText = value;
-                        }
-                    });
-
-                    this.modalElem.show();
-                    inputTarget.blur();
-
-                    modal.addEventListener('hidden.bs.modal', () => {
-                        const promoWrapper = modal.querySelector('b') as HTMLElement;
-
-                        if (promoWrapper) {
-                            promoWrapper.innerText = '';
-                        }
-                    });
-                }
-            }
-        });
-
-        cartView.confirmPromoCodeClickHandler(() => {
-            const modal = document.querySelector('.modal-confirm-promo');
-
-            if (modal) {
-                const promoWrapper = modal.querySelector('b') as HTMLElement;
+        cartView.confirmPromoCodeClickHandler((wrapper: HTMLElement) => {
+            if (wrapper) {
+                const promoWrapper = wrapper.querySelector('b') as HTMLElement;
 
                 if (promoWrapper) {
                     const promo = promoWrapper.innerText.trim();
                     cart.addPromocode(promo);
 
                     cartLS.set(cart.get());
-
-                    this.modalElem.hide();
-
-                    const total = document.querySelector('.cart-board__total-price');
-
-                    if (total) {
-                        total.classList.add('through');
-                    }
-
-                    const input = document.querySelector('.cart-total__promo') as HTMLInputElement;
-
-                    if (input) {
-                        input.value = '';
-                        input.focus();
-                    }
                 }
             }
         });

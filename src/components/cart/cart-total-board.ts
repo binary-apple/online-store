@@ -1,9 +1,11 @@
+import { Modal } from 'bootstrap';
 import { Cart } from '../../model/cart/cart';
 import { IPromoCode } from '../../model/types/cart';
 import { Component } from '../types/component';
 
 class CartTotalBoard extends Component {
     cart: Cart;
+    modalElem = {} as Modal;
 
     constructor(cart: Cart) {
         super();
@@ -25,25 +27,72 @@ class CartTotalBoard extends Component {
         return this.getTotalInformation();
     }
 
-    public inputHandlerPromoCode(callback: (e: Event) => void) {
+    public inputHandlerPromoCode() {
         const input = document.querySelector('.cart-total__promo');
 
         if (input) {
             input.addEventListener('input', (e: Event) => {
-                callback(e);
+                const inputTarget = e.target as HTMLInputElement;
+                const value = inputTarget.value;
+
+                const existPromo = this.cart.getExistPromocodes();
+                const currentPromos = this.cart.getConfirmedPromocodes();
+
+                const hasCoincedence = existPromo.get(value) && !currentPromos.map((item) => item.name).includes(value);
+
+                if (hasCoincedence) {
+                    const modal = document.querySelector('.modal');
+
+                    if (modal) {
+                        this.modalElem = new Modal(modal);
+
+                        modal.addEventListener('show.bs.modal', () => {
+                            const promoWrapper = modal.querySelector('b') as HTMLElement;
+                            if (promoWrapper) {
+                                promoWrapper.innerText = value;
+                            }
+                        });
+
+                        this.modalElem.show();
+                        inputTarget.blur();
+
+                        modal.addEventListener('hidden.bs.modal', () => {
+                            const promoWrapper = modal.querySelector('b') as HTMLElement;
+
+                            if (promoWrapper) {
+                                promoWrapper.innerText = '';
+                            }
+                        });
+                    }
+                }
             });
         }
     }
 
-    public confirmPromoCodeClickHandler(callback: () => void) {
-        const modal = document.querySelector('.modal');
+    public confirmPromoCodeClickHandler(callback: (wrapper: HTMLElement) => void) {
+        const modal = document.querySelector('.modal-confirm-promo') as HTMLElement;
 
         if (modal) {
             const confirmBtn = modal.querySelector('.cart-modal__confirm');
 
             if (confirmBtn) {
                 confirmBtn.addEventListener('click', () => {
-                    callback();
+                    callback(modal);
+
+                    this.modalElem.hide();
+
+                    const total = document.querySelector('.cart-board__total-price');
+
+                    if (total) {
+                        total.classList.add('through');
+                    }
+
+                    const input = document.querySelector('.cart-total__promo') as HTMLInputElement;
+
+                    if (input) {
+                        input.value = '';
+                        input.focus();
+                    }
                 });
             }
         }
@@ -136,7 +185,7 @@ class CartTotalBoard extends Component {
             </span>`;
     }
 
-    private update() {
+    public update() {
         const totalInfo = document.querySelector('.cart-board__info');
 
         if (totalInfo) {
