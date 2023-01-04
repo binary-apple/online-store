@@ -1,7 +1,6 @@
 import Controller from '../controller';
 import Router from 'vanilla-router';
 import CartView from '../../view/cart-view';
-import RouterLinksController from '../router-links-controller';
 import SelectAllProducts from './features/select-all-products';
 import RemoveSelectedProducts from './features/remove-selected-products';
 import ChangeQuanityInCart from './features/change-quantity-in-cart';
@@ -14,6 +13,7 @@ import CartFacade from '../../model/cart/cart-facade';
 import CartPaginationState from '../../model/cart/cart-pagination-state';
 import CartQuery from '../../model/cart/cart-query';
 import { Product } from '../../model/types/product';
+import RouterLinksController from '../router-links-controller';
 
 const ONLINE_STORE_APPLE_NEPO = process.env.LOCAL_STORAGE_NAME as string;
 

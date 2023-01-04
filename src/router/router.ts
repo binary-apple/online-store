@@ -22,7 +22,6 @@ router.add(Routers.MAIN, () => {
 
 router.add(Routers.PRODUCT, () => {
     const productController = new ProductController(router);
-
     productController.init();
 });
 

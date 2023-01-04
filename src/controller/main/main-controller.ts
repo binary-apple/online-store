@@ -10,12 +10,10 @@ class MainController extends Controller {
 
     async init() {
         const mainView = new MainView();
-
         mainView.init();
 
-        const routerLinksController = new RouterLinksController(this.router);
-
-        routerLinksController.init();
+        const links = new RouterLinksController(this.router);
+        links.init();
     }
 }
 

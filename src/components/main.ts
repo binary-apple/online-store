@@ -2,7 +2,7 @@ import { Component } from './types/component';
 
 export class Content extends Component {
     constructor() {
-        super({ containerTag: 'main' });
+        super({ containerTag: 'main', className: ['row', 'main-container'] });
     }
 
     protected template(): DocumentFragment {

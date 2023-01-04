@@ -1,16 +1,17 @@
 import { Component } from './types/component';
 import BreadCrumbsStore from '../model/breadcrumbs-store';
 import { BreadCrumbsNames, IBreadcrumbsNames } from './types/breadcrumbs';
+import { Product } from '../model/types/product';
 
 class BreadCrumbs extends Component {
     breadcrumbsStore: BreadCrumbsStore;
 
-    constructor() {
+    constructor(product?: Product) {
         super({ containerTag: 'nav', className: ['row', 'breadcrumbs'] });
 
         this.breadcrumbsStore = new BreadCrumbsStore();
 
-        this.breadcrumbsStore.set();
+        this.breadcrumbsStore.set(product);
     }
 
     template() {
@@ -29,7 +30,7 @@ class BreadCrumbs extends Component {
         const breadcrumbsItems = breadcrumbs.map(linksTemplate);
 
         return `
-            <ul class="col-2 d-flex">
+            <ul class="col-12 d-flex">
                 ${breadcrumbsItems.join('')}
             </ul>
         `;
@@ -38,13 +39,19 @@ class BreadCrumbs extends Component {
     linksTemplate(item: string, index: number, array: Array<string>) {
         const isLast = index === array.length - 1;
         const isActive = isLast ? ' active' : '';
-        const linkText = (BreadCrumbsNames as IBreadcrumbsNames)[item];
+        const linkText = (BreadCrumbsNames as IBreadcrumbsNames)[item] || item;
 
         const glue = !isLast ? '<li class="breadcrumbs__item glue">></li>' : '';
 
         return `
             <li class="breadcrumbs__item">
-                <a class="breadcrumbs__link${isActive}" href="" data-href="/${item}">${linkText}</a>
+                ${
+                    (BreadCrumbsNames as IBreadcrumbsNames)[item]
+                        ? `
+                        <a class="breadcrumbs__link${isActive}" href="" data-href="/${item}">${linkText}</a>
+                    `
+                        : `<span class="breadcrumbs__link${isActive}" href="" data-href="/${item}">${linkText}</span>`
+                }
             </li>
             ${glue}
         `;
