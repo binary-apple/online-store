@@ -3,15 +3,18 @@ import Router from 'vanilla-router';
 import Routers from '../../router/routers';
 import { Cart } from '../../model/cart';
 import { MainView } from '../../view/main-view';
+import Request from '../../api/request';
+import Products from '../../model/products/products';
 
 class MainController extends Controller {
     private view: MainView;
     private cart: Cart = new Cart();
+    private products: Products = new Products([]);
     constructor(router: Router) {
         super(router);
         
         const big = this.getBigFromQuery() === 'false' ? false : true;
-        this.view = new MainView(this.cart, big);
+        this.view = new MainView(this.cart, this.products, big);
     }
 
     async init() {
@@ -20,17 +23,21 @@ class MainController extends Controller {
 
         let cart = new Cart();
 
-        const view = new MainView(cart);
-        view.init(this.root);
+        // const view = new MainView(cart);
+        this.view.init(this.root);
 
-        view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
-        view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
+        this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
+        this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
-        view.handleSliderInput(this.handleSliderInput.bind(this));
+        this.view.handleSliderInput(this.handleSliderInput.bind(this));
         this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
 
         this.view.handleBigScaleClick(this.handleBigScaleClick.bind(this));
         this.view.handleSmallScaleClick(this.handleSmallScaleClick.bind(this));
+
+        const prods = new Request().make('GET', 'https://dummyjson.com/products?limit=100');
+        //  TODO: catch error
+        this.products.set((await prods).products);
     }
 
     private handleClickToCartIcon(e: Event){

@@ -1,13 +1,19 @@
 import { Component } from "../types/component";
+import { Products as ProductsModel } from "../../model/products/products";
+import { Subscriber } from "../../utils/observer-interface";
 
-export class Products extends Component {
-    constructor(private big: boolean) {
-        super({containerTag: 'div', className: 'products flex-grow-1 d-flex gap-2'.split(' ')});
+export class Products extends Component implements Subscriber {
+    private readonly productsModel: ProductsModel;
+    constructor(private big: boolean, products: ProductsModel) {
+        super({containerTag: 'div', className: 'products d-flex flex-column gap-2'.split(' ')});
+        this.productsModel = products;
+        this.subscribe(this.productsModel);
     }
 
     protected template(): DocumentFragment {
         const temp = document.createElement('template');
         temp.innerHTML = `
+        <div class=" flex-grow-1 d-flex gap-2">
             <select name="sort" id="sort">
                 <option value="sort-title">Sort</option>
                 <option value="price-asc">Sort by price ASC</option>
@@ -22,8 +28,32 @@ export class Products extends Component {
             <div class="view big-view ${this.big ? 'active-view' : ''} d-flex flex-wrap justify-content-around">
                 ${this.drawViewIcon(9)}
             </div>
+        </div>
+        <div id="prods" class="d-flex flex-wrap gap-2"></div>
         `;
         return temp.content;
+    }
+
+    private drawProducts(): void {
+        const prodsWrapper = this.container.querySelector('#prods');
+        if (!prodsWrapper) throw new Error('Products Wrapper not exist');
+        prodsWrapper.innerHTML = '';
+        this.productsModel.get().forEach((el) => {
+            let productItem = document.createElement('div');
+            productItem.classList.add('product-item');
+            // productItem.style.width = this.big ? '33.33%' : '25%';
+            // console.log('productItem.style.width: ', productItem.style.width);
+            if (this.big) {
+                productItem.classList.add('big-item');
+            } else {
+                productItem.classList.add('small-item');
+            }
+            productItem.innerHTML = `
+            <img src="${el.thumbnail}" loading="lazy" alt="${el.title}" class="item-img">
+            `
+            // productItem.innerHTML = `${el.brand}`;
+            prodsWrapper.append(productItem);
+        })
     }
 
     private drawViewIcon(size: number) {
@@ -77,5 +107,9 @@ export class Products extends Component {
         if (smallIcon) {
             smallIcon.addEventListener('click', callback);
         }
+    }
+
+    public update(): void {
+        this.drawProducts();
     }
 }

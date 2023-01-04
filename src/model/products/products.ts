@@ -2,7 +2,7 @@ import { IFilter, FilterMetric } from '../types/filter';
 import { Product } from '../types/product';
 import { Store } from '../store';
 
-class Products extends Store {
+export class Products extends Store {
     initialItems: Array<Product>;
     filtred: Array<Product>;
     filterItem: IFilter;
@@ -14,6 +14,14 @@ class Products extends Store {
 
         this.filter = this.filter;
         this.filterItem = {} as IFilter;
+    }
+
+    public set(items: Array<Product>) {
+        this.filtred = items;
+        this.initialItems = items;
+        // TODO: call filter once I know how to do with it
+        // this.filter(this.filterItem);
+        this.notify();
     }
 
     public get() {
@@ -164,7 +172,7 @@ class Products extends Store {
     }
 
     private emptyCheck(filter: IFilter) {
-        const isEmpty = !filter.search && !filter.categories.length && !filter.brands.length;
+        const isEmpty = !filter.search && !filter.categories && !filter.brands;
 
         return isEmpty;
     }

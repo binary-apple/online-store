@@ -57,3 +57,25 @@ input[type="search"] {
 .small-view.active-view > div {
     border-color: $primary;
 }
+
+.product-item {
+    position: relative;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.item-img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.big-item {
+    width: calc(33% - 0.5rem);
+    padding-bottom:33%;
+}
+
+.small-item {
+    width: calc(25% - 0.5rem);
+    padding-bottom:25%;
+}

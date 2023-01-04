@@ -1,20 +1,21 @@
 import { Component } from "../types/component";
 import { Products } from "./products";
+import { Products as ProductsModel } from "../../model/products/products";
 import { Slider } from "./slider";
 
 export class MainProducts extends Component
 {
     private readonly priceSlider;
     private readonly products;
-    constructor(big: boolean) {
+    constructor(big: boolean, productsModel: ProductsModel) {
         super({containerTag: 'main', className: 'main container'.split(' ')});
         this.priceSlider = new Slider();
-        this.products = new Products(big);
+        this.products = new Products(big, productsModel);
     }
 
     protected template(): HTMLElement {
         const wrapper = document.createElement('div');
-        wrapper.classList.add(...'position-relative d-flex gap-3'.split(' '));
+        wrapper.classList.add(...'position-relative d-flex gap-3 mb-3'.split(' '));
         wrapper.append(this.priceSlider.render());
         wrapper.append(this.products.render());
         return wrapper;

@@ -3,16 +3,17 @@ import { Footer } from "../components/footer";
 import { View } from "./types/view";
 import { Cart } from "../model/cart";
 import { MainProducts } from "../components/products/main";
+import { Products as ProductsModel } from "../model/products/products";
 
 export class MainView implements View {
     private header: Header;
     private footer: Footer;
     private content: MainProducts;
 
-    constructor(cart: Cart, private big: boolean = true) {
+    constructor(cart: Cart, productsModel: ProductsModel, private big: boolean = true) {
         this.header = new Header(cart);
         this.footer = new Footer();
-        this.content = new MainProducts(big);
+        this.content = new MainProducts(big, productsModel);
     }
 
     init(root: HTMLElement) {
