@@ -58,27 +58,6 @@ class CartLocalStorage extends Store {
         }
     }
 
-    saveProduct(product: Product, count = 1) {
-        const jsonCart = localStorage.getItem(this.name);
-
-        if (jsonCart) {
-            const localStorageCart = JSON.parse(jsonCart);
-
-            const productItem = utils.createProduct(product, count, localStorageCart.products);
-
-            if (localStorageCart.products) {
-                localStorageCart.products.push(productItem);
-            } else {
-                localStorageCart.products = [];
-                localStorageCart.products.push(productItem);
-            }
-
-            this.update(localStorageCart);
-
-            this.notify();
-        }
-    }
-
     savePagination(pagination: ICartPagination) {
         const jsonCart = localStorage.getItem(this.name);
 
@@ -90,66 +69,16 @@ class CartLocalStorage extends Store {
         }
     }
 
-    removeProduct(id: number) {
+    saveProducts(products: Array<Product>) {
         const jsonCart = localStorage.getItem(this.name);
 
         if (jsonCart) {
             const localStorageCart = JSON.parse(jsonCart);
 
-            if (localStorageCart.products) {
-                localStorageCart.products = localStorageCart.products.filter((el: Product) => el.id !== id);
-
-                this.update(localStorageCart);
-
-                this.notify();
-            }
-        }
-    }
-
-    increaseProduct(product: Product) {
-        const jsonCart = localStorage.getItem(this.name);
-
-        if (jsonCart) {
-            const localStorageCart = JSON.parse(jsonCart);
-            const index = localStorageCart.products.findIndex((el: Product) => el.id === product.id);
-
-            if (index >= 0) {
-                if (localStorageCart.products) {
-                    localStorageCart.products[index].count += 1;
-                } else {
-                    localStorageCart.products = [];
-                    const productItem = utils.createProduct(product, product.count + 1, localStorageCart.products);
-                    localStorageCart.products.push(productItem);
-                }
-            }
+            localStorageCart.products = [...products];
 
             this.update(localStorageCart);
-
             this.notify();
-        }
-    }
-
-    decreaseProduct(id: number) {
-        const jsonCart = localStorage.getItem(this.name);
-
-        if (jsonCart) {
-            const localStorageCart = JSON.parse(jsonCart);
-
-            if (localStorageCart.products.length) {
-                const index = localStorageCart.products.findIndex((el: Product) => el.id === id);
-
-                const count = localStorageCart.products[index].count;
-
-                if (count === 1) {
-                    localStorageCart.products.splice(index, 1);
-                } else {
-                    localStorageCart.products[index].count -= 1;
-                }
-
-                this.update(localStorageCart);
-
-                this.notify();
-            }
         }
     }
 

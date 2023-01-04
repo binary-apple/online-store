@@ -36,11 +36,11 @@ class CartController extends Controller {
         );
 
         if (!cartLocalStorage.cart?.products?.length) {
-            cartFacade.addProduct({ id: 1 } as Product, 1);
-            cartFacade.addProduct({ id: 2 } as Product, 1);
-            cartFacade.addProduct({ id: 3 } as Product, 1);
-            cartFacade.addProduct({ id: 4 } as Product, 1);
-            cartFacade.addProduct({ id: 5 } as Product, 1);
+            cartFacade.addProduct({ id: 1, stock: 5 } as Product, 1);
+            cartFacade.addProduct({ id: 2, stock: 10 } as Product, 1);
+            cartFacade.addProduct({ id: 3, stock: 3 } as Product, 1);
+            cartFacade.addProduct({ id: 4, stock: 15 } as Product, 1);
+            cartFacade.addProduct({ id: 5, stock: 3 } as Product, 1);
         }
 
         const cartView = new CartView(cartFacade);

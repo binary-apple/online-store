@@ -51,6 +51,8 @@ export class Cart extends Store {
         };
 
         this.productsInCart.push(productItem);
+
+        return this.productsInCart;
     }
 
     public removeProductFromCart(id: number) {
@@ -60,6 +62,8 @@ export class Cart extends Store {
             this.productsInCart.splice(index, 1);
 
             this.productsInCart.map((item, index) => (item.order = index + 1));
+
+            return this.productsInCart;
         } else {
             throw new Error('You are trying to remove from the cart a product that is not in the cart');
         }
@@ -69,7 +73,17 @@ export class Cart extends Store {
         const productIdInCart = this.productsInCart.findIndex((el: Product) => el.id === el.id);
 
         if (productIdInCart >= 0) {
-            this.productsInCart[productIdInCart].count += 1;
+            this.productsInCart = this.productsInCart.map((item) => {
+                if (item.id === product.id) {
+                    if (item.count + 1 <= product.stock) {
+                        item.count += 1;
+                    }
+                }
+
+                return item;
+            });
+
+            return this.productsInCart;
         } else {
             this.addProductToCart(product, 1);
         }
@@ -79,11 +93,22 @@ export class Cart extends Store {
         const productIdInCart = this.productsInCart.findIndex((el: Product) => el.id === productId);
 
         if (productIdInCart >= 0) {
-            if (this.productsInCart[productIdInCart].count < 1) {
-                this.removeProductFromCart(productId);
-            } else {
-                this.productsInCart[productIdInCart].count -= 1;
-            }
+            this.productsInCart = this.productsInCart
+                .map((item) => {
+                    if (item.id === productId) {
+                        item.count -= 1;
+                    }
+
+                    return item;
+                })
+                .filter((el) => el.count > 0)
+                .map((item, index) => {
+                    item.order = index + 1;
+
+                    return item;
+                });
+
+            return this.productsInCart;
         } else {
             throw new Error('You are trying to remove from the cart a product that is not in the cart');
         }

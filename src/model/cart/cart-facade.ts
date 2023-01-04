@@ -72,14 +72,20 @@ class CartFacade extends Store {
     }
 
     public addProduct(product: Product, count = 1) {
-        this.cart.addProductToCart(product, count);
-        this.cartLocalStorage.saveProduct(product, count);
+        const products = this.cart.addProductToCart(product, count);
+
+        if (products) {
+            this.cartLocalStorage.saveProducts(products);
+        }
     }
 
     public removeProduct(id: number) {
-        this.cart.removeProductFromCart(id);
-        this.cartLocalStorage.removeProduct(id);
-        this.cartQuery.toPrevPage();
+        const products = this.cart.removeProductFromCart(id);
+
+        if (products) {
+            this.cartLocalStorage.saveProducts(products);
+            this.cartQuery.toPrevPage();
+        }
     }
 
     public addPromocode(promo: string) {
@@ -91,14 +97,20 @@ class CartFacade extends Store {
     }
 
     public increaseProductQuantity(product: Product) {
-        this.cart.increaseProductCount(product);
-        this.cartLocalStorage.increaseProduct(product);
+        const products = this.cart.increaseProductCount(product);
+
+        if (products) {
+            this.cartLocalStorage.saveProducts(products);
+        }
     }
 
     public decreaseProductQuntity(id: number) {
-        this.cart.decreaseProductCount(id);
-        this.cartLocalStorage.decreaseProduct(id);
-        this.cartQuery.toPrevPage();
+        const products = this.cart.decreaseProductCount(id);
+
+        if (products) {
+            this.cartLocalStorage.saveProducts(products);
+            this.cartQuery.toPrevPage();
+        }
     }
 }
 
