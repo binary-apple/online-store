@@ -2,7 +2,7 @@
 @import './typography';
 
 .slider {
-    max-width: 25%;
+    // max-width: 25%;
     position: relative;
 }
 
@@ -17,7 +17,7 @@ input[type='range']::-webkit-slider-thumb {
 
 input[type='range'] {
     position: absolute;
-    width: 100%;
+    // width: 100%;
     cursor: pointer;
     outline: none;    
 }

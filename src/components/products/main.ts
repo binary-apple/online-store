@@ -15,7 +15,7 @@ export class MainProducts extends Component
 
     protected template(): HTMLElement {
         const wrapper = document.createElement('div');
-        wrapper.classList.add(...'position-relative d-flex gap-3 mb-3'.split(' '));
+        wrapper.classList.add(...'position-relative d-flex flex-wrap mb-3'.split(' '));
         wrapper.append(this.priceSlider.render());
         wrapper.append(this.products.render());
         return wrapper;

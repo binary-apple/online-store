@@ -2,7 +2,7 @@ import { Component } from "../types/component";
 
 export class Slider extends Component {
     constructor() {
-        super({containerTag: 'div', className: 'slider flex-grow-1'.split(' ')});
+        super({containerTag: 'div', className: 'slider col-md-3 col-12'.split(' ')});
     }
 
     protected template(): DocumentFragment {

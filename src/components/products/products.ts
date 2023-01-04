@@ -5,7 +5,7 @@ import { Subscriber } from "../../utils/observer-interface";
 export class Products extends Component implements Subscriber {
     private readonly productsModel: ProductsModel;
     constructor(private big: boolean, products: ProductsModel) {
-        super({containerTag: 'div', className: 'products d-flex flex-column gap-2'.split(' ')});
+        super({containerTag: 'div', className: 'products col-md-9 col-12'.split(' ')});
         this.productsModel = products;
         this.subscribe(this.productsModel);
     }
@@ -13,7 +13,7 @@ export class Products extends Component implements Subscriber {
     protected template(): DocumentFragment {
         const temp = document.createElement('template');
         temp.innerHTML = `
-        <div class=" flex-grow-1 d-flex gap-2">
+        <div class=" flex-grow-1 d-flex align-items-center justify-content-between gap-2 mb-2">
             <select name="sort" id="sort">
                 <option value="sort-title">Sort</option>
                 <option value="price-asc">Sort by price ASC</option>
@@ -22,11 +22,13 @@ export class Products extends Component implements Subscriber {
                 <option value="rating-desc">Sort by rating DESC</option>
             </select>
             <input type="search" placeholder="Search product">
-            <div class="view small-view ${!this.big ? 'active-view' : ''} d-flex flex-wrap justify-content-around">
-                ${this.drawViewIcon(16)}
-            </div>
-            <div class="view big-view ${this.big ? 'active-view' : ''} d-flex flex-wrap justify-content-around">
-                ${this.drawViewIcon(9)}
+            <div class="d-flex gap-3">
+                <div class="view small-view ${!this.big ? 'active-view' : ''} d-flex flex-wrap justify-content-around">
+                    ${this.drawViewIcon(false)}
+                </div>
+                <div class="view big-view ${this.big ? 'active-view' : ''} d-flex flex-wrap justify-content-around">
+                    ${this.drawViewIcon(true)}
+                </div>
             </div>
         </div>
         <div id="prods" class="d-flex flex-wrap gap-2"></div>
@@ -56,13 +58,43 @@ export class Products extends Component implements Subscriber {
         })
     }
 
-    private drawViewIcon(size: number) {
-        let result = '';
-        let tmp = '<div></div>';
-        for (let i = 0; i < size; i++) {
-            result += tmp;
+    private drawViewIcon(big: boolean = true) {
+        if (big) {
+            return `
+            <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0.5" y="0.5" width="6" height="6" stroke="#414141"/>
+            <rect x="0.5" y="9.5" width="6" height="6" stroke="#414141"/>
+            <rect x="0.5" y="18.5" width="6" height="6" stroke="#414141"/>
+            <rect x="9.5" y="0.5" width="6" height="6" stroke="#414141"/>
+            <rect x="9.5" y="9.5" width="6" height="6" stroke="#414141"/>
+            <rect x="9.5" y="18.5" width="6" height="6" stroke="#414141"/>
+            <rect x="18.5" y="0.5" width="6" height="6" stroke="#414141"/>
+            <rect x="18.5" y="9.5" width="6" height="6" stroke="#414141"/>
+            <rect x="18.5" y="18.5" width="6" height="6" stroke="#414141"/>
+            </svg>
+            `
+        } else {
+            return `
+            <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0.5" y="0.5" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="0.5" y="13.5" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="0.5" y="7" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="0.5" y="20" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="7" y="0.5" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="7" y="13.5" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="7" y="7" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="7" y="20" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="13.5" y="0.5" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="13.5" y="13.5" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="13.5" y="7" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="13.5" y="20" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="20" y="0.5" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="20" y="13.5" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="20" y="7" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="20" y="20" width="4.5" height="4.5" stroke="#414141"/>
+            </svg>
+            `
         }
-        return result;
     }
 
     public setBigScale() {
