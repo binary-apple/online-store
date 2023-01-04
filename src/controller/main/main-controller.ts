@@ -5,11 +5,13 @@ import { Cart } from '../../model/cart';
 import { MainView } from '../../view/main-view';
 import Request from '../../api/request';
 import Products from '../../model/products/products';
+import { Cart } from '../../model/cart';
 
 class MainController extends Controller {
     private view: MainView;
     private cart: Cart = new Cart();
     private products: Products = new Products([]);
+    private cart: Cart = new Cart;
     constructor(router: Router) {
         super(router);
         
