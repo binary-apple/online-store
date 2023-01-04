@@ -48,14 +48,8 @@ class CartQuery {
     emptyQuery(loadCart: ICartLocalStorage) {
         const url = new URL(window.location.href);
 
-        const paginationDefault = {
-            limit: 3,
-            page: 1,
-            newPage: 1,
-        };
-
         if (!loadCart?.params) {
-            const paginationItem = this.cartPagination.setPagination(paginationDefault);
+            const paginationItem = this.cartPagination.setPagination(this.cartPagination.paginationDefault);
             this.cartLocalStorage.savePagination(paginationItem);
 
             url.searchParams.set('limit', '' + paginationItem.limit);

@@ -34,6 +34,14 @@ class CartPaginationState extends Store {
         return this.paginationState;
     }
 
+    public get paginationDefault() {
+        return {
+            limit: 3,
+            page: 1,
+            newPage: 1,
+        };
+    }
+
     public getProducts(products: Array<Product>) {
         const { page, limit } = this.paginationState;
 
