@@ -110,9 +110,9 @@ class PromoCode {
 
                     this.cart.removePromocode(promo);
 
-                    const promocodes = this.cart.promocodes;
+                    const hasPromocodes = !!this.cart.promocodes[0].length;
 
-                    if (!promocodes.length) {
+                    if (!hasPromocodes) {
                         const total = document.querySelector('.cart-board__total-price');
                         if (total) {
                             total.classList.remove('through');

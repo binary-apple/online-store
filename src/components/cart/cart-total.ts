@@ -67,11 +67,12 @@ class CartTotal extends Component {
         const discountValue = this.cart.discount;
 
         const counter = this.cart.quantityProducts;
+        const havePromocodes = this.cart.promocodes[0].length;
 
         return `
             <li class="cart-info__item d-flex justify-content-between">
                 <span>${counter} ${counter > 1 ? 'products' : 'product'}</span>
-                <span class="cart-board__total-price">${resultPrice} €</span>
+                <span class="cart-board__total-price ${havePromocodes ? 'through' : ''}">${resultPrice} €</span>
             </li>
             <li class="cart-info__item d-flex justify-content-between">
                 Discount
