@@ -6,10 +6,10 @@ export class MainProducts extends Component
 {
     private readonly priceSlider;
     private readonly products;
-    constructor() {
+    constructor(big: boolean) {
         super({containerTag: 'main', className: 'main container'.split(' ')});
         this.priceSlider = new Slider();
-        this.products = new Products();
+        this.products = new Products(big);
     }
 
     protected template(): HTMLElement {
@@ -28,11 +28,19 @@ export class MainProducts extends Component
         this.priceSlider.setSliderTrack();
     }
 
-    handleViewIconClick(callback: (e: Event) => void) {
-        this.products.handleViewIconClick(callback);
+    handleBigScaleClick(callback: (e: Event) => void) {
+        this.products.handleBigScaleClick(callback);
     }
 
-    toggeView(e: Event) {
-        this.products.toggleView(e);
+    handleSmallScaleClick(callback: (e: Event) => void) {
+        this.products.handleSmallScaleClick(callback);
+    }
+
+    setBigScale() {
+        this.products.setBigScale();
+    }
+
+    setSmallScale() {
+        this.products.setSmallScale();
     }
 }

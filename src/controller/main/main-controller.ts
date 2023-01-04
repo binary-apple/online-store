@@ -5,10 +5,13 @@ import { Cart } from '../../model/cart';
 import { MainView } from '../../view/main-view';
 
 class MainController extends Controller {
-    view = new MainView(new Cart());
+    private view: MainView;
+    private cart: Cart = new Cart();
     constructor(router: Router) {
         super(router);
-        console.log(this.view);
+        
+        const big = this.getBigFromQuery() === 'false' ? false : true;
+        this.view = new MainView(this.cart, big);
     }
 
     async init() {
@@ -25,6 +28,9 @@ class MainController extends Controller {
 
         view.handleSliderInput(this.handleSliderInput.bind(this));
         this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
+
+        this.view.handleBigScaleClick(this.handleBigScaleClick.bind(this));
+        this.view.handleSmallScaleClick(this.handleSmallScaleClick.bind(this));
     }
 
     private handleClickToCartIcon(e: Event){
@@ -43,8 +49,24 @@ class MainController extends Controller {
         this.view.setSliderTrack();
     }
 
-    private handleViewIconClick(e: Event) {
-        this.view.toggleView(e);
+    private handleBigScaleClick(e: Event) {
+        this.view.setBigScale();
+        this.addScaleToQuery(true);
+    }
+    private handleSmallScaleClick(e: Event) {
+        this.view.setSmallScale();
+        this.addScaleToQuery(false);
+    }
+
+    private addScaleToQuery(big: boolean) {
+        const url = new URL(window.location.href);
+            this.router.navigateTo(`/?big=${big}`);
+    }
+
+    private getBigFromQuery(): string | null {
+        const url = new URL(window.location.href);
+        const query = url.searchParams;
+        return query.get('big');
     }
 }
 

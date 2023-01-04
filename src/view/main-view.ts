@@ -2,17 +2,17 @@ import { Header } from "../components/header";
 import { Footer } from "../components/footer";
 import { View } from "./types/view";
 import { Cart } from "../model/cart";
-import { Slider } from "../components/products/slider";
 import { MainProducts } from "../components/products/main";
 
 export class MainView implements View {
     private header: Header;
     private footer: Footer;
     private content: MainProducts;
-    constructor(cart: Cart) {
+
+    constructor(cart: Cart, private big: boolean = true) {
         this.header = new Header(cart);
         this.footer = new Footer();
-        this.content = new MainProducts();
+        this.content = new MainProducts(big);
     }
 
     init(root: HTMLElement) {
@@ -41,11 +41,19 @@ export class MainView implements View {
         window.addEventListener('resize', callback, false);
     }
 
-    public handleViewIconClick(callback: (e:Event) => void) {
-        this.content.handleViewIconClick(callback);
+    public handleBigScaleClick(callback: (e:Event) => void) {
+        this.content.handleBigScaleClick(callback);
     }
 
-    public toggleView(e: Event) {
-        this.content.toggeView(e);
+    public handleSmallScaleClick(callback: (e:Event) => void) {
+        this.content.handleSmallScaleClick(callback);
+    }
+
+    setBigScale() {
+        this.content.setBigScale();
+    }
+
+    setSmallScale() {
+        this.content.setSmallScale();
     }
 }

@@ -19,7 +19,7 @@ class Utils {
     getPathName(url: string = window.location.href) {
         const currentUrl = new URL(url);
 
-        return currentUrl.pathname;
+        return (currentUrl.pathname + currentUrl.search);
     }
 }
 
