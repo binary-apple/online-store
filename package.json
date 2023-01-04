@@ -22,6 +22,7 @@
     },
     "homepage": "https://github.com/binary-apple/online-store#readme",
     "devDependencies": {
+        "@types/bootstrap": "^5.2.6",
         "@types/jest": "^29.2.4",
         "@typescript-eslint/eslint-plugin": "^5.46.0",
         "@typescript-eslint/parser": "^5.46.0",

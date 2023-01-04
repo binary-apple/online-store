@@ -13,7 +13,6 @@ import CartLocalStorage from '../../model/cart/cart-local-storage';
 import CartFacade from '../../model/cart/cart-facade';
 import CartPaginationState from '../../model/cart/cart-pagination-state';
 import CartQuery from '../../model/cart/cart-query';
-import ConfirmController from '../confirm-controller';
 import { Product } from '../../model/types/product';
 
 const ONLINE_STORE_APPLE_NEPO = process.env.LOCAL_STORAGE_NAME as string;
@@ -54,7 +53,6 @@ class CartController extends Controller {
             new ChangeQuanityInCart(cartFacade),
             new CartPagination(cartFacade),
             new PromoCode(cartFacade),
-            new ConfirmController(this.router),
             new MakeOrder(),
         ];
 

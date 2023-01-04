@@ -1,6 +1,8 @@
 @import './colors';
 
 .cart-content {
+    margin-bottom: 120px;
+
     &__remove-selected {
         margin-top: 70px;
         font-weight: 400;
@@ -367,5 +369,17 @@
 
     &__page {
         font-size: 18px;
+    }
+}
+
+.cart-modal {
+    &__confirm {
+        background-color: $primary;
+        color: white;
+
+        &:hover {
+            background-color: hsl(15, 100%, 55%);
+            color: white;
+        }
     }
 }

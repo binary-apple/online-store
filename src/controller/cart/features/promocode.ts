@@ -1,8 +1,9 @@
-import Confirm from '../../../components/confirm';
 import CartFacade from '../../../model/cart/cart-facade';
+import { Modal } from 'bootstrap';
 
 class PromoCode {
     cart: CartFacade;
+    modalElem = {} as Modal;
 
     constructor(cart: CartFacade) {
         this.cart = cart;
@@ -19,7 +20,7 @@ class PromoCode {
         if (input) {
             const [promocodes, existPromo] = this.cart.promocodes;
 
-            const confirm = this.confirmPromo.bind(this);
+            this.confirmPromo();
 
             input.addEventListener('input', (e) => {
                 const htmlTarget = e.target as HTMLInputElement;
@@ -28,45 +29,65 @@ class PromoCode {
                 const findPromo = existPromo.get(value) && !promocodes.includes(value);
 
                 if (findPromo) {
-                    const text = `Вы действительно хотите применить промокод: <span class="confirm-window__value">${value}</span>?`;
+                    const modal = document.querySelector('.modal');
 
-                    const applyPromo = new Confirm({
-                        text,
-                        confirm,
-                    });
+                    if (modal) {
+                        this.modalElem = new Modal(modal);
 
-                    htmlTarget.blur();
-                    applyPromo.open();
+                        modal.addEventListener('show.bs.modal', () => {
+                            const promoWrapper = modal.querySelector('b') as HTMLElement;
+
+                            if (promoWrapper) {
+                                promoWrapper.innerText = value;
+                            }
+                        });
+
+                        this.modalElem.show();
+                        htmlTarget.blur();
+
+                        modal.addEventListener('hidden.bs.modal', () => {
+                            const promoWrapper = modal.querySelector('b') as HTMLElement;
+
+                            if (promoWrapper) {
+                                promoWrapper.innerText = '';
+                            }
+                        });
+                    }
                 }
             });
         }
     }
 
     public confirmPromo() {
-        const promoSpan = document.querySelector('.confirm-window__value') as HTMLElement;
+        const modal = document.querySelector('.modal');
 
-        if (promoSpan) {
-            const promo = promoSpan.innerText.trim();
+        if (modal) {
+            const confirmBtn = modal.querySelector('.cart-modal__confirm');
 
-            this.cart.addPromocode(promo);
+            if (confirmBtn) {
+                confirmBtn.addEventListener('click', () => {
+                    const promoWrapper = modal.querySelector('b') as HTMLElement;
 
-            const confirm = document.querySelector('.confirm');
+                    if (promoWrapper) {
+                        const promo = promoWrapper.innerText.trim();
+                        this.cart.addPromocode(promo);
 
-            if (confirm) {
-                confirm.remove();
-            }
+                        this.modalElem.hide();
 
-            const total = document.querySelector('.cart-board__total-price');
+                        const total = document.querySelector('.cart-board__total-price');
 
-            if (total) {
-                total.classList.add('through');
-            }
+                        if (total) {
+                            total.classList.add('through');
+                        }
 
-            const input = document.querySelector('.cart-total__promo') as HTMLInputElement;
+                        const input = document.querySelector('.cart-total__promo') as HTMLInputElement;
 
-            if (input) {
-                input.value = '';
-                input.focus();
+                        if (input) {
+                            input.value = '';
+                            input.focus();
+                        }
+                    }
+                });
             }
         }
     }
