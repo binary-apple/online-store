@@ -1,0 +1,32 @@
+@import './colors';
+
+.breadcrumbs {
+    margin: 30px 0;
+    padding: 0;
+}
+
+.breadcrumbs {
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    overflow: hidden;
+
+    &__item {
+        height: auto;
+        max-height: 20px;
+        display: flex;
+        align-items: center;
+
+        &.glue {
+            margin: 0 25px;
+        }
+    }
+
+    &__link {
+        color: $onSurface;
+
+        &.active {
+            color: $hard;
+        }
+    }
+}

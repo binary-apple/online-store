@@ -4,9 +4,6 @@ import CartController from '../controller/cart/cart-controller';
 import MainController from '../controller/main/main-controller';
 import ProductController from '../controller/product/product-controller';
 import ErrorController from '../controller/error/error-controller';
-import Utils from '../utils/utils';
-
-const utils = new Utils();
 
 const router = new Router({
     mode: 'history',
@@ -38,9 +35,7 @@ router.add(Routers.CART, () => {
 router.addUriListener();
 
 function activateRouter(router: Router) {
-    const pathname = utils.getPathName(window.location.href);
-
-    router.navigateTo(pathname);
+    router.check();
 }
 
 export default activateRouter.bind(this, router);

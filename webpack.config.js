@@ -3,7 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const { merge } = require('webpack-merge');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const baseConfig = {
     entry: {
@@ -16,6 +17,7 @@ const baseConfig = {
     },
     mode: 'development',
     plugins: [
+        new Dotenv(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             publicPath: './',
