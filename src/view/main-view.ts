@@ -1,6 +1,7 @@
 import { Header } from "../components/header";
 import { Footer } from "../components/footer";
 import { Content } from "../components/main";
+import { View } from "./types/view";
 
 export class MainView implements View {
     private header: Header;

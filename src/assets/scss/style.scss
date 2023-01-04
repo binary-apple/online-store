@@ -1,7 +1,22 @@
 @import './partials/settings';
 @import './partials/colors';
+@import './partials/buttons';
 @import './partials/footer';
 
 body {
     background: $background;
+}
+
+.error {
+    background: transparentize($primary, 0.8);
+}
+
+.e404,
+.e404-text {
+    font-weight: 800;
+}
+
+.e404 {
+    color: $primary;
+    font-size: 80px;
 }

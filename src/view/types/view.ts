@@ -1,3 +1,3 @@
-interface View {
-    init(root: HTMLElement): void;
+export interface View {
+    init(root: HTMLElement): void | HTMLElement;
 }
