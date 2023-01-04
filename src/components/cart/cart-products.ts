@@ -111,7 +111,10 @@ class CartProducts extends Component {
             productsWrapper.innerHTML = '';
 
             if (!products.length) {
-                productsWrapper.insertAdjacentHTML('afterbegin', '<div class="">Page is empty...</div>');
+                productsWrapper.insertAdjacentHTML(
+                    'afterbegin',
+                    '<div class="cart-content__placeholder">Page is empty...</div>'
+                );
             } else {
                 productsWrapper.insertAdjacentHTML('afterbegin', this.toString());
             }
