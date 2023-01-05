@@ -24,15 +24,6 @@ class CartController extends Controller {
         const cartView = new CartView(this.cart);
         cartView.init();
 
-        if (!this.cart.get().length) {
-            const request = new Request();
-            const response = await request.make('GET', '/products?limit=100');
-            response.products.slice(0, 8).forEach((item: Product) => {
-                this.cart.addProductToCart(item, 1);
-            });
-            this.cartLS.set(this.cart.get());
-        }
-
         this.setPaginationFromQueryParams();
 
         cartView.breadCrumbsClickHandler((e: Event) => {
