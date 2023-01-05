@@ -42,7 +42,7 @@ input[type="search"] {
     position: absolute;
     width: 100%;
     height: 50%;
-    object-fit: cover;
+    object-fit: contain;
     border-radius: 4px 4px 0 0;
 }
 
