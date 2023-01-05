@@ -48,7 +48,19 @@ const baseConfig = {
             },
             {
                 test: /\.(scss|css)$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: ['postcss-preset-env'],
+                            },
+                        },
+                    },
+                    'sass-loader',
+                ],
             },
             {
                 test: /\.html$/,

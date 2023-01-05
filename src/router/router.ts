@@ -62,7 +62,7 @@ const router = new HashRouter({
 
         errorController.init();
     },
-});
+} as IRouter);
 
 router.add(Routers.MAIN, () => {
     const mainController = new MainController(router);

@@ -5,26 +5,27 @@ import { Footer } from '../components/footer';
 import ProductContent from '../components/product/product-content';
 import { Product } from '../model/types/product';
 import { Cart } from '../model/cart';
-import { CartName } from '../model/types/cart';
-import CartLocalStorage from '../model/cart-local-storage';
 
 class ProductView extends BaseView {
     private content: ProductContent;
     private breadcrumbs: BreadCrumbs;
     private header: Header;
     private footer: Footer;
+    cart: Cart;
+    product: Product;
 
-    constructor(product: Product) {
+    constructor(product: Product, cart: Cart) {
         super();
-        const cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
+        this.cart = cart;
+        this.product = product;
 
-        this.header = new Header(cart);
+        this.header = new Header(this.cart);
         this.footer = new Footer();
 
         const breadcrumbs = this.getBreadcrumbs(product);
 
         this.breadcrumbs = new BreadCrumbs(breadcrumbs);
-        this.content = new ProductContent();
+        this.content = new ProductContent(product, cart);
     }
 
     init() {
