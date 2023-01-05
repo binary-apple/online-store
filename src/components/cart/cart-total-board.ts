@@ -70,7 +70,7 @@ class CartTotalBoard extends Component {
         }
     }
 
-    public confirmPromoCodeClickHandler(callback: (wrapper: HTMLElement) => void) {
+    public confirmPromoCodeClickHandler(callback: (promo: string) => void) {
         const modal = document.querySelector('.modal-confirm-promo') as HTMLElement;
 
         if (modal) {
@@ -78,7 +78,14 @@ class CartTotalBoard extends Component {
 
             if (confirmBtn) {
                 confirmBtn.addEventListener('click', () => {
-                    callback(modal);
+                    if (modal) {
+                        const promoWrapper = modal.querySelector('b') as HTMLElement;
+
+                        if (promoWrapper) {
+                            const promo = promoWrapper.innerText.trim();
+                            callback(promo);
+                        }
+                    }
 
                     this.modalElem.hide();
 
@@ -99,12 +106,27 @@ class CartTotalBoard extends Component {
         }
     }
 
-    public removePromoCodeClickHandler(callback: (e: Event) => void) {
+    public removePromoCodeClickHandler(callback: (promo: string) => void) {
         const wrapper = document.querySelector('.cart-total');
 
         if (wrapper) {
             wrapper.addEventListener('click', (e) => {
-                callback(e);
+                const htmlTarget = e.target as HTMLElement;
+
+                const isRemovePromocodeBtn = htmlTarget.classList.contains('cart-total__promo-remove');
+
+                if (isRemovePromocodeBtn) {
+                    const promoItem = htmlTarget.closest('.cart-total__promo-item');
+
+                    if (promoItem) {
+                        const promoNameWrapper = promoItem.querySelector('.cart-promocode__name') as HTMLElement;
+
+                        if (promoNameWrapper) {
+                            const promo = promoNameWrapper.innerText.trim();
+                            callback(promo);
+                        }
+                    }
+                }
             });
         }
     }

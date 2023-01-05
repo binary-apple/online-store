@@ -58,29 +58,21 @@ class CartController extends Controller {
             }
         });
 
-        cartView.selectAllChangeHandler((e: Event, container: HTMLElement) => {
-            const inputTarget = e.target as HTMLInputElement;
-
-            const productCbs = container.querySelectorAll('input[type="checkbox"]');
-
+        cartView.selectAllChangeHandler((productCbs: Array<HTMLInputElement>, type: string) => {
             if (productCbs.length) {
-                if (inputTarget.checked) {
-                    productCbs.forEach((item) => ((item as HTMLInputElement).checked = true));
+                if (type === 'select') {
+                    productCbs.forEach((item) => (item.checked = true));
                 } else {
-                    productCbs.forEach((item) => ((item as HTMLInputElement).checked = false));
+                    productCbs.forEach((item) => (item.checked = false));
                 }
             }
         });
 
-        cartView.removeSelectedClickHandler((container: HTMLElement) => {
-            const productCbs = container.querySelectorAll('input[type="checkbox"]');
-
-            if (productCbs.length) {
-                productCbs.forEach((item) => {
-                    const cb = item as HTMLInputElement;
-
-                    if (cb.checked) {
-                        const productId = +cb.value;
+        cartView.removeSelectedClickHandler((checkboxs: Array<HTMLInputElement>) => {
+            if (checkboxs.length) {
+                checkboxs.forEach((item) => {
+                    if (item.checked) {
+                        const productId = +item.value;
 
                         this.cart.removeProductFromCart(productId);
 
@@ -98,17 +90,11 @@ class CartController extends Controller {
             }
         });
 
-        cartView.changeLimitPaginationHandler((e: Event) => {
-            const inputTarget = e.target as HTMLInputElement;
-
-            if (inputTarget.value === '') {
-                return;
-            }
-
-            this.cart.changeParamsLimit(+inputTarget.value);
+        cartView.changeLimitPaginationHandler((target: HTMLInputElement) => {
+            this.cart.changeParamsLimit(+target.value);
             this.cartLS.set(this.cart.get());
 
-            this.router.addSearchParams('limit', inputTarget.value);
+            this.router.addSearchParams('limit', target.value);
 
             const { page, limit } = this.cart.getPagination();
             const hasProducts = this.cart.checkProducts(limit, page);
@@ -127,7 +113,7 @@ class CartController extends Controller {
             this.router.addSearchParams('page', page);
         });
 
-        cartView.linkClickHandler((e: Event) => {
+        cartView.productLinkClickHandler((e: Event) => {
             const htmlTarget = e.target as HTMLElement;
 
             const isException = htmlTarget.dataset.exception;
@@ -140,81 +126,58 @@ class CartController extends Controller {
 
             if (isLink) {
                 e.preventDefault();
-                const { href } = htmlTarget.dataset;
+
+                let href;
+
+                if (htmlTarget.tagName === 'A') {
+                    href = htmlTarget.dataset.href;
+                } else {
+                    const parentA = htmlTarget.closest('a');
+
+                    if (parentA) {
+                        href = parentA.dataset.href;
+                    }
+                }
 
                 if (href) {
-                    this.router.navigateTo(href);
+                    this.router.navigateTo(href, '', true);
                 }
             }
         });
 
-        cartView.changeQuntityProductInCart((e: Event, type: string) => {
-            const htmlTarget = e.target as HTMLElement;
-            const cartState = this.cart.get();
+        cartView.changeQuntityProductInCart((e: Event, type: string, productId: number) => {
+            if (type === 'increase') {
+                const cartState = this.cart.get();
 
-            const productWrapper = htmlTarget.closest('.cart-item') as HTMLElement;
+                const product = cartState.find((el) => el.id === productId);
 
-            if (productWrapper) {
-                const checkbox = productWrapper.querySelector('.checkbox-fake__input') as HTMLInputElement;
+                if (product) {
+                    this.cart.increaseProductCount(product);
+                }
+            } else {
+                this.cart.decreaseProductCount(productId);
 
-                if (checkbox) {
-                    const productId = +checkbox.value;
+                const { page, limit } = this.cart.getPagination();
+                const hasProducts = this.cart.checkProducts(limit, page);
 
-                    const product = cartState.find((el) => el.id === productId);
-
-                    if (product) {
-                        if (type === 'increase') {
-                            this.cart.increaseProductCount(product);
-                        } else {
-                            this.cart.decreaseProductCount(product.id);
-
-                            const { page, limit } = this.cart.getPagination();
-                            const hasProducts = this.cart.checkProducts(limit, page);
-
-                            if (!hasProducts) {
-                                this.decreasePageInQueryParams(page);
-                            }
-                        }
-
-                        this.cartLS.set(this.cart.get());
-                    }
+                if (!hasProducts) {
+                    this.decreasePageInQueryParams(page);
                 }
             }
+
+            this.cartLS.set(this.cart.get());
         });
 
         cartView.inputHandlerPromoCode();
 
-        cartView.confirmPromoCodeClickHandler((wrapper: HTMLElement) => {
-            if (wrapper) {
-                const promoWrapper = wrapper.querySelector('b') as HTMLElement;
-
-                if (promoWrapper) {
-                    const promo = promoWrapper.innerText.trim();
-                    this.cart.addPromocode(promo);
-
-                    this.cartLS.set(this.cart.get());
-                }
-            }
+        cartView.confirmPromoCodeClickHandler((promo: string) => {
+            this.cart.addPromocode(promo);
+            this.cartLS.set(this.cart.get());
         });
 
-        cartView.removePromoCodeClickHandler((e: Event) => {
-            const htmlTarget = e.target as HTMLElement;
-
-            const isRemovePromocodeBtn = htmlTarget.classList.contains('cart-total__promo-remove');
-
-            if (isRemovePromocodeBtn) {
-                const promoItem = htmlTarget.closest('.cart-total__promo-item');
-
-                if (promoItem) {
-                    const promoNameWrapper = promoItem.querySelector('.cart-promocode__name') as HTMLElement;
-
-                    if (promoNameWrapper) {
-                        const promo = promoNameWrapper.innerText.trim();
-                        this.cart.removePromocode(promo);
-                        this.cartLS.set(this.cart.get());
-                    }
-                }
-            }
+        cartView.removePromoCodeClickHandler((promo: string) => {
+            this.cart.removePromocode(promo);
+            this.cartLS.set(this.cart.get());
         });
     }
 
@@ -243,7 +206,7 @@ class CartController extends Controller {
     }
 
     decreasePageInQueryParams(page: number) {
-        const pageValue = page - 1;
+        const pageValue = page - 1 > 0 ? page - 1 : 1;
         this.cart.changeParamsPage(pageValue);
 
         this.router.addSearchParams('page', '' + pageValue);

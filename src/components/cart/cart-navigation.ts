@@ -23,15 +23,28 @@ class CartNavigation extends Component {
         return main.content;
     }
 
-    public changeLimitPaginationHandler(callback: (e: Event) => void) {
+    public changeLimitPaginationHandler(callback: (target: HTMLInputElement) => void) {
         const limitInput = document.querySelector('.cart-pagination__value');
 
         if (limitInput) {
-            limitInput.addEventListener('change', (e: Event) => {
-                callback(e);
+            limitInput.addEventListener('change', (e) => {
+                const inputTarget = e.target as HTMLInputElement;
+
+                if (inputTarget.value === '') {
+                    return;
+                }
+
+                callback(inputTarget);
             });
+
             limitInput.addEventListener('keyup', (e: Event) => {
-                callback(e);
+                const inputTarget = e.target as HTMLInputElement;
+
+                if (inputTarget.value === '') {
+                    return;
+                }
+
+                callback(inputTarget);
             });
         }
     }
@@ -82,26 +95,42 @@ class CartNavigation extends Component {
         }
     }
 
-    public selectAllChangeHandler(callback: (e: Event, container: HTMLElement) => void) {
+    public selectAllChangeHandler(callback: (productCbs: Array<HTMLInputElement>, type: string) => void) {
         const checkbox = document.getElementById('select-all');
 
         if (checkbox) {
             const productsWrapper = document.querySelector('.cart-products') as HTMLElement;
 
             checkbox.addEventListener('change', (e: Event) => {
-                callback(e, productsWrapper);
+                const inputTarget = e.target as HTMLInputElement;
+
+                if (productsWrapper) {
+                    const productCbs = Array.from(
+                        productsWrapper.querySelectorAll('input[type="checkbox"]')
+                    ) as Array<HTMLInputElement>;
+
+                    if (inputTarget.checked) {
+                        callback(productCbs, 'select');
+                    } else {
+                        callback(productCbs, 'no-select');
+                    }
+                }
             });
         }
     }
 
-    public removeSelectedClickHandler(callback: (container: HTMLElement) => void) {
+    public removeSelectedClickHandler(callback: (checkboxs: Array<HTMLInputElement>) => void) {
         const removeSelectedBtn = document.querySelector('.cart-remove-selected__btn');
 
         if (removeSelectedBtn) {
             const productsWrapper = document.querySelector('.cart-products') as HTMLElement;
 
             removeSelectedBtn.addEventListener('click', () => {
-                callback(productsWrapper);
+                const productCbs = Array.from(
+                    productsWrapper.querySelectorAll('input[type="checkbox"]')
+                ) as Array<HTMLInputElement>;
+
+                callback(productCbs);
 
                 const selectAllCb = document.getElementById('select-all') as HTMLInputElement;
 

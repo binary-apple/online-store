@@ -199,10 +199,12 @@ export class Cart extends Store {
             if (changeFromQuery) {
                 const counter = page;
 
-                for (let i = 0; i < counter; i++) {
-                    page -= 1;
-                    if (this.checkProducts(limit, page)) {
-                        break;
+                if (counter > 1) {
+                    for (let i = 0; i < counter; i++) {
+                        page -= 1;
+                        if (this.checkProducts(limit, page)) {
+                            break;
+                        }
                     }
                 }
 

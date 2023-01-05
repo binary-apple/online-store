@@ -25,7 +25,7 @@ class CartProducts extends Component {
         return main.content;
     }
 
-    public linkClickHandler(callback: (e: Event) => void) {
+    public productLinkClickHandler(callback: (e: Event) => void) {
         const wrapper = document.querySelector('.cart-products');
 
         if (wrapper) {
@@ -35,7 +35,7 @@ class CartProducts extends Component {
         }
     }
 
-    public changeQuntityProductInCart(callback: (e: Event, type: string) => void) {
+    public changeQuntityProductInCart(callback: (e: Event, type: string, productId: number) => void) {
         const wrapper = document.querySelector('.cart-products');
 
         if (wrapper) {
@@ -45,10 +45,20 @@ class CartProducts extends Component {
                 const isIncrease = htmlTarget.classList.contains('cart-quanity__btn--plus');
                 const isDecrease = htmlTarget.classList.contains('cart-quanity__btn--minus');
 
-                if (isIncrease) {
-                    callback(e, 'increase');
-                } else if (isDecrease) {
-                    callback(e, 'decrease');
+                const productWrapper = htmlTarget.closest('.cart-item') as HTMLElement;
+
+                if (productWrapper) {
+                    const checkbox = productWrapper.querySelector('.checkbox-fake__input') as HTMLInputElement;
+
+                    if (checkbox) {
+                        const productId = +checkbox.value;
+
+                        if (isIncrease) {
+                            callback(e, 'increase', productId);
+                        } else if (isDecrease) {
+                            callback(e, 'decrease', productId);
+                        }
+                    }
                 }
             });
         }
@@ -70,6 +80,7 @@ class CartProducts extends Component {
             count: item.count,
             totalPrice: item.count * item.price,
             image: item.images[0],
+            id: item.id,
         });
     }
 

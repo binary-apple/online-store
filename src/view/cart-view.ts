@@ -54,15 +54,15 @@ class CartView extends BaseView implements View {
         this.breadcrumbs.breadCrumbsClickHandler(callback);
     }
 
-    public selectAllChangeHandler(callback: (e: Event, container: HTMLElement) => void) {
+    public selectAllChangeHandler(callback: (productCbs: Array<HTMLInputElement>, type: string) => void) {
         this.content.cartNavigation.selectAllChangeHandler(callback);
     }
 
-    public removeSelectedClickHandler(callback: (container: HTMLElement) => void) {
+    public removeSelectedClickHandler(callback: (checkboxs: Array<HTMLInputElement>) => void) {
         this.content.cartNavigation.removeSelectedClickHandler(callback);
     }
 
-    public changeLimitPaginationHandler(callback: (e: Event) => void) {
+    public changeLimitPaginationHandler(callback: (target: HTMLInputElement) => void) {
         this.content.cartNavigation.changeLimitPaginationHandler(callback);
     }
 
@@ -70,19 +70,19 @@ class CartView extends BaseView implements View {
         this.content.cartNavigation.changePagePaginationClickHandler(callback);
     }
 
-    public changeQuntityProductInCart(callback: (e: Event, type: string) => void) {
+    public changeQuntityProductInCart(callback: (e: Event, type: string, productId: number) => void) {
         this.content.cartProducts.changeQuntityProductInCart(callback);
     }
 
-    public linkClickHandler(callback: (e: Event) => void) {
-        this.content.cartProducts.linkClickHandler(callback);
+    public productLinkClickHandler(callback: (e: Event) => void) {
+        this.content.cartProducts.productLinkClickHandler(callback);
     }
 
-    public confirmPromoCodeClickHandler(callback: (wrapper: HTMLElement) => void) {
+    public confirmPromoCodeClickHandler(callback: (promo: string) => void) {
         this.content.cartTotal.confirmPromoCodeClickHandler(callback);
     }
 
-    public removePromoCodeClickHandler(callback: (e: Event) => void) {
+    public removePromoCodeClickHandler(callback: (promo: string) => void) {
         this.content.cartTotal.removePromoCodeClickHandler(callback);
     }
 
