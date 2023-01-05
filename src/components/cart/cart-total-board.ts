@@ -176,7 +176,21 @@ class CartTotalBoard extends Component {
 
         if (promoNote) {
             promoNote.innerHTML = '';
-            promoNote.insertAdjacentHTML('afterbegin', this.getPromocodesTemplate());
+            promoNote.innerHTML = this.getPromocodesTemplate();
+        }
+
+        const totalWrapper = document.querySelector('.cart-total') as HTMLElement;
+        const cartNav = document.querySelector('.cart-content__remove-selected') as HTMLElement;
+
+        if (totalWrapper && cartNav) {
+            const products = this.cart.get();
+            if (!products.length) {
+                totalWrapper.classList.add('hide');
+                cartNav.classList.add('hide');
+            } else {
+                totalWrapper.classList.remove('hide');
+                cartNav.classList.remove('hide');
+            }
         }
     }
 }
