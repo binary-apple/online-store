@@ -1,0 +1,22 @@
+<div class="cart-content__remove-wrapper d-flex justify-content-between">
+    <div class="cart-content__select-all">{{{selectAll}}}</div>
+    <div class="d-flex">
+        <button class="cart-remove-selected__btn" type="button">Remove selected</button>
+    </div>
+</div>
+<div class="d-inline-flex cart-content__pagination">
+    <div class="d-flex align-items-center">
+        Limit:
+        <input type="number" value="{{limit}}" class="cart-pagination__value" />
+    </div>
+    <div class="cart-pagination__nav d-flex align-items-center">
+        Page:
+        <span class="cart-pagination__wrapper">
+            <span>
+                <span class="cart-pagination__back"><</span>
+                <span class="cart-pagination__page">{{page}}</span>
+                <span class="cart-pagination__forward">></span>
+            </span>
+        </span>
+    </div>
+</div>

@@ -4,6 +4,7 @@ import { Header } from '../components/header';
 import { Footer } from '../components/footer';
 import ProductContent from '../components/product/product-content';
 import { Product } from '../model/types/product';
+import { Cart } from '../model/cart';
 
 class ProductView extends BaseView {
     private content: ProductContent;
@@ -13,8 +14,9 @@ class ProductView extends BaseView {
 
     constructor(product: Product) {
         super();
+        const cart = new Cart();
 
-        this.header = new Header();
+        this.header = new Header(cart);
         this.footer = new Footer();
 
         const breadcrumbs = this.getBreadcrumbs(product);

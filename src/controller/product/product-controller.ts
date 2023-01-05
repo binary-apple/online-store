@@ -1,5 +1,6 @@
 import Controller from '../controller';
 import { HashRouter } from '../../router/router';
+import { Cart } from '../../model/cart';
 
 class ProductController extends Controller {
     constructor(router: HashRouter) {
@@ -18,7 +19,8 @@ class ProductController extends Controller {
     async init() {
         // const product = await this.getProduct();
         // if (product) {
-        //     const productView = new ProductView(product);
+        // const cart = new Cart();
+        // const productView = new ProductView(product, cart);
         //     productView.init();
         //     const features = [new RouterLinksController(this.router)];
         //     features.forEach((item) => {

@@ -20,6 +20,7 @@
 
     &__select-all {
         min-width: 115px;
+        display: flex;
     }
 
     &__pagination {
@@ -68,6 +69,7 @@
         border: 0;
         color: $primary;
         min-width: 130px;
+        font-size: 12px;
     }
 }
 

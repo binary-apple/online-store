@@ -1,7 +1,10 @@
 import { Component } from '../types/component';
 import Checkbox from '../ui/checkbox';
 import { Product } from '../../model/types/product';
-import { Cart } from '../../model/cart/cart';
+import { Cart } from '../../model/cart';
+import ProductTemplate from './component/product.html';
+import Mustache from 'mustache';
+import CartPlaceholder from './component/cartPlaceholder.html';
 
 class CartProducts extends Component {
     cart: Cart;
@@ -12,26 +15,14 @@ class CartProducts extends Component {
         this.cart = cart;
 
         this.subscribe(this.cart);
-
-        const rendered = this.rendered.bind(this);
-
-        window.addEventListener('render-component', rendered);
     }
 
     protected template() {
         const main = document.createElement('template');
 
-        main.innerHTML = this.getProducts();
+        main.innerHTML = this.getTemplate();
 
         return main.content;
-    }
-
-    private getProducts() {
-        return this.getProductsTemplate();
-    }
-
-    public toString() {
-        return this.getProducts();
     }
 
     public linkClickHandler(callback: (e: Event) => void) {
@@ -63,94 +54,48 @@ class CartProducts extends Component {
         }
     }
 
-    private getProductsTemplate() {
-        const cart = this.cart.get();
-
-        if (cart.products.length) {
-            const productTemplate = this.getProductTemplate.bind(this);
-
-            return cart.products.map(productTemplate).join('');
-        }
-
-        return '';
-    }
-
     private getProductTemplate(item: Product) {
         const checkboxProduct = new Checkbox({
             id: `product-${item.id}`,
             value: item.id,
+        }).getTemplate();
+
+        return Mustache.render(ProductTemplate, {
+            checkbox: checkboxProduct,
+            order: item.order,
+            title: item.title,
+            description: item.description,
+            price: item.price,
+            stock: item.stock,
+            count: item.count,
+            totalPrice: item.count * item.price,
         });
-
-        return `
-            <li class="cart-item d-flex">
-                ${checkboxProduct.toString()}
-                <a class="cart-item__link d-flex w-100" data-href="/product/${item.id}" href="">
-                    <div class=" cart-item__img">
-                        <img class="cart-item__picture" src="${item.images[0]}" alt="product-img">
-                    </div>
-                    <ul class="cart-item__wrapper w-100">
-                        <li class="d-flex w-100 justify-content-between">
-                            <div class="d-flex justify-content-start w-100">
-                                <div class="cart-item__order">
-                                    № ${item.order}
-                                </div>
-                                <div class="cart-item__description">
-                                    <h2 class="cart-item__title">${item.title}</h2>
-                                    <p class="cart-item__description-text">${item.description}</p>
-                                    <p class="cart-item__one-price">
-                                        <span class="cart-item__one-price--value">${item.price} €</span>
-                                        per item
-                                        <span class="cart-item__stock">
-                                            <span class="cart-item-stock__value">${item.stock}</span> 
-                                            stock
-                                        <span>
-                                    </p>
-                                </div>
-                            </div>
-                            <div class="cart-item__nav d-flex align-items-start">
-                                <div data-exception="true" class="cart-item__quanity d-flex align-items-center justify-content-between">
-                                    <button data-exception="true" class="cart-quanity__btn cart-quanity__btn--minus" type="button"></button>
-                                    <span data-exception="true" class="cart-quanity__value">${item.count}</span>
-                                    <button data-exception="true" class="cart-quanity__btn cart-quanity__btn--plus" type="button"></button>
-                                </div>
-                                <div class="cart-item__price">
-                                    ${item.count * item.price} €
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </a>
-            </li>
-        `;
     }
 
-    private update() {
-        const cart = this.cart.get();
+    public getTemplate() {
+        const products = this.cart.getProductsWithPagination() as Array<Product>;
 
-        const products = cart.products;
-        this.updateProductsList(products);
+        if (products.length) {
+            const productTemplate = this.getProductTemplate.bind(this);
+
+            return products.map(productTemplate).join('');
+        }
+
+        return Mustache.render(CartPlaceholder, {});
     }
 
-    private rendered() {
-        const cart = this.cart.get();
-
-        const products = cart.products;
-        this.updateProductsList(products);
-    }
-
-    private updateProductsList(products: Array<Product>) {
+    public update() {
         const productsWrapper = document.querySelector('.cart-products');
 
         if (productsWrapper) {
             productsWrapper.innerHTML = '';
 
+            const products = this.cart.get();
+
             if (!products.length) {
-                productsWrapper.insertAdjacentHTML(
-                    'afterbegin',
-                    '<div class="cart-content__placeholder">Page is empty...</div>'
-                );
+                productsWrapper.innerHTML = Mustache.render(CartPlaceholder, {});
             } else {
-                productsWrapper.insertAdjacentHTML('afterbegin', this.toString());
+                productsWrapper.innerHTML = this.getTemplate();
             }
         }
     }

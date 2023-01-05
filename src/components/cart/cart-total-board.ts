@@ -1,7 +1,11 @@
 import { Modal } from 'bootstrap';
-import { Cart } from '../../model/cart/cart';
+import { Cart } from '../../model/cart';
 import { IPromoCode } from '../../model/types/cart';
 import { Component } from '../types/component';
+import Mustache from 'mustache';
+import Total from './component/total/total.html';
+import TotalInfo from './component/total/totalinfo.html';
+import Promocode from './component/promocodes/promocode.html';
 
 class CartTotalBoard extends Component {
     cart: Cart;
@@ -18,13 +22,9 @@ class CartTotalBoard extends Component {
     protected template() {
         const main = document.createElement('template');
 
-        main.innerHTML = this.getTotalInformation();
+        main.innerHTML = this.getTemplate();
 
         return main.content;
-    }
-
-    public toString() {
-        return this.getTotalInformation();
     }
 
     public inputHandlerPromoCode() {
@@ -38,7 +38,8 @@ class CartTotalBoard extends Component {
                 const existPromo = this.cart.getExistPromocodes();
                 const currentPromos = this.cart.getConfirmedPromocodes();
 
-                const hasCoincedence = existPromo.get(value) && !currentPromos.map((item) => item.name).includes(value);
+                const hasCoincedence =
+                    existPromo.get(value) && !currentPromos.map((item: IPromoCode) => item.name).includes(value);
 
                 if (hasCoincedence) {
                     const modal = document.querySelector('.modal');
@@ -108,60 +109,23 @@ class CartTotalBoard extends Component {
         }
     }
 
-    private getTotalInformation() {
-        const promos = this.getPromocodesTemplate.bind(this);
+    public getTemplate() {
+        const totalPrice = this.cart.getTotalPrice();
+        const totalInfo = this.getTotalInfo();
+        const promocodes = this.getPromocodesTemplate();
 
-        return `
-            <div class="cart-total__board">
-                <ul class="cart-board__list">
-                    <li class="cart-board__item d-flex justify-content-between">
-                        <ul class="cart-board__info w-100">
-                            ${this.getTotalInfo()}
-                        </ul>
-                    </li>
-                    <li class="cart-board__item">
-                        <input class="cart-total__promo" placeholder="Enter promocode" type="text">
-                        <div class="cart-total__promo-note">
-                            ${promos()}                       
-                        </div>
-                        <p class="cart-total__example">Test promocodes: <span class="cart-total__example-promo">EPM, RS</span></p>
-                    </li>
-                    <li class="cart-board__item price p d-flex justify-content-between align-items-center">
-                        ${this.getTotalPrice()}
-                    </li>
-                    <li class="cart-board__item">
-                        <button type="button" class="cart-board__btn w-100">Make order</button>
-                    </li>
-                </ul>
-            </div>
-        `;
-    }
-
-    private getTotalPrice() {
-        const totalPrice = this.cart.getTotalPrice().toFixed(2);
-
-        return `
-            Total <span class="cart-board__total">${totalPrice} €</span>
-        `;
+        return Mustache.render(Total, { totalPrice, totalInfo, promocodes });
     }
 
     private getTotalInfo() {
-        const totalPrice = this.cart.getCartPrice().toFixed(2);
-        const discount = this.cart.getDiscountPrice().toFixed(2);
-        const products = this.cart.getTotalCount();
+        const cartPrice = this.cart.getCartPrice();
+        const discount = this.cart.getDiscountPrice();
+        const counter = this.cart.getTotalCount();
 
         const through = this.cart.getConfirmedPromocodes().length ? 'cart-board__total-price--through' : '';
+        const word = counter > 1 ? 'products' : 'product';
 
-        return `
-            <li class="cart-info__item d-flex justify-content-between">
-                <span>${products} ${products > 1 ? 'products' : 'product'}</span>
-                <span class="cart-board__total-price ${through}">${totalPrice} €</span>
-            </li>
-            <li class="cart-info__item d-flex justify-content-between">
-                Discount
-                <span class="cart-board__total-discount">${discount} €</span> 
-            </li>
-        `;
+        return Mustache.render(TotalInfo, { through, counter, cartPrice, discount, word });
     }
 
     private getPromocodesTemplate() {
@@ -173,16 +137,9 @@ class CartTotalBoard extends Component {
     }
 
     private promocodeItem(item: IPromoCode) {
-        return `
-            <span class="cart-total__promo-item d-inline-flex justify-content-between align-items-center">
-                <span class="cart-total__promocode">
-                    <span class="cart-promocode__name">${item.name}</span>
-                    <span>
-                        ${item.discount * 100} %
-                    </span>
-                </span>
-                <span class="cart-total__promo-remove"></span>
-            </span>`;
+        const discount = item.discount * 100;
+
+        return Mustache.render(Promocode, { discount, name: item.name });
     }
 
     public update() {
@@ -198,13 +155,6 @@ class CartTotalBoard extends Component {
         if (promoNote) {
             promoNote.innerHTML = '';
             promoNote.insertAdjacentHTML('afterbegin', this.getPromocodesTemplate());
-        }
-
-        const totalPrice = document.querySelector('.cart-board__item.price');
-
-        if (totalPrice) {
-            totalPrice.innerHTML = '';
-            totalPrice.innerHTML = this.getTotalPrice();
         }
     }
 }

@@ -2,6 +2,7 @@ import { Header } from '../components/header';
 import { Footer } from '../components/footer';
 import { Content } from '../components/main';
 import { View } from './types/view';
+import { Cart } from '../model/cart';
 import BaseView from './base-view';
 
 export class MainView extends BaseView implements View {
@@ -9,18 +10,26 @@ export class MainView extends BaseView implements View {
     private footer: Footer;
     private content: Content;
 
-    constructor() {
+    constructor(cart: Cart) {
         super();
 
-        this.header = new Header();
+        this.header = new Header(cart);
         this.footer = new Footer();
         this.content = new Content();
     }
 
-    init(): void {
-        this.root.append(this.header.render());
+    init(root: HTMLElement): void {
+        root.append(this.header.render());
         this.container.append(this.content.render());
-        this.root.append(this.container);
-        this.root.append(this.footer.render());
+        root.append(this.container);
+        root.append(this.footer.render());
+    }
+
+    public handleClickToCartIcon(callback: (e: Event) => void) {
+        this.header.handleClickToCartIcon(callback);
+    }
+
+    public handleClickToLogoIcon(callback: (e: Event) => void) {
+        this.header.handleClickToLogoIcon(callback);
     }
 }

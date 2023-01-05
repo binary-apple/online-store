@@ -6,7 +6,7 @@ interface IComponent {
 
 export type ComponentType = IComponent | (IComponent & Subscriber);
 
-function isSubscriber(component: ComponentType): component is (IComponent & Subscriber) {
+function isSubscriber(component: ComponentType): component is IComponent & Subscriber {
     return 'update' in component;
 }
 
@@ -33,9 +33,6 @@ export abstract class Component implements IComponent {
 
     public render(): HTMLElement {
         this.container.append(this.template());
-
-        const event = new Event('render-component');
-        dispatchEvent(event);
 
         return this.container;
     }

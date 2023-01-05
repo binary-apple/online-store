@@ -1,7 +1,7 @@
 import Controller from '../controller';
 import CartView from '../../view/cart-view';
-import { Cart } from '../../model/cart/cart';
-import CartLocalStorage from '../../model/cart/cart-local-storage';
+import { Cart } from '../../model/cart';
+import CartLocalStorage from '../../model/cart-local-storage';
 import { HashRouter } from '../../router/router';
 import { Product } from '../../model/types/product';
 import Request from '../../api/request';
@@ -15,10 +15,9 @@ class CartController extends Controller {
 
     async init() {
         const cartLS = new CartLocalStorage(ONLINE_STORE_APPLE_NEPO);
+        const cart = new Cart();
 
-        const cart = new Cart(cartLS.get());
-
-        if (!cart.get().products.length) {
+        if (!cart.get().length) {
             const request = new Request();
             const response = await request.make('GET', '/products?limit=100');
 
@@ -88,15 +87,7 @@ class CartController extends Controller {
         cartView.changeLimitPaginationHandler((e: Event) => {
             const inputTarget = e.target as HTMLInputElement;
 
-            if (!inputTarget.value) {
-                return;
-            }
-
-            if (+inputTarget.value < 1) {
-                inputTarget.value = '1';
-                cart.changeParamsLimit(+inputTarget.value);
-                cartLS.set(cart.get());
-
+            if (inputTarget.value === '') {
                 return;
             }
 
@@ -142,7 +133,7 @@ class CartController extends Controller {
                 if (checkbox) {
                     const productId = +checkbox.value;
 
-                    const product = cartState.products.find((el) => el.id === productId);
+                    const product = cartState.find((el) => el.id === productId);
 
                     if (product) {
                         if (type === 'increase') {

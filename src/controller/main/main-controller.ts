@@ -1,6 +1,7 @@
 import Controller from '../controller';
+import Routers from '../../router/routers';
+import { Cart } from '../../model/cart';
 import { MainView } from '../../view/main-view';
-import RouterLinksController from '../router-links-controller';
 import { HashRouter } from '../../router/router';
 
 class MainController extends Controller {
@@ -9,11 +10,24 @@ class MainController extends Controller {
     }
 
     async init() {
-        const mainView = new MainView();
-        mainView.init();
+        /* eslint-disable-next-line */
+        console.log('products');
 
-        const links = new RouterLinksController(this.router);
-        links.init();
+        const cart = new Cart();
+
+        const view = new MainView(cart);
+        view.init(this.root);
+
+        view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
+        view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
+    }
+
+    private handleClickToCartIcon(e: Event) {
+        this.router.navigateTo(Routers.CART);
+    }
+
+    private handleClickToLogoIcon(e: Event) {
+        this.router.navigateTo(Routers.MAIN);
     }
 }
 

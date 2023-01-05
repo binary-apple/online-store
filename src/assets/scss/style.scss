@@ -3,11 +3,27 @@
 @import './partials/settings';
 @import './partials/typography';
 @import './partials/checkbox';
+@import './partials/buttons';
 @import './partials/footer';
+@import './partials/header';
 
 body {
-    background: $background-app;
+    background: $background;
     color: $onSurface;
+}
+
+.error {
+    background: transparentize($primary, 0.8);
+}
+
+.e404,
+.e404-text {
+    font-weight: 800;
+}
+
+.e404 {
+    color: $primary;
+    font-size: 80px;
 }
 
 .main-container {

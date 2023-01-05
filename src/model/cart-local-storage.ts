@@ -1,5 +1,5 @@
-import { Component } from '../../components/types/component';
-import { ICart } from '../types/cart';
+import { Component } from '../components/types/component';
+import { Product } from './types/product';
 
 class CartLocalStorage extends Component {
     name: string;
@@ -31,7 +31,7 @@ class CartLocalStorage extends Component {
         return main.content;
     }
 
-    set(cart: ICart) {
+    set(cart: Array<Product>) {
         localStorage.removeItem(this.name);
 
         const jsonCart = JSON.stringify(cart);

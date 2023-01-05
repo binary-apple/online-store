@@ -13,28 +13,22 @@ class Checkbox extends Component {
     protected template() {
         const main = document.createElement('template');
 
-        main.innerHTML = this.getCheckboxTemplate(this.checkbox);
+        main.innerHTML = this.getTemplate();
 
         return main.content;
     }
 
-    public toString() {
+    public getTemplate() {
+        const text = this.checkbox.text ? `<span class="checkbox-fake__text">${this.checkbox.text}</span>` : '';
+
         return `
             <div class="d-flex checkbox-fake">
-                ${this.getCheckboxTemplate(this.checkbox)}
+                <input class="checkbox-fake__input" value="${this.checkbox.value}" type="checkbox" id="${this.checkbox.id}">
+                <label class="d-flex checkbox-fake__label" for="${this.checkbox.id}">
+                    <span class="checkbox-fake__checkbox"></span>
+                    ${text}
+                </label>
             </div>
-        `;
-    }
-
-    getCheckboxTemplate(checkbox: ICheckbox) {
-        const text = checkbox.text ? `<span class="checkbox-fake__text">${checkbox.text}</span>` : '';
-
-        return `
-            <input class="checkbox-fake__input" value="${checkbox.value}" type="checkbox" id="${checkbox.id}">
-            <label class="d-flex checkbox-fake__label" for="${checkbox.id}">
-                <span class="checkbox-fake__checkbox"></span>
-                ${text}
-            </label>
         `;
     }
 }

@@ -4,7 +4,7 @@ import CartContent from '../components/cart/cart-content';
 import BreadCrumbs from '../components/breadcrumbs';
 import { Header } from '../components/header';
 import { Footer } from '../components/footer';
-import { Cart } from '../model/cart/cart';
+import { Cart } from '../model/cart';
 import { Modal } from 'bootstrap';
 
 class CartView extends BaseView implements View {
@@ -20,7 +20,7 @@ class CartView extends BaseView implements View {
 
         this.cart = cart;
 
-        this.header = new Header();
+        this.header = new Header(cart);
         this.footer = new Footer();
 
         const breadcrumbs = this.getBreadcrumbs();
@@ -55,19 +55,19 @@ class CartView extends BaseView implements View {
     }
 
     public selectAllChangeHandler(callback: (e: Event, container: HTMLElement) => void) {
-        this.content.selectAllProducts.selectAllChangeHandler(callback);
+        this.content.cartNavigation.selectAllChangeHandler(callback);
     }
 
     public removeSelectedClickHandler(callback: (container: HTMLElement) => void) {
-        this.content.selectAllProducts.removeSelectedClickHandler(callback);
+        this.content.cartNavigation.removeSelectedClickHandler(callback);
     }
 
     public changeLimitPaginationHandler(callback: (e: Event) => void) {
-        this.content.cartPagination.changeLimitPaginationHandler(callback);
+        this.content.cartNavigation.changeLimitPaginationHandler(callback);
     }
 
     public changePagePaginationClickHandler(callback: (e: Event, type: string) => void) {
-        this.content.cartPagination.changePagePaginationClickHandler(callback);
+        this.content.cartNavigation.changePagePaginationClickHandler(callback);
     }
 
     public changeQuntityProductInCart(callback: (e: Event, type: string) => void) {
