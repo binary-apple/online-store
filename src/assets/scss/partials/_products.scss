@@ -28,6 +28,10 @@ input[type="search"] {
     stroke: $primary;
 }
 
+.view {
+    cursor: pointer;
+}
+
 .product-item {
     position: relative;
     background: $surface;
