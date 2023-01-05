@@ -5,13 +5,17 @@ import { Cart } from '../../model/cart';
 import { MainView } from '../../view/main-view';
 import Request from '../../api/request';
 import Products from '../../model/products/products';
+import { CartAPI } from '../../model/cart-api';
 
 class MainController extends Controller {
     private view: MainView;
     private cart: Cart = new Cart();
     private products: Products = new Products([]);
+    private cartAPI: CartAPI = new CartAPI();
     constructor(router: Router) {
         super(router);
+
+        this.cart.attach(this.cartAPI);
         
         const big = this.getBigFromQuery() === 'false' ? false : true;
         this.view = new MainView(this.cart, this.products, big);
@@ -20,26 +24,24 @@ class MainController extends Controller {
     async init() {
         /* eslint-disable-next-line */
         console.log('products');
-
-        let cart = new Cart();
-
-        // const view = new MainView(cart);
+        
         this.view.init(this.root);
-
+        
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
         this.view.handleSliderInput(this.handleSliderInput.bind(this));
         this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
-
+        
         this.view.handleBigScaleClick(this.handleBigScaleClick.bind(this));
         this.view.handleSmallScaleClick(this.handleSmallScaleClick.bind(this));
-
+        
         const prods = new Request().make('GET', 'https://dummyjson.com/products?limit=100');
         //  TODO: catch error
         this.products.set((await prods).products);
-
+        
         this.view.handleProductButtonClick();
+        this.cart.setCart(this.cartAPI.createFromJSON());
     }
 
     private handleClickToCartIcon(e: Event){

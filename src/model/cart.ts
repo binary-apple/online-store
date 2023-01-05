@@ -99,4 +99,18 @@ export class Cart extends Store {
     isProductInCart(id: number) {
         return this.productsInCart.find((cartItem) => cartItem.productId === id) ? true : false;
     }
+
+    getCart() {
+        return { productsInCart: this.productsInCart,
+            promoList: this.promoList,
+            totalDisc: this.totalDisc
+        };
+    }
+
+    setCart({ productsInCart, promoList, totalDisc} : { productsInCart: CartItem[], promoList: string[], totalDisc: number}) {
+        this.productsInCart = productsInCart;
+        this.promoList = promoList;
+        this.totalDisc = totalDisc;
+        this.notify();
+    }
 }
