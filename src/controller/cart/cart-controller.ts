@@ -5,30 +5,36 @@ import CartLocalStorage from '../../model/cart-local-storage';
 import { HashRouter } from '../../router/router';
 import { Product } from '../../model/types/product';
 import Request from '../../api/request';
+import { ICartPagination } from '../../model/types/cart';
 
 const ONLINE_STORE_APPLE_NEPO = process.env.LOCAL_STORAGE_NAME as string;
 
 class CartController extends Controller {
+    cart: Cart;
+    cartLS: CartLocalStorage;
+
     constructor(router: HashRouter) {
         super(router);
+
+        this.cartLS = new CartLocalStorage(ONLINE_STORE_APPLE_NEPO);
+        this.cart = new Cart();
     }
 
     async init() {
-        const cartLS = new CartLocalStorage(ONLINE_STORE_APPLE_NEPO);
-        const cart = new Cart();
-
-        if (!cart.get().length) {
+        if (!this.cart.get().length) {
             const request = new Request();
             const response = await request.make('GET', '/products?limit=100');
 
-            response.products.forEach((item: Product) => {
-                cart.addProductToCart(item, 1);
-                cartLS.set(cart.get());
+            response.products.slice(0, 8).forEach((item: Product) => {
+                this.cart.addProductToCart(item, 1);
+                this.cartLS.set(this.cart.get());
             });
         }
 
-        const cartView = new CartView(cart);
+        const cartView = new CartView(this.cart);
         cartView.init();
+
+        this.setPaginationFromQueryParams();
 
         cartView.breadCrumbsClickHandler((e: Event) => {
             const htmlTarget = e.target as HTMLElement;
@@ -76,11 +82,19 @@ class CartController extends Controller {
                     if (cb.checked) {
                         const productId = +cb.value;
 
-                        cart.removeProductFromCart(productId);
+                        this.cart.removeProductFromCart(productId);
 
-                        cartLS.set(cart.get());
+                        this.cartLS.set(this.cart.get());
                     }
                 });
+            }
+
+            const { page, limit } = this.cart.getPagination();
+            const hasProducts = this.cart.checkProducts(limit, page);
+
+            if (!hasProducts) {
+                this.cart.changeParamsPage(page);
+                this.decreasePageInQueryParams(page);
             }
         });
 
@@ -91,13 +105,26 @@ class CartController extends Controller {
                 return;
             }
 
-            cart.changeParamsLimit(+inputTarget.value);
-            cartLS.set(cart.get());
+            this.cart.changeParamsLimit(+inputTarget.value);
+            this.cartLS.set(this.cart.get());
+
+            this.router.addSearchParams('limit', inputTarget.value);
+
+            const { page, limit } = this.cart.getPagination();
+            const hasProducts = this.cart.checkProducts(limit, page);
+
+            if (!hasProducts) {
+                this.decreasePageInQueryParams(page);
+            }
         });
 
         cartView.changePagePaginationClickHandler((e: Event, type: string) => {
-            cart.changeParamsPage(type);
-            cartLS.set(cart.get());
+            this.cart.changeParamsPage(type);
+            this.cartLS.set(this.cart.get());
+
+            const page = '' + this.cart.getPagination().page;
+
+            this.router.addSearchParams('page', page);
         });
 
         cartView.linkClickHandler((e: Event) => {
@@ -123,7 +150,7 @@ class CartController extends Controller {
 
         cartView.changeQuntityProductInCart((e: Event, type: string) => {
             const htmlTarget = e.target as HTMLElement;
-            const cartState = cart.get();
+            const cartState = this.cart.get();
 
             const productWrapper = htmlTarget.closest('.cart-item') as HTMLElement;
 
@@ -137,12 +164,19 @@ class CartController extends Controller {
 
                     if (product) {
                         if (type === 'increase') {
-                            cart.increaseProductCount(product);
+                            this.cart.increaseProductCount(product);
                         } else {
-                            cart.decreaseProductCount(product.id);
+                            this.cart.decreaseProductCount(product.id);
+
+                            const { page, limit } = this.cart.getPagination();
+                            const hasProducts = this.cart.checkProducts(limit, page);
+
+                            if (!hasProducts) {
+                                this.decreasePageInQueryParams(page);
+                            }
                         }
 
-                        cartLS.set(cart.get());
+                        this.cartLS.set(this.cart.get());
                     }
                 }
             }
@@ -156,9 +190,9 @@ class CartController extends Controller {
 
                 if (promoWrapper) {
                     const promo = promoWrapper.innerText.trim();
-                    cart.addPromocode(promo);
+                    this.cart.addPromocode(promo);
 
-                    cartLS.set(cart.get());
+                    this.cartLS.set(this.cart.get());
                 }
             }
         });
@@ -176,12 +210,43 @@ class CartController extends Controller {
 
                     if (promoNameWrapper) {
                         const promo = promoNameWrapper.innerText.trim();
-                        cart.removePromocode(promo);
-                        cartLS.set(cart.get());
+                        this.cart.removePromocode(promo);
+                        this.cartLS.set(this.cart.get());
                     }
                 }
             }
         });
+    }
+
+    setPaginationFromQueryParams() {
+        const params = this.router.getSearchParams() as ICartPagination;
+
+        const hasParams = !!Object.keys(params).filter((el) => el).length;
+
+        if (hasParams) {
+            if (params.limit) {
+                this.cart.changeParamsLimit(params.limit);
+            }
+
+            if (params.page) {
+                this.cart.changeParamsPage(params.page);
+            }
+        }
+
+        const hasProducts = this.cart.checkProducts(params.limit, params.page);
+
+        if (!hasProducts) {
+            const pagination = this.cart.getPagination();
+
+            this.router.addSearchParams('page', '' + pagination.page);
+        }
+    }
+
+    decreasePageInQueryParams(page: number) {
+        const pageValue = page - 1;
+        this.cart.changeParamsPage(pageValue);
+
+        this.router.addSearchParams('page', '' + pageValue);
     }
 }
 

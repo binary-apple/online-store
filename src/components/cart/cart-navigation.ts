@@ -6,6 +6,7 @@ import Checkbox from '../ui/checkbox';
 
 class CartNavigation extends Component {
     cart: Cart;
+
     constructor(cart: Cart) {
         super();
 
@@ -101,6 +102,12 @@ class CartNavigation extends Component {
 
             removeSelectedBtn.addEventListener('click', () => {
                 callback(productsWrapper);
+
+                const selectAllCb = document.getElementById('select-all') as HTMLInputElement;
+
+                if (selectAllCb) {
+                    selectAllCb.checked = false;
+                }
             });
         }
     }

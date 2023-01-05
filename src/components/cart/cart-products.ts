@@ -69,6 +69,7 @@ class CartProducts extends Component {
             stock: item.stock,
             count: item.count,
             totalPrice: item.count * item.price,
+            image: item.images[0],
         });
     }
 

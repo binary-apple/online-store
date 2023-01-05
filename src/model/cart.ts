@@ -34,8 +34,7 @@ export class Cart extends Store {
     public getProductsWithPagination() {
         const { limit, page } = this.pagination;
 
-        const start = page === 1 ? 0 : (page - 1) * limit;
-        const end = page === 1 ? limit : start + limit;
+        const [start, end] = this.getPaginationIndex(limit, page);
 
         return this.productsInCart.slice(start, end);
     }
@@ -157,14 +156,57 @@ export class Cart extends Store {
         this.notify();
     }
 
-    changeParamsPage(type: string) {
-        if (type === 'increase') {
-            this.pagination.page = this.pagination.page += 1;
-        } else {
-            this.pagination.page = this.pagination.page -= 1;
+    public checkProducts(limit: number, page: number) {
+        const [start, end] = this.getPaginationIndex(limit, page);
 
-            if (this.pagination.page < 1) {
-                this.pagination.page = 1;
+        return this.productsInCart.slice(start, end).length;
+    }
+
+    private getPaginationIndex(limit: number, page: number) {
+        const start = page === 1 ? 0 : (page - 1) * limit;
+        const end = page === 1 ? limit : start + limit;
+
+        return [start, end];
+    }
+
+    changeParamsPage(type: string | number) {
+        const changeFromEvent = typeof type === 'string';
+        const changeFromQuery = typeof type === 'number';
+
+        let page;
+
+        if (changeFromEvent) {
+            if (type === 'increase') {
+                page = this.pagination.page + 1;
+            } else {
+                page = this.pagination.page - 1;
+            }
+        } else {
+            page = type;
+        }
+
+        if (page < 1) {
+            page = 1;
+        }
+
+        const { limit } = this.getPagination();
+
+        const hasProducts = this.checkProducts(limit, page);
+
+        if (hasProducts) {
+            this.pagination.page = page;
+        } else {
+            if (changeFromQuery) {
+                const counter = page;
+
+                for (let i = 0; i < counter; i++) {
+                    page -= 1;
+                    if (this.checkProducts(limit, page)) {
+                        break;
+                    }
+                }
+
+                this.pagination.page = page;
             }
         }
 
