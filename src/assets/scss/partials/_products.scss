@@ -33,7 +33,7 @@ input[type="search"] {
     background: $surface;
     border-radius: 4px;
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
-    .in-cart {
+    &.in-cart {
         box-shadow: 4px 8px 16px rgba(255, 102, 51, 0.2);
     }
 }
@@ -44,17 +44,19 @@ input[type="search"] {
     height: 50%;
     object-fit: contain;
     border-radius: 4px 4px 0 0;
+    cursor: pointer;
 }
 
 .big-item {
     width: calc(33% - 0.5rem);
     padding-bottom: 36%;
+    font-size: small;
 }
 
 .small-item {
     width: calc(25% - 0.5rem);
     padding-bottom: 32%;
-    font-size: small;
+    font-size: x-small;
 }
 
 .products-button {

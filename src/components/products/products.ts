@@ -45,19 +45,23 @@ export class Products extends Component implements Subscriber {
         prodsWrapper.innerHTML = '';
         this.productsModel.get().forEach((el) => {
             let productItem = document.createElement('div');
-            productItem.classList.add('product-item');
+            productItem.classList.add(...`product-item ${this.cart.isProductInCart(el.id) ? 'in-cart' : ''}`.trim().split(' '));
             if (this.big) {
                 productItem.classList.add('big-item');
             } else {
                 productItem.classList.add('small-item');
             }
             productItem.innerHTML = `
-            <img src="${el.thumbnail}" loading="lazy" alt="${el.title}" class="item-img ${this.cart.isProductInCart(el.id) ? 'in-cart' : ''}">
+            <img src="${el.thumbnail}" 
+                loading="lazy" 
+                alt="${el.title}" 
+                class="item-img"
+                data-idimg="${el.id}">
             <div class="product-info mx-1 lh-base">
                 <div>${el.title}</div>
                 <div>Price: <span class="product-price">${el.price}</span></div>
             </div>
-            <button class="products-button ${this.cart.isProductInCart(el.id) ? 'drop' : 'add'}">
+            <button class="products-button ${this.cart.isProductInCart(el.id) ? 'drop' : 'add'}" data-idbutton="${el.id}">
                 ${this.cart.isProductInCart(el.id) ? 'Drop from cart' : 'Add to cart'}
             </button>
             `
@@ -148,8 +152,24 @@ export class Products extends Component implements Subscriber {
         }
     }
 
-    public handleProductButtonClick(callback: (e: Event) => void) {
+    public addToDropFromCart(e: Event): void {
+        const target = e.target;
+        if (!(target instanceof HTMLElement) || !(target)) {
+            return;
+        }
+        if (target.tagName === 'IMG') {
+            // TODO: переход на страницу продукта
+        } else if (target.tagName === 'BUTTON') {
+            const id = Number(target.dataset.idbutton);
+            this.cart.isProductInCart(id) ? this.cart.removeProductFromCart(id) : this.cart.addProductToCart(id);
+        }
+    }
 
+    public handleProductButtonClick(): void {
+        const products = this.container.querySelector('#prods');
+        if (products) {
+            products.addEventListener('click', this.addToDropFromCart.bind(this));
+        }
     }
 
     public update(): void {

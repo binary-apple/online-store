@@ -57,4 +57,13 @@ export class MainView implements View {
     setSmallScale() {
         this.content.setSmallScale();
     }
+
+    // public addToDropFromCart(e: Event) {
+    //     this.content.addToDropFromCart(e);
+    // }
+
+    public handleProductButtonClick() {
+        this.content.handleProductButtonClick();
+    }
+
 }

@@ -38,6 +38,8 @@ class MainController extends Controller {
         const prods = new Request().make('GET', 'https://dummyjson.com/products?limit=100');
         //  TODO: catch error
         this.products.set((await prods).products);
+
+        this.view.handleProductButtonClick();
     }
 
     private handleClickToCartIcon(e: Event){
@@ -60,6 +62,7 @@ class MainController extends Controller {
         this.view.setBigScale();
         this.addScaleToQuery(true);
     }
+
     private handleSmallScaleClick(e: Event) {
         this.view.setSmallScale();
         this.addScaleToQuery(false);
@@ -75,6 +78,15 @@ class MainController extends Controller {
         const query = url.searchParams;
         return query.get('big');
     }
+
+    // private addToDropFromCart(e: Event) {
+    //     this.view.addToDropFromCart(e);
+    // }
+
+    public handleProductButtonClick() {
+        this.view.handleProductButtonClick();
+    }
+
 }
 
 export default MainController;

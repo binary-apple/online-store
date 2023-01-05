@@ -47,4 +47,13 @@ export class MainProducts extends Component
     setSmallScale() {
         this.products.setSmallScale();
     }
+
+    // public addToDropFromCart(e: Event) {
+    //     this.products.addToDropFromCart(e);
+    // }
+
+    public handleProductButtonClick() {
+        this.products.handleProductButtonClick();
+    }
+
 }
