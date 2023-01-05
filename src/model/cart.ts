@@ -12,9 +12,9 @@ export class Cart extends Store {
         page: 1,
     } as ICartPagination;
 
-    constructor() {
+    constructor(products: Array<Product>) {
         super();
-        this.productsInCart = [];
+        this.productsInCart = [...products];
         this.allPromocodes = new Map<string, number>([
             ['EPM', 0.1],
             ['RS', 0.1],

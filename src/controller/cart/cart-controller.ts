@@ -3,8 +3,6 @@ import CartView from '../../view/cart-view';
 import { Cart } from '../../model/cart';
 import CartLocalStorage from '../../model/cart-local-storage';
 import { HashRouter } from '../../router/router';
-import { Product } from '../../model/types/product';
-import Request from '../../api/request';
 import { ICartPagination } from '../../model/types/cart';
 
 const ONLINE_STORE_APPLE_NEPO = process.env.LOCAL_STORAGE_NAME as string;
@@ -17,20 +15,10 @@ class CartController extends Controller {
         super(router);
 
         this.cartLS = new CartLocalStorage(ONLINE_STORE_APPLE_NEPO);
-        this.cart = new Cart();
+        this.cart = new Cart(this.cartLS.get());
     }
 
     async init() {
-        if (!this.cart.get().length) {
-            const request = new Request();
-            const response = await request.make('GET', '/products?limit=100');
-
-            response.products.slice(0, 8).forEach((item: Product) => {
-                this.cart.addProductToCart(item, 1);
-                this.cartLS.set(this.cart.get());
-            });
-        }
-
         const cartView = new CartView(this.cart);
         cartView.init();
 
@@ -75,10 +63,10 @@ class CartController extends Controller {
                         const productId = +item.value;
 
                         this.cart.removeProductFromCart(productId);
-
-                        this.cartLS.set(this.cart.get());
                     }
                 });
+
+                this.cartLS.set(this.cart.get());
             }
 
             const { page, limit } = this.cart.getPagination();

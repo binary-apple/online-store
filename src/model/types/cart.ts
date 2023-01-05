@@ -20,3 +20,7 @@ export interface IPromoCode {
     name: string;
     discount: number;
 }
+
+export enum CartName {
+    LOCAL_STORAGE_NAME = 'online-store-apple-nepo',
+}
