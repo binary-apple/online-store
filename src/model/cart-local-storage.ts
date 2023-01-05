@@ -3,19 +3,11 @@ import { Product } from './types/product';
 
 class CartLocalStorage extends Component {
     name: string;
-    initialCart;
+    initialCart = [] as Array<Product>;
 
     constructor(name: string) {
         super();
         this.name = name;
-
-        this.initialCart = {
-            params: {
-                limit: 3,
-                page: 1,
-            },
-            products: [],
-        };
 
         const cart = this.get();
 

@@ -39,8 +39,9 @@ class CartContent extends Component {
         const products = this.cartProducts.getTemplate();
         const total = this.cartTotal.getTemplate();
         const navigation = this.cartNavigation.getTemplate();
+        const coontentIsHide = this.cart.getTotalCount() === 0 ? 'hide' : '';
 
-        return Mustache.render(Content, { counter, navigation, products, total });
+        return Mustache.render(Content, { counter, navigation, products, total, coontentIsHide });
     }
 
     private cartCounter() {

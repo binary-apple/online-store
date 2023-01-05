@@ -4,6 +4,8 @@ import { Cart } from '../../model/cart';
 import CartLocalStorage from '../../model/cart-local-storage';
 import { HashRouter } from '../../router/router';
 import { ICartPagination } from '../../model/types/cart';
+import Request from '../../api/request';
+import { Product } from '../../model/types/product';
 
 const ONLINE_STORE_APPLE_NEPO = process.env.LOCAL_STORAGE_NAME as string;
 
@@ -21,6 +23,15 @@ class CartController extends Controller {
     async init() {
         const cartView = new CartView(this.cart);
         cartView.init();
+
+        if (!this.cart.get().length) {
+            const request = new Request();
+            const response = await request.make('GET', '/products?limit=100');
+            response.products.slice(0, 8).forEach((item: Product) => {
+                this.cart.addProductToCart(item, 1);
+            });
+            this.cartLS.set(this.cart.get());
+        }
 
         this.setPaginationFromQueryParams();
 
@@ -42,16 +53,6 @@ class CartController extends Controller {
 
                 if (href) {
                     this.router.navigateTo(href);
-                }
-            }
-        });
-
-        cartView.selectAllChangeHandler((productCbs: Array<HTMLInputElement>, type: string) => {
-            if (productCbs.length) {
-                if (type === 'select') {
-                    productCbs.forEach((item) => (item.checked = true));
-                } else {
-                    productCbs.forEach((item) => (item.checked = false));
                 }
             }
         });
@@ -155,8 +156,6 @@ class CartController extends Controller {
 
             this.cartLS.set(this.cart.get());
         });
-
-        cartView.inputHandlerPromoCode();
 
         cartView.confirmPromoCodeClickHandler((promo: string) => {
             this.cart.addPromocode(promo);

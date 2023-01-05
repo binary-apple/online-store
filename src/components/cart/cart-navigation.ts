@@ -95,7 +95,7 @@ class CartNavigation extends Component {
         }
     }
 
-    public selectAllChangeHandler(callback: (productCbs: Array<HTMLInputElement>, type: string) => void) {
+    public selectAllChangeHandler() {
         const checkbox = document.getElementById('select-all');
 
         if (checkbox) {
@@ -110,9 +110,9 @@ class CartNavigation extends Component {
                     ) as Array<HTMLInputElement>;
 
                     if (inputTarget.checked) {
-                        callback(productCbs, 'select');
+                        productCbs.forEach((item) => (item.checked = true));
                     } else {
-                        callback(productCbs, 'no-select');
+                        productCbs.forEach((item) => (item.checked = false));
                     }
                 }
             });

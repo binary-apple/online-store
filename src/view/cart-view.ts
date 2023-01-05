@@ -35,6 +35,9 @@ class CartView extends BaseView implements View {
         this.container.append(this.breadcrumbs.render());
         this.container.append(this.content.render());
         this.root.append(this.footer.render());
+
+        this.selectAllChangeHandler();
+        this.inputHandlerPromoCode();
     }
 
     private getBreadcrumbs() {
@@ -52,10 +55,6 @@ class CartView extends BaseView implements View {
 
     public breadCrumbsClickHandler(callback: (e: Event) => void) {
         this.breadcrumbs.breadCrumbsClickHandler(callback);
-    }
-
-    public selectAllChangeHandler(callback: (productCbs: Array<HTMLInputElement>, type: string) => void) {
-        this.content.cartNavigation.selectAllChangeHandler(callback);
     }
 
     public removeSelectedClickHandler(callback: (checkboxs: Array<HTMLInputElement>) => void) {
@@ -88,6 +87,10 @@ class CartView extends BaseView implements View {
 
     public inputHandlerPromoCode() {
         this.content.cartTotal.inputHandlerPromoCode();
+    }
+
+    public selectAllChangeHandler() {
+        this.content.cartNavigation.selectAllChangeHandler();
     }
 }
 

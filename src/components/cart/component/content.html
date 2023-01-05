@@ -2,12 +2,14 @@
     <h1 class="col-2 cart-title__text">Cart</h1>
     {{{counter}}}
 </div>
-<div class="row col-9 cart-content__remove-selected d-flex justify-content-between">{{{navigation}}}</div>
+<div class="row col-9 cart-content__remove-selected d-flex justify-content-between {{coontentIsHide}}">
+    {{{navigation}}}
+</div>
 <div class="row cart-content__products">
     <ul class="col-9 cart-products">
         {{{products}}}
     </ul>
-    <div class="col-3 cart-total">{{{total}}}</div>
+    <div class="col-3 cart-total {{coontentIsHide}}">{{{total}}}</div>
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-confirm-promo">
