@@ -4,10 +4,7 @@ import { Cart } from '../../model/cart';
 import CartLocalStorage from '../../model/cart-local-storage';
 import { HashRouter } from '../../router/router';
 import { ICartPagination } from '../../model/types/cart';
-import Request from '../../api/request';
-import { Product } from '../../model/types/product';
-
-const ONLINE_STORE_APPLE_NEPO = process.env.LOCAL_STORAGE_NAME as string;
+import { CartName } from '../../model/types/cart';
 
 class CartController extends Controller {
     cart: Cart;
@@ -16,7 +13,7 @@ class CartController extends Controller {
     constructor(router: HashRouter) {
         super(router);
 
-        this.cartLS = new CartLocalStorage(ONLINE_STORE_APPLE_NEPO);
+        this.cartLS = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);
         this.cart = new Cart(this.cartLS.get());
     }
 
