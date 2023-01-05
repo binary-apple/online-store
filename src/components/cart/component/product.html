@@ -1,0 +1,39 @@
+<li class="cart-item d-flex">
+    {{{checkbox}}}
+    <a class="cart-item__link d-flex w-100" data-href="/product/{{id}}" href="">
+        <div class="cart-item__img">
+            <img class="cart-item__picture" src="{{image}}" alt="product-img">
+        </div>
+        <ul class="cart-item__wrapper w-100">
+            <li class="flex-column flex-lg-row d-flex w-100 justify-content-between">
+                <div class="d-flex justify-content-start w-100">
+                    <div class="cart-item__order">
+                        № {{order}}
+                    </div>
+                    <div class="cart-item__description">
+                        <h2 class="cart-item__title">{{title}}</h2>
+                        <p class="cart-item__description-text">{{description}}</p>
+                        <p class="cart-item__one-price">
+                            <span class="cart-item__one-price--value">{{price}} €</span>
+                            per item
+                            <span class="cart-item__stock">
+                                <span class="cart-item-stock__value">{{stock}}</span>
+                                stock
+                            <span>
+                        </p>
+                    </div>
+                </div>
+                <div class="cart-item__nav d-flex align-items-lg-start justify-content-start align-items-center justify-content-lg-end">
+                    <div data-exception="true" class="col-4 cart-item__quanity d-flex align-items-center justify-content-between">
+                        <button data-exception="true" class="cart-quanity__btn cart-quanity__btn--minus" type="button"></button>
+                        <span data-exception="true" class="cart-quanity__value">{{count}}</span>
+                        <button data-exception="true" class="cart-quanity__btn cart-quanity__btn--plus" type="button"></button>
+                    </div>
+                    <div class="col-4 cart-item__price">
+                        {{totalPrice}} €
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </a>
+</li>

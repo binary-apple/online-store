@@ -4,11 +4,58 @@ import CartController from '../controller/cart/cart-controller';
 import MainController from '../controller/main/main-controller';
 import ProductController from '../controller/product/product-controller';
 import ErrorController from '../controller/error/error-controller';
-import Utils from '../utils/utils';
+import { IterableObject } from '../utils/types/utils';
+import { IRouter } from './types/router';
 
-const utils = new Utils();
+export class HashRouter extends Router {
+    settings: IRouter;
 
-const router = new Router({
+    constructor(settings: IRouter) {
+        super();
+
+        this.settings = settings;
+    }
+
+    addSearchParams(key: string, value: string) {
+        const url = new URL(window.location.href);
+
+        url.searchParams.set(key, value);
+
+        history.pushState({}, '', url);
+    }
+
+    clearSearchParams() {
+        const url = new URL(window.location.href);
+
+        const params = this.getSearchParams();
+
+        for (const key in params) {
+            url.searchParams.delete(key);
+        }
+
+        history.pushState({}, '', url);
+    }
+
+    getSearchParams() {
+        const url = new URL(window.location.href);
+
+        const searchArr = url.search.split('?')[url.search.split('?').length - 1].split('&');
+
+        const paramsObj: IterableObject = {};
+
+        if (searchArr.length) {
+            searchArr.forEach((item) => {
+                const [key, value] = item.split('=');
+
+                paramsObj[key] = +value;
+            });
+        }
+
+        return paramsObj;
+    }
+}
+
+const router = new HashRouter({
     mode: 'history',
     page404: () => {
         const errorController = new ErrorController(router);
@@ -25,7 +72,6 @@ router.add(Routers.MAIN, () => {
 
 router.add(Routers.PRODUCT, () => {
     const productController = new ProductController(router);
-
     productController.init();
 });
 
@@ -38,9 +84,7 @@ router.add(Routers.CART, () => {
 router.addUriListener();
 
 function activateRouter(router: Router) {
-    const pathname = utils.getPathName(window.location.href);
-
-    router.navigateTo(pathname);
+    router.check();
 }
 
 export default activateRouter.bind(this, router);

@@ -1,13 +1,15 @@
+import { HashRouter } from '../../router/router';
 import Controller from '../controller';
-import Router from 'vanilla-router';
 import { ErrorView } from '../../view/error-view';
 import { Cart } from '../../model/cart';
 import Routers from '../../router/routers';
+import CartLocalStorage from '../../model/cart-local-storage';
+import { CartName } from '../../model/types/cart';
 
 class ErrorController extends Controller {
     // private root: HTMLElement;
-    private cart: Cart = new Cart();
-    constructor(router: Router) {
+    private cart: Cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
+    constructor(router: HashRouter) {
         super(router);
         this.root = document.body;
     }
@@ -23,11 +25,11 @@ class ErrorController extends Controller {
         view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
     }
 
-    private handleClickToCartIcon(e: Event){
+    private handleClickToCartIcon(e: Event) {
         this.router.navigateTo(Routers.CART);
     }
 
-    private handleClickToLogoIcon(e: Event){
+    private handleClickToLogoIcon(e: Event) {
         this.router.navigateTo(Routers.MAIN);
     }
 }

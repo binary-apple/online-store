@@ -1,0 +1,44 @@
+@import './colors';
+
+.checkbox-fake {
+    &__input {
+        width: 0;
+        height: 0;
+        opacity: 0;
+        pointer-events: none;
+
+        &:checked {
+            & ~ label > .checkbox-fake__checkbox {
+                background-color: $secondary;
+                justify-content: center;
+                align-items: center;
+
+                &::after {
+                    content: '';
+                    display: inline-flex;
+                    width: 12px;
+                    height: 8px;
+                    background-image: url('../img/checkmark.svg');
+                }
+            }
+        }
+    }
+
+    &__checkbox {
+        display: inline-flex;
+        width: 24px;
+        height: 24px;
+        border-radius: 4px;
+        border: 1px solid $light;
+        background-color: white;
+    }
+
+    &__label {
+        align-items: center;
+        cursor: pointer;
+    }
+
+    &__text {
+        margin-left: 8px;
+    }
+}

@@ -1,0 +1,20 @@
+<div class="cart-total__board">
+    <ul class="cart-board__list">
+        <li class="cart-board__item d-flex justify-content-between">
+            <ul class="cart-board__info w-100">
+                {{{totalInfo}}}
+            </ul>
+        </li>
+        <li class="cart-board__item">
+            <input class="cart-total__promo" placeholder="Enter promocode" type="text" />
+            <div class="cart-total__promo-note">{{{promocodes}}}</div>
+            <p class="cart-total__example">Test promocodes: <span class="cart-total__example-promo">EPM, RS</span></p>
+        </li>
+        <li class="cart-board__item price p d-flex justify-content-between align-items-center">
+            Total <span class="cart-board__total">{{totalPrice}} €</span>
+        </li>
+        <li class="cart-board__item">
+            <button type="button" class="cart-board__btn w-100">Make order</button>
+        </li>
+    </ul>
+</div>
