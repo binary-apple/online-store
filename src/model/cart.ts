@@ -95,4 +95,8 @@ export class Cart extends Store {
             this.notify();
         }
     }
+
+    isProductInCart(id: number) {
+        return this.productsInCart.find((cartItem) => cartItem.productId === id) ? true : false;
+    }
 }

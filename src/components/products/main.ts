@@ -2,15 +2,18 @@ import { Component } from "../types/component";
 import { Products } from "./products";
 import { Products as ProductsModel } from "../../model/products/products";
 import { Slider } from "./slider";
+import { Cart } from "../../model/cart";
 
 export class MainProducts extends Component
 {
     private readonly priceSlider;
     private readonly products;
-    constructor(big: boolean, productsModel: ProductsModel) {
+    private readonly cart;
+    constructor(big: boolean, productsModel: ProductsModel, cart: Cart) {
         super({containerTag: 'main', className: 'main container'.split(' ')});
         this.priceSlider = new Slider();
-        this.products = new Products(big, productsModel);
+        this.cart = new Cart();
+        this.products = new Products(big, productsModel, cart);
     }
 
     protected template(): HTMLElement {

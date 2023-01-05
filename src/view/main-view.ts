@@ -13,7 +13,7 @@ export class MainView implements View {
     constructor(cart: Cart, productsModel: ProductsModel, private big: boolean = true) {
         this.header = new Header(cart);
         this.footer = new Footer();
-        this.content = new MainProducts(big, productsModel);
+        this.content = new MainProducts(big, productsModel, cart);
     }
 
     init(root: HTMLElement) {

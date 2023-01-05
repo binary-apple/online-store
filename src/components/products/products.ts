@@ -1,13 +1,16 @@
 import { Component } from "../types/component";
 import { Products as ProductsModel } from "../../model/products/products";
 import { Subscriber } from "../../utils/observer-interface";
+import { Cart } from "../../model/cart";
 
 export class Products extends Component implements Subscriber {
     private readonly productsModel: ProductsModel;
-    constructor(private big: boolean, products: ProductsModel) {
+    private readonly cart: Cart;
+    constructor(private big: boolean, products: ProductsModel, cart: Cart) {
         super({containerTag: 'div', className: 'products col-md-9 col-12'.split(' ')});
         this.productsModel = products;
-        this.subscribe(this.productsModel);
+        this.cart = cart;
+        this.subscribe(this.productsModel, this.cart);
     }
 
     protected template(): DocumentFragment {
@@ -43,17 +46,21 @@ export class Products extends Component implements Subscriber {
         this.productsModel.get().forEach((el) => {
             let productItem = document.createElement('div');
             productItem.classList.add('product-item');
-            // productItem.style.width = this.big ? '33.33%' : '25%';
-            // console.log('productItem.style.width: ', productItem.style.width);
             if (this.big) {
                 productItem.classList.add('big-item');
             } else {
                 productItem.classList.add('small-item');
             }
             productItem.innerHTML = `
-            <img src="${el.thumbnail}" loading="lazy" alt="${el.title}" class="item-img">
+            <img src="${el.thumbnail}" loading="lazy" alt="${el.title}" class="item-img ${this.cart.isProductInCart(el.id) ? 'in-cart' : ''}">
+            <div class="product-info mx-1 lh-base">
+                <div>${el.title}</div>
+                <div>Price: <span class="product-price">${el.price}</span></div>
+            </div>
+            <button class="products-button ${this.cart.isProductInCart(el.id) ? 'drop' : 'add'}">
+                ${this.cart.isProductInCart(el.id) ? 'Drop from cart' : 'Add to cart'}
+            </button>
             `
-            // productItem.innerHTML = `${el.brand}`;
             prodsWrapper.append(productItem);
         })
     }
@@ -139,6 +146,10 @@ export class Products extends Component implements Subscriber {
         if (smallIcon) {
             smallIcon.addEventListener('click', callback);
         }
+    }
+
+    public handleProductButtonClick(callback: (e: Event) => void) {
+
     }
 
     public update(): void {
