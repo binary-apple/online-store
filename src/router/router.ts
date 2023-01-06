@@ -42,7 +42,13 @@ export class HashRouter extends Router {
             searchArr.forEach((item) => {
                 const [key, value] = item.split('=');
 
-                paramsObj[key] = +value;
+                const notANumber = Number.isNaN(+value);
+
+                const isNumber = notANumber ? false : +value;
+                const isTrue = value === 'true' ? true : false;
+                const isNotFalse = notANumber && value !== 'false' ? value : false;
+
+                paramsObj[key] = isNumber || isTrue || isNotFalse || false;
             });
         }
 
@@ -72,6 +78,8 @@ router.add(Routers.PRODUCT, () => {
 
 router.add(Routers.CART, () => {
     const cartController = new CartController(router);
+
+    console.log(router.getSearchParams());
 
     cartController.init();
 });
