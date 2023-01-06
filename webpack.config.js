@@ -33,22 +33,15 @@ const baseConfig = {
                 loader: 'ts-loader',
             },
             {
-                test: /\.(?:ico|gif|png|jpg|jpeg|svg)$/i,
+                test: /\.(?:ico|gif|png|jpg|jpeg)$/i,
                 type: 'asset/resource',
-                resourceQuery: '',
                 generator: {
                     filename: 'assets/[name][ext]',
                 },
             },
             {
-                test: /\.svg$/,
-                resourceQuery: /inline/,
-                type: 'asset/source',
-            },
-            {
-                test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
+                test: /\.(woff(2)?|eot|ttf|otf|svg|)$/,
                 type: 'asset/resource',
-                resourceQuery: '',
                 generator: {
                     filename: 'fonts/[name][ext]',
                 },

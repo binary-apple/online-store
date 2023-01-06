@@ -5,9 +5,8 @@ import { Footer } from '../components/footer';
 import ProductContent from '../components/product/product-content';
 import { Product } from '../model/types/product';
 import { Cart } from '../model/cart';
-import { View } from './types/view';
 
-class ProductView extends BaseView implements View {
+class ProductView extends BaseView {
     private content: ProductContent;
     private breadcrumbs: BreadCrumbs;
     private header: Header;
@@ -35,9 +34,6 @@ class ProductView extends BaseView implements View {
         this.container.append(this.breadcrumbs.render());
         this.container.append(this.content.render());
         this.root.append(this.footer.render());
-
-        this.zoomImage();
-        this.changeQuntityProduct();
     }
 
     getBreadcrumbs(product: Product) {
@@ -59,22 +55,6 @@ class ProductView extends BaseView implements View {
                 name: product.title.toLowerCase().trim(),
             },
         ];
-    }
-
-    public addProdcutToCard(callback: (product: Product, type: string) => void) {
-        this.content.addProdcutToCard(callback);
-    }
-
-    private zoomImage() {
-        this.content.zoomImage();
-    }
-
-    public makeOrder(callback: (product: Product) => void) {
-        this.content.makeOrder(callback);
-    }
-
-    private changeQuntityProduct() {
-        this.content.changeQuntityProduct();
     }
 }
 

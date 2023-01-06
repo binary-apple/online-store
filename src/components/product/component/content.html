@@ -1,52 +1,6 @@
 <div class="product">
     <h1 class="col-12 product__title">{{name}}</h1>
-    <div class="col-12 product-header d-flex align-items-center">
-        <ul class="product__rating">
-            {{{rating}}}
-        </ul>
-        <button class="product__to-cart" type="button">{{cartText}}</button>
-    </div>
-    <div class="col-lg-12 product__info d-flex flex-column flex-md-row">
-        <div class="col-12 col-md-5 col-lg-6 product-info__images d-flex">
-            <ul class="col-2 col-md-2 product-images__list flex-column">
-                {{{image}}}
-            </ul>
-            <div class="col-10 col-md-10 product-images__main">
-                <img class="product-images-main__image img-fluid" src="{{mainImage}}" alt="product-image" />
-            </div>
-        </div>
-        <div class="col-12 col-md-7 col-lg-6 product-info__right">
-            <ul class="col-12">
-                <li class="product-info__price d-flex justify-content-between">
-                    <span class="product-price__total d-flex flex-column">
-                        <span class="product-price-total__value">{{price}} €</span>
-                        <span class="product-price-total__text">Price</span>
-                    </span>
-                    <span class="product-price__discount d-flex flex-column">
-                        <span class="product-price-discount__value">{{discount}} %</span>
-                        <span class="product-price-discount__text">Size of discount</span>
-                    </span>
-                </li>
-                <li class="product-info__nav d-flex align-items-center">
-                    <button class="product-info__order-btn" type="button">MAKE ORDER</button>
-                </li>
-                <li class="product-info__right-item product-info__stock d-flex justify-content-between">
-                    Stock:
-                    <span class="product-stock__value">{{stock}}</span>
-                </li>
-                <li class="product-info__right-item product-info__stock d-flex justify-content-between">
-                    Category:
-                    <span class="product-stock__value">{{category}}</span>
-                </li>
-                <li class="product-info__right-item product-info__stock d-flex justify-content-between">
-                    Brand:
-                    <span class="product-stock__value">{{brand}}</span>
-                </li>
-                <li class="product-info__right-item product-info__description">
-                    Description:
-                    <p class="product-description__text">{{description}}</p>
-                </li>
-            </ul>
-        </div>
-    </div>
+    <ul class="product__rating">
+        {{{rating}}}
+    </ul>
 </div>
