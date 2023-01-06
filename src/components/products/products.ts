@@ -58,7 +58,7 @@ export class Products extends Component implements Subscriber {
                 <div>Price: <span class="product-price">${el.price}</span></div>
             </div>
             <button class="products-button ${this.cart.isProductInCart(el.id) ? 'drop' : 'add'}" data-idbutton="${el.id}">
-                ${this.cart.isProductInCart(el.id) ? 'Drop from cart' : 'Add to cart'}
+                ${this.cart.isProductInCart(el.id) ? 'Remove' : 'To cart'}
             </button>
             `
             prodsWrapper.append(productItem);
