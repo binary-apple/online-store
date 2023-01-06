@@ -1,5 +1,8 @@
-@import './partials/settings';
 @import './partials/colors';
+@import './partials/fonts';
+@import './partials/settings';
+@import './partials/typography';
+@import './partials/checkbox';
 @import './partials/buttons';
 @import './partials/footer';
 @import './partials/header';
@@ -31,3 +34,21 @@ main {
     color: $primary;
     font-size: 80px;
 }
+
+.main-container {
+    max-width: 1205px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+/* breadcrumbs */
+
+@import './partials/breadcrumbs';
+
+/* cart */
+
+@import './partials/cart-content';
+
+/* product */
+
+@import './partials/product';

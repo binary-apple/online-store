@@ -3,7 +3,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const { merge } = require('webpack-merge');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const Dotenv = require('dotenv-webpack');
 
 const baseConfig = {
     entry: {
@@ -16,6 +17,7 @@ const baseConfig = {
     },
     mode: 'development',
     plugins: [
+        new Dotenv(),
         new HtmlWebpackPlugin({
             template: path.resolve(__dirname, './src/index.html'),
             publicPath: './',
@@ -46,7 +48,23 @@ const baseConfig = {
             },
             {
                 test: /\.(scss|css)$/,
-                use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    {
+                        loader: 'postcss-loader',
+                        options: {
+                            postcssOptions: {
+                                plugins: ['postcss-preset-env'],
+                            },
+                        },
+                    },
+                    'sass-loader',
+                ],
+            },
+            {
+                test: /\.html$/,
+                use: ['html-loader'],
             },
         ],
     },

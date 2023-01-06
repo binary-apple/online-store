@@ -8,7 +8,9 @@ export interface Product {
     discountPercentage: number;
     description: string;
     title: string;
-    images: Array<string>;
     thumbnail: string;
-    [index: string]: number | string | Array<string>;
+    order?: number;
+    count?: number;
+    images: Array<string>;
+    [index: string]: number | string | Array<string> | undefined;
 }

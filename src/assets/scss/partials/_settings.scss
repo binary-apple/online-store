@@ -27,4 +27,18 @@ ul {
 
 a {
     text-decoration: none;
+
+    &:hover {
+        color: inherit;
+    }
+}
+
+#app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.hide {
+    display: none !important;
 }

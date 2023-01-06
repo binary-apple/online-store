@@ -133,10 +133,15 @@ export class Products extends Store {
 
         let sorting;
 
+        // TODO: understand why values can be undefined
+        if (!a[value] || !b[value]) {
+            throw new Error('Products values not specified');
+        }
+
         if (order === 'desc') {
-            sorting = +b[value] - +a[value];
+            sorting = +b[value]! - +a[value]!;
         } else {
-            sorting = +a[value] - +b[value];
+            sorting = +a[value]! - +b[value]!;
         }
 
         return sorting;

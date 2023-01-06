@@ -2,6 +2,7 @@ import { Component } from "../types/component";
 import { Products as ProductsModel } from "../../model/products/products";
 import { Subscriber } from "../../utils/observer-interface";
 import { Cart } from "../../model/cart";
+import { products } from "../../model/productItems";
 
 export class Products extends Component implements Subscriber {
     private readonly productsModel: ProductsModel;
@@ -157,7 +158,11 @@ export class Products extends Component implements Subscriber {
     }
 
     private toggleProductInCart(id: number) {
-        this.cart.isProductInCart(id) ? this.cart.removeProductFromCart(id) : this.cart.addProductToCart(id);
+        const product = products.find(e => e.id === id);
+        if (! product) {
+            throw new Error('No such product');
+        }
+        this.cart.isProductInCart(id) ? this.cart.removeProductFromCart(id) : this.cart.addProductToCart(product);
     }
 
     public handleProductClick(callback: (id: number) => void) {

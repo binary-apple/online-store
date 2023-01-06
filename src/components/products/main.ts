@@ -12,7 +12,7 @@ export class MainProducts extends Component
     constructor(big: boolean, productsModel: ProductsModel, cart: Cart) {
         super({containerTag: 'main', className: 'main container'.split(' ')});
         this.priceSlider = new Slider();
-        this.cart = new Cart();
+        this.cart = cart;
         this.products = new Products(big, productsModel, cart);
     }
 

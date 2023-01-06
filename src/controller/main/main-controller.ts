@@ -1,21 +1,25 @@
 import Controller from '../controller';
-import Router from 'vanilla-router';
 import Routers from '../../router/routers';
 import { Cart } from '../../model/cart';
 import { MainView } from '../../view/main-view';
 import Products from '../../model/products/products';
-import { CartAPI } from '../../model/cart-api';
+// import { CartAPI } from '../../model/cart-api';
 import { products } from '../../model/productItems';
+import { HashRouter } from '../../router/router';
+import CartLocalStorage from '../../model/cart-local-storage';
+import { CartName } from '../../model/types/cart';
 
 class MainController extends Controller {
     private view: MainView;
-    private cart: Cart = new Cart();
+    private cart: Cart = new Cart([]);
     private products: Products = new Products([]);
-    private cartAPI: CartAPI = new CartAPI();
-    constructor(router: Router) {
+    // private cartAPI: CartAPI = new CartAPI();
+    // TODO: replace cartAPI
+    constructor(router: HashRouter) {
         super(router);
 
-        this.cart.attach(this.cartAPI);
+        // this.cart.attach(this.cartAPI);
+        // TODO: implement without cartAPI
         
         const big = this.getBigFromQuery() === 'false' ? false : true;
         this.view = new MainView(this.cart, this.products, big);
@@ -30,7 +34,8 @@ class MainController extends Controller {
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
-        this.view.handleSliderInput(this.handleSliderInput.bind(this));
+        // TODO: implement
+        // this.view.handleSliderInput(this.handleSliderInput.bind(this));
         this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
         
         this.view.handleScaleClick(this.handleScaleClick.bind(this));
@@ -39,14 +44,21 @@ class MainController extends Controller {
         
         // this.view.handleProductButtonClick();
         this.view.handleProductClick(this.handleProductClick.bind(this));
-        this.cart.setCart(this.cartAPI.createFromJSON());
+
+        const cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
+
+        const view = new MainView(cart, this.products, this.getBigFromQuery() === 'false' ? false : true);
+        view.init(this.root);
+
+        view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
+        view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
     }
 
-    private handleClickToCartIcon(e: Event){
+    private handleClickToCartIcon(e: Event) {
         this.router.navigateTo(Routers.CART);
     }
 
-    private handleClickToLogoIcon(e: Event){
+    private handleClickToLogoIcon(e: Event) {
         this.router.navigateTo(Routers.MAIN);
     }
 

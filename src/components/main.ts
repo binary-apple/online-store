@@ -1,13 +1,13 @@
-import { Component } from "./types/component";
+import { Component } from './types/component';
 
-export class Content extends Component{
+export class Content extends Component {
     constructor() {
-        super({containerTag: 'main'});
+        super({ containerTag: 'main', className: ['row', 'main-container'] });
     }
 
     protected template(): DocumentFragment {
-        const main = new DocumentFragment();
-        main.append(`Main`);
-        return main;
+        const main = document.createElement('template');
+
+        return main.content;
     }
 }

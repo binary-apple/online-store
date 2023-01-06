@@ -1,4 +1,6 @@
-export const products = [
+import { Product } from "./types/product";
+
+export const products: Array<Product> = [
     {
         id: 1,
         title: 'iPhone 9',
