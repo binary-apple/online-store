@@ -4,16 +4,134 @@ import Content from './component/content.html';
 import { Product } from '../../model/types/product';
 import { Cart } from '../../model/cart';
 import Rating from './component/rating.html';
+import Image from './component/image.html';
+import { products } from '../../model/productItems';
+import Preloader from '../../assets/img/preloader.svg?inline';
 
 class ProductContent extends Component {
     product: Product;
     cart: Cart;
+    products: Array<Product>;
+    cartText = '';
+    btnToCartDisabled = '';
 
     constructor(product: Product, cart: Cart) {
         super({ containerTag: 'main', className: ['main-container'] });
 
         this.product = product;
         this.cart = cart;
+        this.products = products as unknown as Array<Product>;
+
+        this.subscribe(this.cart);
+    }
+
+    public addProdcutToCard(callback: (product: Product, type: string) => void) {
+        const btn = document.querySelector('.product__to-cart');
+
+        if (btn) {
+            btn.addEventListener('click', () => {
+                const inCart = this.productInCart();
+
+                callback(this.product, inCart ? 'remove' : 'add');
+            });
+        }
+    }
+
+    public zoomImage() {
+        const wrapper = document.querySelector('.product-info__images');
+
+        if (wrapper) {
+            wrapper.addEventListener('click', async (e: Event) => {
+                const htmlTarget = e.target as HTMLElement;
+
+                const isImage =
+                    htmlTarget.classList.contains('product-images-item__img') ||
+                    htmlTarget.classList.contains('product-images-main__image');
+
+                if (isImage) {
+                    const wrapperPhoto = document.createElement('div');
+                    wrapperPhoto.innerHTML = Preloader;
+
+                    wrapperPhoto.classList.add('product-photo__bg');
+
+                    const img = document.createElement('img');
+                    img.classList.add('product-photo__img');
+
+                    const src = htmlTarget.getAttribute('src');
+
+                    if (src) {
+                        img.setAttribute('src', src);
+                        document.body.append(wrapperPhoto);
+
+                        setTimeout(() => {
+                            wrapperPhoto.classList.add('show');
+                        });
+
+                        const loadImg = new Promise((res) => {
+                            img.onload = () => {
+                                res(true);
+                            };
+                        });
+
+                        await loadImg;
+
+                        wrapperPhoto.innerHTML = '';
+
+                        wrapperPhoto.append(img);
+
+                        wrapperPhoto.addEventListener('click', (event) => {
+                            const htmlTarget = event.target as HTMLElement;
+
+                            const isBg = htmlTarget.classList.contains('product-photo__bg');
+
+                            if (isBg) {
+                                htmlTarget.remove();
+                            }
+
+                            const isPic = htmlTarget.closest('.product-photo__bg');
+
+                            if (isPic) {
+                                isPic.remove();
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    }
+
+    public makeOrder(callback: (product: Product) => void) {
+        const orderBtn = document.querySelector('.product-info__order-btn');
+
+        if (orderBtn) {
+            orderBtn.addEventListener('click', () => {
+                callback(this.product);
+            });
+        }
+    }
+
+    public changeQuntityProduct() {
+        const quantity = document.querySelector('.product-nav__input') as HTMLInputElement;
+
+        if (quantity) {
+            const changeQuntity = this.changeQuntity.bind(this);
+
+            quantity.addEventListener('change', changeQuntity);
+
+            quantity.addEventListener('keyup', changeQuntity);
+        }
+    }
+
+    changeQuntity(e: Event) {
+        const inputTarget = e.target as HTMLInputElement;
+
+        if (inputTarget.value === '') {
+            return;
+        }
+
+        if (+inputTarget.value < 1) {
+            inputTarget.value = '1';
+        }
     }
 
     protected template() {
@@ -27,11 +145,43 @@ class ProductContent extends Component {
     public getTemplate() {
         const name = this.product.title;
         const rating = this.getRatingTemplate();
+        const image = this.getImageTemplate();
 
-        return Mustache.render(Content, { name, rating });
+        const mainImage = this.product.images[Math.floor(Math.random() * this.product.images.length)];
+        const price = this.product.price;
+        const discount = this.product.discountPercentage;
+        const description = this.product.description;
+        const stock = this.product.stock;
+        const category = this.product.category.toLowerCase().trim();
+        const brand = this.product.brand.toLowerCase().trim();
+
+        this.cartText = this.getCartBtnText();
+
+        return Mustache.render(Content, {
+            name,
+            rating,
+            image,
+            mainImage,
+            price,
+            discount,
+            description,
+            stock,
+            category,
+            brand,
+            cartText: this.cartText,
+        });
     }
 
-    getRatingTemplate() {
+    productInCart() {
+        return !!this.cart.get().find((el) => el.id === this.product.id);
+    }
+
+    getCartBtnText() {
+        const inCart = this.productInCart();
+        return inCart ? 'REMOVE FROM CART' : 'TO CART';
+    }
+
+    private getRatingTemplate() {
         const rating = this.product.rating;
 
         const [first, second] = ('' + rating).split('.');
@@ -43,7 +193,16 @@ class ProductContent extends Component {
 
         const calculateRatingClass = this.calculateRatingClass.bind(this, roundedRating);
 
-        return Array.from(new Array(5)).map(calculateRatingClass);
+        return Array.from(new Array(5)).map(calculateRatingClass).join('');
+    }
+
+    private getImageTemplate() {
+        return this.product.images
+            .map((item: string) => {
+                const image = item;
+                return Mustache.render(Image, { image });
+            })
+            .join('');
     }
 
     calculateRatingClass(rating: number, item: number, index: number) {
@@ -62,7 +221,11 @@ class ProductContent extends Component {
     }
 
     public update() {
-        console.log('update');
+        const btn = document.querySelector('.product__to-cart') as HTMLElement;
+
+        if (btn) {
+            btn.innerText = this.getCartBtnText();
+        }
     }
 }
 

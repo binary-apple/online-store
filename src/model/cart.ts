@@ -80,6 +80,10 @@ export class Cart extends Store {
         return ((cartPrice / 100) * discountPercentage).toFixed(2);
     }
 
+    public productInCart(product: Product) {
+        return !!this.productsInCart.find((el) => el.id === product.id);
+    }
+
     public getTotalCount() {
         return this.productsInCart.reduce((acc: number, cur: Product) => acc + cur.count, 0);
     }
