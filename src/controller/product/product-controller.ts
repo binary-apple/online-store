@@ -63,6 +63,7 @@ class ProductController extends Controller {
                 this.router.addSearchParams('makeOrder', 'true');
             });
         } else {
+            this.router.navigateTo('/404', '');
         }
     }
 }
