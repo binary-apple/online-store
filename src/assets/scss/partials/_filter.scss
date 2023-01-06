@@ -4,6 +4,7 @@
     font-weight: 700;
     text-align: center;
     border-bottom: 1px solid $secondary;
+    padding-bottom: 0.5rem;
 }
 
 .filter {
@@ -23,11 +24,43 @@
     height: 24px;
     gap: 10px;
     align-items: center;
-    &:last-child {
-        justify-self: end;
+    & > * {
+        cursor: pointer;
     }
 }
 
 .filtred-cnt {
     margin-left: auto;
+}
+
+.filter-item > .default-check {
+    position: absolute;
+    opacity: 0;
+    height: 20px;
+    width: 20px;
+}
+.filter-item > .custom-check {
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: $surface;
+    border: 1px solid $light;
+    border-radius: 4px;
+}
+
+.filter-item .default-check:checked ~ .custom-check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $secondary;
+    border-color: $surface;
+    &::after {
+        content: '';
+        display: block;
+        width: 10px;
+        height: 7px;
+        background: url('../img/checkmark.svg') no-repeat;
+        background-size: 100%;
+    }
 }

@@ -23,7 +23,8 @@ export class Filter extends Component {
         this.filterList.forEach((el) => {
             res.push(`
             <div class="filter-item">
-                <input type="checkbox" id="${el}">
+                <input type="checkbox" id="${el}" class="default-check">
+                <div class="custom-check"></div>
                 <label for="${el}">${el}</label>
                 <span class="filtred-cnt">(???)</span>
             </div>
