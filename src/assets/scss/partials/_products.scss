@@ -80,7 +80,12 @@ input[type="search"] {
 }
 
 .add {
-    border: 1px solid $secondary;
+    border: 1px solid $primary;
     background: $surface;
-    color: $secondary;
+    color: $primary;
+    &:hover {
+        border-color: $secondary;
+        background: $surface;
+        color: $secondary;
+    }
 }
