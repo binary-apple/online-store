@@ -4,17 +4,17 @@ import { Products as ProductsModel } from "../../model/products/products";
 import { Slider } from "./slider";
 import { Cart } from "../../model/cart";
 import CartLocalStorage from "../../model/cart-local-storage";
+import { Filter } from "./filters";
 
 export class MainProducts extends Component
 {
     private readonly priceSlider;
     private readonly products;
-    // private readonly cart;
+    private readonly categoryFilter;
     constructor(big: boolean, productsModel: ProductsModel, cart: Cart, cartLS: CartLocalStorage) {
         super({containerTag: 'main', className: 'main container'.split(' ')});
         this.priceSlider = new Slider();
-        // this.cart = cart;
-        // this.cartLS = 
+        this.categoryFilter = new Filter('Category', ['Smartphone', 'Laptops']);
         this.products = new Products(big, productsModel, cart, cartLS);
     }
 
@@ -22,6 +22,7 @@ export class MainProducts extends Component
         const wrapper = document.createElement('div');
         wrapper.classList.add(...'position-relative d-flex flex-wrap my-3'.split(' '));
         wrapper.append(this.priceSlider.render());
+        wrapper.append(this.categoryFilter.render());
         wrapper.append(this.products.render());
         return wrapper;
     }
