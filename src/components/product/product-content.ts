@@ -52,7 +52,7 @@ class ProductContent extends Component {
                     const wrapperPhoto = document.createElement('div');
                     wrapperPhoto.innerHTML = Preloader;
 
-                    wrapperPhoto.classList.add('product-photo__bg');
+                    wrapperPhoto.classList.add('preloader__bg');
 
                     const img = document.createElement('img');
                     img.classList.add('product-photo__img');
@@ -82,13 +82,13 @@ class ProductContent extends Component {
                         wrapperPhoto.addEventListener('click', (event) => {
                             const htmlTarget = event.target as HTMLElement;
 
-                            const isBg = htmlTarget.classList.contains('product-photo__bg');
+                            const isBg = htmlTarget.classList.contains('preloader__bg');
 
                             if (isBg) {
                                 htmlTarget.remove();
                             }
 
-                            const isPic = htmlTarget.closest('.product-photo__bg');
+                            const isPic = htmlTarget.closest('.preloader__bg');
 
                             if (isPic) {
                                 isPic.remove();
@@ -107,30 +107,6 @@ class ProductContent extends Component {
             orderBtn.addEventListener('click', () => {
                 callback(this.product);
             });
-        }
-    }
-
-    public changeQuntityProduct() {
-        const quantity = document.querySelector('.product-nav__input') as HTMLInputElement;
-
-        if (quantity) {
-            const changeQuntity = this.changeQuntity.bind(this);
-
-            quantity.addEventListener('change', changeQuntity);
-
-            quantity.addEventListener('keyup', changeQuntity);
-        }
-    }
-
-    changeQuntity(e: Event) {
-        const inputTarget = e.target as HTMLInputElement;
-
-        if (inputTarget.value === '') {
-            return;
-        }
-
-        if (+inputTarget.value < 1) {
-            inputTarget.value = '1';
         }
     }
 

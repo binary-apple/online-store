@@ -37,7 +37,6 @@ class ProductView extends BaseView implements View {
         this.root.append(this.footer.render());
 
         this.zoomImage();
-        this.changeQuntityProduct();
     }
 
     getBreadcrumbs(product: Product) {
@@ -71,10 +70,6 @@ class ProductView extends BaseView implements View {
 
     public makeOrder(callback: (product: Product) => void) {
         this.content.makeOrder(callback);
-    }
-
-    private changeQuntityProduct() {
-        this.content.changeQuntityProduct();
     }
 }
 
