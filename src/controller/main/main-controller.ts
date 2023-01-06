@@ -3,9 +3,9 @@ import Router from 'vanilla-router';
 import Routers from '../../router/routers';
 import { Cart } from '../../model/cart';
 import { MainView } from '../../view/main-view';
-import Request from '../../api/request';
 import Products from '../../model/products/products';
 import { CartAPI } from '../../model/cart-api';
+import { products } from '../../model/productItems';
 
 class MainController extends Controller {
     private view: MainView;
@@ -35,9 +35,7 @@ class MainController extends Controller {
         
         this.view.handleScaleClick(this.handleScaleClick.bind(this));
         
-        const prods = new Request().make('GET', 'https://dummyjson.com/products?limit=100');
-        //  TODO: catch error
-        this.products.set((await prods).products);
+        this.products.set(products);
         
         // this.view.handleProductButtonClick();
         this.view.handleProductClick(this.handleProductClick.bind(this));
