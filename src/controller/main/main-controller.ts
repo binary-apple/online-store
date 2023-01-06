@@ -22,9 +22,8 @@ class MainController extends Controller {
         // this.cart.attach(this.cartAPI);
         // TODO: implement without cartAPI
         
-        const big = this.getBigFromQuery() === 'false' ? false : true;
         this.cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
-        this.view = new MainView(this.cart, this.products, this.getBigFromQuery() === 'false' ? false : true);
+        this.view = new MainView(this.cart, this.products, this.getBigFromQuery());
     }
 
     async init() {
@@ -44,10 +43,7 @@ class MainController extends Controller {
         
         this.products.set(products);
         
-        // this.view.handleProductButtonClick();
         this.view.handleProductClick(this.handleProductClick.bind(this));
-
-        // view.init(this.root);
 
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
@@ -73,11 +69,14 @@ class MainController extends Controller {
         this.router.addSearchParams('big', String(big));
     }
 
-    private getBigFromQuery(): string | null {
-        // TODO: use router method
-        const url = new URL(window.location.href);
-        const query = url.searchParams;
-        return query.get('big');
+    private getBigFromQuery(): boolean {
+        const query = this.router.getSearchParams();
+        const strBig = query.big;
+        if (typeof strBig === 'string') {
+            if (strBig === 'true') return true;
+            if (strBig === 'false') return false;
+        }
+        return true;
     }
 
     private handleProductClick(id: number) {
