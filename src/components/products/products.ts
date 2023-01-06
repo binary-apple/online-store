@@ -46,12 +46,12 @@ export class Products extends Component implements Subscriber {
         this.productsModel.get().forEach((el) => {
             let productItem = document.createElement('div');
             productItem.classList.add(...`product-item ${this.cart.isProductInCart(el.id) ? 'in-cart' : ''}`.trim().split(' '));
+            productItem.dataset.idproduct=`${el.id}`;
             productItem.innerHTML = `
             <img src="${el.thumbnail}" 
                 loading="lazy" 
                 alt="${el.title}" 
-                class="item-img"
-                data-idimg="${el.id}">
+                class="item-img">
             <div class="product-info mx-1 lh-base">
                 <div>${el.title}</div>
                 <div>Price: <span class="product-price">${el.price}</span></div>
@@ -133,11 +133,6 @@ export class Products extends Component implements Subscriber {
         this.big = false;
     }
 
-    public handleScaleClick(callback: (big: boolean) => void) {
-        this._handleScaleClick('small-view', 'product-col-3', 'product-col-4', false, callback);
-        this._handleScaleClick('big-view', 'product-col-4', 'product-col-3', true, callback);
-    }
-
     private _handleScaleClick(iconClass: string, removeClass: string, setClass: string, big: boolean, callback: (big: boolean) => void) {
         const scaleIcon = this.container.getElementsByClassName(iconClass)[0];
         if (scaleIcon) {
@@ -156,24 +151,39 @@ export class Products extends Component implements Subscriber {
         }
     }
 
-    public addToDropFromCart(e: Event): void {
-        const target = e.target;
-        if (!(target instanceof HTMLElement) || !(target)) {
-            return;
-        }
-        if (target.tagName === 'IMG') {
-            // TODO: переход на страницу продукта
-        } else if (target.tagName === 'BUTTON') {
-            const id = Number(target.dataset.idbutton);
-            this.cart.isProductInCart(id) ? this.cart.removeProductFromCart(id) : this.cart.addProductToCart(id);
-        }
+    public handleScaleClick(callback: (big: boolean) => void) {
+        this._handleScaleClick('small-view', 'product-col-3', 'product-col-4', false, callback);
+        this._handleScaleClick('big-view', 'product-col-4', 'product-col-3', true, callback);
     }
 
-    public handleProductButtonClick(): void {
-        const products = this.container.querySelector('#prods');
-        if (products) {
-            products.addEventListener('click', this.addToDropFromCart.bind(this));
+    private toggleProductInCart(id: number) {
+        this.cart.isProductInCart(id) ? this.cart.removeProductFromCart(id) : this.cart.addProductToCart(id);
+    }
+
+    public handleProductClick(callback: (id: number) => void) {
+        const prods = this.container.querySelector('#prods');
+        if (!prods) {
+            throw new Error('No products-wrapper');
         }
+        prods.addEventListener('click', (e: Event) => {
+            const target = e.target;
+            if (!(target instanceof HTMLElement) || !(target)) {
+                return;
+            }
+            const idButton = target.dataset.idbutton;
+            if (idButton) {
+                this.toggleProductInCart(Number(idButton));
+            } else {
+                const productEl = target.closest('.product-item');
+                if (!(productEl instanceof HTMLElement) || !(productEl)) {
+                    return;
+                }
+                const idProduct = productEl.dataset.idproduct;
+                if (idProduct) {
+                    callback(Number(idProduct));
+                }
+            }
+        })
     }
 
     public update(): void {

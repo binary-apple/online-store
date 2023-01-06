@@ -36,12 +36,8 @@ export class MainProducts extends Component
         this.products.handleScaleClick(callback);
     }
 
-    // public addToDropFromCart(e: Event) {
-    //     this.products.addToDropFromCart(e);
-    // }
-
-    public handleProductButtonClick() {
-        this.products.handleProductButtonClick();
+    public handleProductClick(callback: (id: number) => void) {
+        this.products.handleProductClick(callback);
     }
 
 }

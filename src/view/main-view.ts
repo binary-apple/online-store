@@ -46,12 +46,8 @@ export class MainView implements View {
         this.content.handleScaleClick(callback);
     }
 
-    // public addToDropFromCart(e: Event) {
-    //     this.content.addToDropFromCart(e);
-    // }
-
-    public handleProductButtonClick() {
-        this.content.handleProductButtonClick();
+    public handleProductClick(callback: (id: number) => void) {
+        this.content.handleProductClick(callback);
     }
 
 }

@@ -39,7 +39,8 @@ class MainController extends Controller {
         //  TODO: catch error
         this.products.set((await prods).products);
         
-        this.view.handleProductButtonClick();
+        // this.view.handleProductButtonClick();
+        this.view.handleProductClick(this.handleProductClick.bind(this));
         this.cart.setCart(this.cartAPI.createFromJSON());
     }
 
@@ -60,22 +61,19 @@ class MainController extends Controller {
     }
 
     private handleScaleClick(big: boolean) {
-        console.log(big);
         // TODO: addScaleToQuery
     }
 
     private getBigFromQuery(): string | null {
+        // TODO: use router method
         const url = new URL(window.location.href);
         const query = url.searchParams;
         return query.get('big');
     }
 
-    // private addToDropFromCart(e: Event) {
-    //     this.view.addToDropFromCart(e);
-    // }
-
-    public handleProductButtonClick() {
-        this.view.handleProductButtonClick();
+    private handleProductClick(id: number) {
+        // TODO: implement via Routers
+        this.router.navigateTo(`/product/${id}`);
     }
 
 }
