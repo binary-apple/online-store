@@ -6,10 +6,19 @@
 @import './partials/buttons';
 @import './partials/footer';
 @import './partials/header';
+@import './partials/sliders';
+@import './partials/products';
 
 body {
     background: $background;
     color: $onSurface;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex-grow: 1;
 }
 
 .error {

@@ -2,7 +2,7 @@ import { Component } from "./types/component";
 
 export class Error extends Component{
     constructor() {
-        super({containerTag: 'div', className: 'w-100 d-flex align-items-center'.split(' ')});
+        super({containerTag: 'main', className: 'w-100 d-flex align-items-center'.split(' ')});
     }
 
     protected template(): DocumentFragment {

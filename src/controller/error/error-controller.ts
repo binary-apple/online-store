@@ -3,6 +3,7 @@ import Controller from '../controller';
 import { ErrorView } from '../../view/error-view';
 import { Cart } from '../../model/cart';
 import Routers from '../../router/routers';
+// import { CartAPI } from '../../model/cart-api';
 import CartLocalStorage from '../../model/cart-local-storage';
 import { CartName } from '../../model/types/cart';
 
@@ -12,6 +13,8 @@ class ErrorController extends Controller {
     constructor(router: HashRouter) {
         super(router);
         this.root = document.body;
+        // this.cart.attach(this.cartAPI);
+        // TODO: attach cart to localStorage
     }
 
     init() {

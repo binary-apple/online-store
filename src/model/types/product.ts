@@ -1,4 +1,5 @@
 export interface Product {
+    id: number;
     category: string;
     brand: string;
     price: number;
@@ -7,10 +8,9 @@ export interface Product {
     discountPercentage: number;
     description: string;
     title: string;
-    order: number;
-    count: number;
-    id: number;
-    thubnail: string;
+    order?: number;
+    count?: number;
+    thumbnail: string;
     images: Array<string>;
-    [index: string]: number | string | Array<string>;
+    [index: string]: number | string | Array<string> | undefined;
 }

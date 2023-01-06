@@ -1,6 +1,6 @@
-import { Product } from './types/product';
+import { Product } from "./types/product";
 
-export const products = [
+export const products: Array<Product> = [
     {
         id: 1,
         title: 'iPhone 9',
@@ -549,4 +549,5 @@ export const products = [
             'https://i.dummyjson.com/data/products/30/thumbnail.jpg',
         ],
     },
-] as unknown as Array<Product>;
+];
+

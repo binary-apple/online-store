@@ -1,21 +1,22 @@
-import { Header } from '../components/header';
-import { Footer } from '../components/footer';
-import { Content } from '../components/main';
-import { View } from './types/view';
-import { Cart } from '../model/cart';
+import { Header } from "../components/header";
+import { Footer } from "../components/footer";
+import { View } from "./types/view";
+import { Cart } from "../model/cart";
+import { MainProducts } from "../components/products/main";
+import { Products as ProductsModel } from "../model/products/products";
+// import { Content } from '../components/main';
 import BaseView from './base-view';
 
 export class MainView extends BaseView implements View {
     private header: Header;
     private footer: Footer;
-    private content: Content;
+    private content: MainProducts;
 
-    constructor(cart: Cart) {
+    constructor(cart: Cart, productsModel: ProductsModel, private big: boolean = true) {
         super();
-
         this.header = new Header(cart);
         this.footer = new Footer();
-        this.content = new Content();
+        this.content = new MainProducts(big, productsModel, cart);
     }
 
     init(root: HTMLElement): void {
@@ -32,4 +33,21 @@ export class MainView extends BaseView implements View {
     public handleClickToLogoIcon(callback: (e: Event) => void) {
         this.header.handleClickToLogoIcon(callback);
     }
+
+    public setSliderTrack() {
+        this.content.setSliderTrack();
+    }
+
+    public handleResizeWindow(callback: (e: Event)=> void) {
+        window.addEventListener('resize', callback, false);
+    }
+
+    public handleScaleClick(callback: (big: boolean) => void) {
+        this.content.handleScaleClick(callback);
+    }
+
+    public handleProductClick(callback: (id: number) => void) {
+        this.content.handleProductClick(callback);
+    }
+
 }
