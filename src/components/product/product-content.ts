@@ -110,30 +110,6 @@ class ProductContent extends Component {
         }
     }
 
-    public changeQuntityProduct() {
-        const quantity = document.querySelector('.product-nav__input') as HTMLInputElement;
-
-        if (quantity) {
-            const changeQuntity = this.changeQuntity.bind(this);
-
-            quantity.addEventListener('change', changeQuntity);
-
-            quantity.addEventListener('keyup', changeQuntity);
-        }
-    }
-
-    changeQuntity(e: Event) {
-        const inputTarget = e.target as HTMLInputElement;
-
-        if (inputTarget.value === '') {
-            return;
-        }
-
-        if (+inputTarget.value < 1) {
-            inputTarget.value = '1';
-        }
-    }
-
     protected template() {
         const main = document.createElement('template');
 
