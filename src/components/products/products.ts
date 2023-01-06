@@ -10,7 +10,7 @@ export class Products extends Component implements Subscriber {
     private readonly cart: Cart;
     private readonly cartLS: CartLocalStorage;
     constructor(private big: boolean, products: ProductsModel, cart: Cart, cartLS: CartLocalStorage) {
-        super({containerTag: 'div', className: 'products col-md-9 col-12 px-md-4'.split(' ')});
+        super({containerTag: 'div', className: 'products col-lg-10 col-12 px-md-4'.split(' ')});
         this.productsModel = products;
         this.cart = cart;
         this.cartLS = cartLS;        
@@ -20,16 +20,22 @@ export class Products extends Component implements Subscriber {
     protected template(): DocumentFragment {
         const temp = document.createElement('template');
         temp.innerHTML = `
+        <div class="d-flex align-items-center">
+            <div class="found w-50">
+                Found: <span class="found-cnt"></span>
+            </div>
+            <input type="search" placeholder="Search product" class="w-100">
+        </div>
         <div class=" flex-grow-1 d-flex align-items-center justify-content-between gap-2 mb-2">
-            <select name="sort" id="sort">
+            <select name="sort" id="sort" class="sort">
                 <option value="sort-title">Sort</option>
                 <option value="price-asc">Sort by price ASC</option>
                 <option value="price-desc">Sort by price DESC</option>
                 <option value="rating-asc">Sort by rating ASC</option>
                 <option value="rating-desc">Sort by rating DESC</option>
             </select>
-            <input type="search" placeholder="Search product">
-            <div class="d-flex gap-3">
+            
+            <div class="d-flex gap-3 justify-content-end">
                 <div class="view small-view ${!this.big ? 'active-view' : ''} d-flex flex-wrap justify-content-around">
                     ${this.drawViewIcon(false)}
                 </div>
@@ -38,7 +44,7 @@ export class Products extends Component implements Subscriber {
                 </div>
             </div>
         </div>
-        <div id="prods" class="d-flex flex-wrap gap-2 product-col-${this.big ? 3 : 4 }"></div>
+        <div id="prods" class="d-flex flex-wrap justify-content-between product-col-${this.big ? 3 : 4 }"></div>
         `;
         return temp.content;
     }
@@ -195,7 +201,14 @@ export class Products extends Component implements Subscriber {
         })
     }
 
+    private setFoundCount() {
+        const foundEl = this.container.querySelector('.found-cnt');
+        if (!foundEl) return;
+        foundEl.innerHTML = `${this.productsModel.get().length}`;
+    }
+
     public update(): void {
         this.drawProducts();
+        this.setFoundCount();
     }
 }

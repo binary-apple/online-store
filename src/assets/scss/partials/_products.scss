@@ -92,3 +92,15 @@ input[type="search"] {
         color: $secondary;
     }
 }
+
+#prods {
+    row-gap: 1rem;
+}
+
+.found {
+    font-weight: 700;
+}
+
+.sort {
+    width: min(55vw, 11rem);
+}
