@@ -8,6 +8,7 @@ import { products } from '../../model/productItems';
 import { HashRouter } from '../../router/router';
 import CartLocalStorage from '../../model/cart-local-storage';
 import { CartName } from '../../model/types/cart';
+import { Router } from 'express';
 
 class MainController extends Controller {
     private view: MainView;
@@ -69,7 +70,7 @@ class MainController extends Controller {
     }
 
     private handleScaleClick(big: boolean) {
-        // TODO: addScaleToQuery
+        this.router.addSearchParams('big', String(big));
     }
 
     private getBigFromQuery(): string | null {
