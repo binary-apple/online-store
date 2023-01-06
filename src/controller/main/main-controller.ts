@@ -3,7 +3,6 @@ import Routers from '../../router/routers';
 import { Cart } from '../../model/cart';
 import { MainView } from '../../view/main-view';
 import Products from '../../model/products/products';
-// import { CartAPI } from '../../model/cart-api';
 import { products } from '../../model/productItems';
 import { HashRouter } from '../../router/router';
 import CartLocalStorage from '../../model/cart-local-storage';
@@ -14,16 +13,13 @@ class MainController extends Controller {
     private view: MainView;
     private cart: Cart;
     private products: Products = new Products([]);
-    // private cartAPI: CartAPI = new CartAPI();
-    // TODO: replace cartAPI
+    private cartLS: CartLocalStorage;
     constructor(router: HashRouter) {
         super(router);
 
-        // this.cart.attach(this.cartAPI);
-        // TODO: implement without cartAPI
-        
+        this.cartLS = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);        
         this.cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
-        this.view = new MainView(this.cart, this.products, this.getBigFromQuery());
+        this.view = new MainView(this.cart, this.cartLS, this.products, this.getBigFromQuery());
     }
 
     async init() {

@@ -3,14 +3,17 @@ import { Products as ProductsModel } from "../../model/products/products";
 import { Subscriber } from "../../utils/observer-interface";
 import { Cart } from "../../model/cart";
 import { products } from "../../model/productItems";
+import CartLocalStorage from "../../model/cart-local-storage";
 
 export class Products extends Component implements Subscriber {
     private readonly productsModel: ProductsModel;
     private readonly cart: Cart;
-    constructor(private big: boolean, products: ProductsModel, cart: Cart) {
+    private readonly cartLS: CartLocalStorage;
+    constructor(private big: boolean, products: ProductsModel, cart: Cart, cartLS: CartLocalStorage) {
         super({containerTag: 'div', className: 'products col-md-9 col-12 px-md-4'.split(' ')});
         this.productsModel = products;
         this.cart = cart;
+        this.cartLS = cartLS;        
         this.subscribe(this.productsModel, this.cart);
     }
 
@@ -163,6 +166,7 @@ export class Products extends Component implements Subscriber {
             throw new Error('No such product');
         }
         this.cart.isProductInCart(id) ? this.cart.removeProductFromCart(id) : this.cart.addProductToCart(product);
+        this.cartLS.set(this.cart.get());
     }
 
     public handleProductClick(callback: (id: number) => void) {
