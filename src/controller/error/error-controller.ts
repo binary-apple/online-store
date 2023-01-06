@@ -12,7 +12,7 @@ class ErrorController extends Controller {
     private cart: Cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
     constructor(router: HashRouter) {
         super(router);
-        this.root = document.body;
+        // this.root = document.body;
         // this.cart.attach(this.cartAPI);
         // TODO: attach cart to localStorage
     }
