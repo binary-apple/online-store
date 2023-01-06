@@ -149,7 +149,7 @@ export class Cart extends Store {
     }
 
     isProductInCart(id: number) {
-        return this.productsInCart.find((cartItem) => cartItem.productId === id) ? true : false;
+        return this.productsInCart.find((product) => product.id === id) ? true : false;
     }
 
     getCart() {

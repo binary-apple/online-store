@@ -11,7 +11,7 @@ import { CartName } from '../../model/types/cart';
 
 class MainController extends Controller {
     private view: MainView;
-    private cart: Cart = new Cart([]);
+    private cart: Cart;
     private products: Products = new Products([]);
     // private cartAPI: CartAPI = new CartAPI();
     // TODO: replace cartAPI
@@ -22,13 +22,14 @@ class MainController extends Controller {
         // TODO: implement without cartAPI
         
         const big = this.getBigFromQuery() === 'false' ? false : true;
-        this.view = new MainView(this.cart, this.products, big);
+        this.cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
+        this.view = new MainView(this.cart, this.products, this.getBigFromQuery() === 'false' ? false : true);
     }
 
     async init() {
         /* eslint-disable-next-line */
         console.log('products');
-        
+
         this.view.init(this.root);
         
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
@@ -45,13 +46,10 @@ class MainController extends Controller {
         // this.view.handleProductButtonClick();
         this.view.handleProductClick(this.handleProductClick.bind(this));
 
-        const cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
+        // view.init(this.root);
 
-        const view = new MainView(cart, this.products, this.getBigFromQuery() === 'false' ? false : true);
-        view.init(this.root);
-
-        view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
-        view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
+        this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
+        this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
     }
 
     private handleClickToCartIcon(e: Event) {
