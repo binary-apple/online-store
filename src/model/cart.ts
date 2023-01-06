@@ -57,10 +57,7 @@ export class Cart extends Store {
     public getCartPrice() {
         return this.productsInCart
             .reduce((acc: number, cur: Product) => {
-                const discount = (cur.price / 100) * cur.discountPercentage;
-                const price = cur.price - discount;
-
-                return acc + price * (cur.count ? cur.count : 0);
+                return acc + cur.price * (cur.count ? cur.count : 0);
             }, 0)
             .toFixed(2);
     }
@@ -157,13 +154,18 @@ export class Cart extends Store {
     }
 
     getCart() {
-        return { productsInCart: this.productsInCart,
-            promoList: this.promoList,
-            totalDisc: this.totalDisc
-        };
+        return { productsInCart: this.productsInCart, promoList: this.promoList, totalDisc: this.totalDisc };
     }
 
-    setCart({ productsInCart, promoList, totalDisc} : { productsInCart: Product[], promoList: string[], totalDisc: number}) {
+    setCart({
+        productsInCart,
+        promoList,
+        totalDisc,
+    }: {
+        productsInCart: Product[];
+        promoList: string[];
+        totalDisc: number;
+    }) {
         this.productsInCart = productsInCart;
         this.promoList = promoList;
         this.totalDisc = totalDisc;
