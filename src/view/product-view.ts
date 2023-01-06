@@ -35,9 +35,6 @@ class ProductView extends BaseView implements View {
         this.container.append(this.breadcrumbs.render());
         this.container.append(this.content.render());
         this.root.append(this.footer.render());
-
-        this.zoomImage();
-        this.changeQuntityProduct();
     }
 
     getBreadcrumbs(product: Product) {
@@ -59,22 +56,6 @@ class ProductView extends BaseView implements View {
                 name: product.title.toLowerCase().trim(),
             },
         ];
-    }
-
-    public addProdcutToCard(callback: (product: Product, type: string) => void) {
-        this.content.addProdcutToCard(callback);
-    }
-
-    private zoomImage() {
-        this.content.zoomImage();
-    }
-
-    public makeOrder(callback: (product: Product) => void) {
-        this.content.makeOrder(callback);
-    }
-
-    private changeQuntityProduct() {
-        this.content.changeQuntityProduct();
     }
 }
 
