@@ -42,20 +42,8 @@ export class MainView implements View {
         window.addEventListener('resize', callback, false);
     }
 
-    public handleBigScaleClick(callback: (e:Event) => void) {
-        this.content.handleBigScaleClick(callback);
-    }
-
-    public handleSmallScaleClick(callback: (e:Event) => void) {
-        this.content.handleSmallScaleClick(callback);
-    }
-
-    setBigScale() {
-        this.content.setBigScale();
-    }
-
-    setSmallScale() {
-        this.content.setSmallScale();
+    public handleScaleClick(callback: (big: boolean) => void) {
+        this.content.handleScaleClick(callback);
     }
 
     // public addToDropFromCart(e: Event) {

@@ -7,7 +7,7 @@ export class Products extends Component implements Subscriber {
     private readonly productsModel: ProductsModel;
     private readonly cart: Cart;
     constructor(private big: boolean, products: ProductsModel, cart: Cart) {
-        super({containerTag: 'div', className: 'products col-md-9 col-12'.split(' ')});
+        super({containerTag: 'div', className: 'products col-md-9 col-12 px-md-4'.split(' ')});
         this.productsModel = products;
         this.cart = cart;
         this.subscribe(this.productsModel, this.cart);
@@ -34,7 +34,7 @@ export class Products extends Component implements Subscriber {
                 </div>
             </div>
         </div>
-        <div id="prods" class="d-flex flex-wrap gap-2"></div>
+        <div id="prods" class="d-flex flex-wrap gap-2 product-col-${this.big ? 3 : 4 }"></div>
         `;
         return temp.content;
     }
@@ -46,11 +46,6 @@ export class Products extends Component implements Subscriber {
         this.productsModel.get().forEach((el) => {
             let productItem = document.createElement('div');
             productItem.classList.add(...`product-item ${this.cart.isProductInCart(el.id) ? 'in-cart' : ''}`.trim().split(' '));
-            if (this.big) {
-                productItem.classList.add('big-item');
-            } else {
-                productItem.classList.add('small-item');
-            }
             productItem.innerHTML = `
             <img src="${el.thumbnail}" 
                 loading="lazy" 
@@ -108,7 +103,7 @@ export class Products extends Component implements Subscriber {
         }
     }
 
-    public setBigScale() {
+    private setBigScale() {
         const bigIcon = this.container.getElementsByClassName('big-view')[0];
         const smallIcon = this.container.getElementsByClassName('small-view')[0];
         if (!bigIcon || !smallIcon) {
@@ -123,7 +118,7 @@ export class Products extends Component implements Subscriber {
         this.big = true;
     }
 
-    public setSmallScale() {
+    private setSmallScale() {
         const bigIcon = this.container.getElementsByClassName('big-view')[0];
         const smallIcon = this.container.getElementsByClassName('small-view')[0];
         if (!bigIcon || !smallIcon) {
@@ -138,17 +133,26 @@ export class Products extends Component implements Subscriber {
         this.big = false;
     }
 
-    public handleBigScaleClick(callback: (e: Event) => void) {
-        const bigIcon = this.container.getElementsByClassName('big-view')[0];
-        if (bigIcon) {
-            bigIcon.addEventListener('click', callback);
-        }
+    public handleScaleClick(callback: (big: boolean) => void) {
+        this._handleScaleClick('small-view', 'product-col-3', 'product-col-4', false, callback);
+        this._handleScaleClick('big-view', 'product-col-4', 'product-col-3', true, callback);
     }
 
-    public handleSmallScaleClick(callback: (e: Event) => void) {
-        const smallIcon = this.container.getElementsByClassName('small-view')[0];
-        if (smallIcon) {
-            smallIcon.addEventListener('click', callback);
+    private _handleScaleClick(iconClass: string, removeClass: string, setClass: string, big: boolean, callback: (big: boolean) => void) {
+        const scaleIcon = this.container.getElementsByClassName(iconClass)[0];
+        if (scaleIcon) {
+            scaleIcon.addEventListener('click', () => {
+                const prods = this.container.querySelector('#prods');
+                if (prods) {
+                    if (prods.classList.contains(removeClass)) {
+                        prods.classList.remove(removeClass);
+                        prods.classList.add(setClass);
+                    }
+                }
+                if (big) this.setBigScale();
+                else this.setSmallScale();
+                callback(big);
+            });
         }
     }
 

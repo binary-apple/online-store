@@ -33,8 +33,7 @@ class MainController extends Controller {
         this.view.handleSliderInput(this.handleSliderInput.bind(this));
         this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
         
-        this.view.handleBigScaleClick(this.handleBigScaleClick.bind(this));
-        this.view.handleSmallScaleClick(this.handleSmallScaleClick.bind(this));
+        this.view.handleScaleClick(this.handleScaleClick.bind(this));
         
         const prods = new Request().make('GET', 'https://dummyjson.com/products?limit=100');
         //  TODO: catch error
@@ -60,19 +59,9 @@ class MainController extends Controller {
         this.view.setSliderTrack();
     }
 
-    private handleBigScaleClick(e: Event) {
-        this.view.setBigScale();
-        this.addScaleToQuery(true);
-    }
-
-    private handleSmallScaleClick(e: Event) {
-        this.view.setSmallScale();
-        this.addScaleToQuery(false);
-    }
-
-    private addScaleToQuery(big: boolean) {
-        const url = new URL(window.location.href);
-            this.router.navigateTo(`/?big=${big}`);
+    private handleScaleClick(big: boolean) {
+        console.log(big);
+        // TODO: addScaleToQuery
     }
 
     private getBigFromQuery(): string | null {

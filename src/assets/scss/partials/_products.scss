@@ -51,13 +51,13 @@ input[type="search"] {
     cursor: pointer;
 }
 
-.big-item {
+.product-col-3 > .product-item {
     width: calc(33% - 0.5rem);
     padding-bottom: 36%;
     font-size: small;
 }
 
-.small-item {
+.product-col-4 > .product-item {
     width: calc(25% - 0.5rem);
     padding-bottom: 32%;
     font-size: x-small;
@@ -66,9 +66,8 @@ input[type="search"] {
 .products-button {
     position: absolute;
     bottom: 0;
-    width: calc(100% - 1rem);
+    width: 100%;
     height: 15%;
-    margin: 0.5rem;
 }
 
 .product-info {
@@ -78,4 +77,10 @@ input[type="search"] {
 
 .product-price::before {
     content: '€';
+}
+
+.add {
+    border: 1px solid $secondary;
+    background: $surface;
+    color: $secondary;
 }
