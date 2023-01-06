@@ -60,7 +60,7 @@ export class Cart extends Store {
                 const discount = (cur.price / 100) * cur.discountPercentage;
                 const price = cur.price - discount;
 
-                return acc + price * cur.count;
+                return acc + price * (cur.count ? cur.count : 0);
             }, 0)
             .toFixed(2);
     }
@@ -81,7 +81,7 @@ export class Cart extends Store {
     }
 
     public getTotalCount() {
-        return this.productsInCart.reduce((acc: number, cur: Product) => acc + cur.count, 0);
+        return this.productsInCart.reduce((acc: number, cur: Product) => acc + (cur.count ? cur.count : 0), 0);
     }
 
     public addProductToCart(product: Product, count = 1) {
@@ -105,6 +105,7 @@ export class Cart extends Store {
         const productIdInCart = this.productsInCart.findIndex((el: Product) => el.id === product.id);
 
         if (productIdInCart >= 0) {
+            if (!product.count) product.count = 0;
             product.count += 1;
             this.notify();
         } else {
@@ -119,7 +120,8 @@ export class Cart extends Store {
             if (this.productsInCart[productIdInCart].count === 1) {
                 this.removeProductFromCart(productId);
             } else {
-                this.productsInCart[productIdInCart].count -= 1;
+                if (!this.productsInCart[productIdInCart].count) this.productsInCart[productIdInCart].count = 0;
+                this.productsInCart[productIdInCart].count! -= 1;
                 this.notify();
             }
         } else {
