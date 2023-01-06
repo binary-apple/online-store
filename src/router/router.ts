@@ -1,19 +1,14 @@
-import Router from 'vanilla-router';
+import Router, { RouterOptions } from 'vanilla-router';
 import Routers from './routers';
 import CartController from '../controller/cart/cart-controller';
 import MainController from '../controller/main/main-controller';
 import ProductController from '../controller/product/product-controller';
 import ErrorController from '../controller/error/error-controller';
 import { IterableObject } from '../utils/types/utils';
-import { IRouter } from './types/router';
 
 export class HashRouter extends Router {
-    settings: IRouter;
-
-    constructor(settings: IRouter) {
-        super();
-
-        this.settings = settings;
+    constructor(settings: RouterOptions) {
+        super(settings);
     }
 
     addSearchParams(key: string, value: string) {
@@ -47,7 +42,13 @@ export class HashRouter extends Router {
             searchArr.forEach((item) => {
                 const [key, value] = item.split('=');
 
-                paramsObj[key] = +value;
+                const notANumber = Number.isNaN(+value);
+
+                const isNumber = notANumber ? false : +value;
+                const isTrue = value === 'true' ? true : false;
+                const isNotFalse = notANumber && value !== 'false' ? value : false;
+
+                paramsObj[key] = isNumber || isTrue || isNotFalse || false;
             });
         }
 
@@ -62,7 +63,7 @@ const router = new HashRouter({
 
         errorController.init();
     },
-} as IRouter);
+});
 
 router.add(Routers.MAIN, () => {
     const mainController = new MainController(router);
@@ -77,6 +78,8 @@ router.add(Routers.PRODUCT, () => {
 
 router.add(Routers.CART, () => {
     const cartController = new CartController(router);
+
+    console.log(router.getSearchParams());
 
     cartController.init();
 });
