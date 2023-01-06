@@ -10,6 +10,7 @@ export interface Product {
     order: number;
     count: number;
     id: number;
+    thubnail: string;
     images: Array<string>;
     [index: string]: number | string | Array<string>;
 }
