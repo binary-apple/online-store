@@ -13,7 +13,7 @@ export class MainProducts extends Component
     private readonly categoryFilter;
     constructor(big: boolean, productsModel: ProductsModel, cart: Cart, cartLS: CartLocalStorage) {
         super({containerTag: 'main', className: 'main container'.split(' ')});
-        this.priceSlider = new Slider();
+        this.priceSlider = new Slider(productsModel, 'price');
         this.categoryFilter = new Filter('Category', ['Smartphone', 'Laptops']);
         this.products = new Products(big, productsModel, cart, cartLS);
     }

@@ -4,7 +4,7 @@ export class Filter extends Component {
     private readonly filterName: string;
     private readonly filterList: Array<string>;
     constructor(filterName: string, filterList: Array<string>) {
-        super({containerTag: 'div', className: ['filter']});
+        super({containerTag: 'div', className: ['filter', `filter-${filterName}`]});
         this.filterName = filterName;
         this.filterList = filterList;
     }
