@@ -1,12 +1,17 @@
 import { Component } from "../types/component";
+import { Filter as FilterModel } from "../../model/products/filter";
+import { Publisher, Subscriber } from "../../utils/observer-interface";
 
-export class Filter extends Component {
+export class Filter extends Component implements Subscriber {
     private readonly filterName: string;
     private readonly filterList: Array<string>;
-    constructor(filterName: string, filterList: Array<string>) {
+    private readonly filterModel: FilterModel;
+    constructor(filterModel: FilterModel, filterName: string, filterList: Array<string>) {
         super({containerTag: 'div', className: ['filter', `filter-${filterName}`]});
+        this.filterModel = filterModel;
         this.filterName = filterName;
         this.filterList = filterList;
+        this.subscribe(this.filterModel);
     }
 
     protected template(): DocumentFragment {
@@ -33,5 +38,7 @@ export class Filter extends Component {
         return res.join('');
     }
 
-
+    update(): void {
+        console.log('update filters');
+    }
 }

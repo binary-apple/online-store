@@ -1,15 +1,18 @@
 import { Publisher, Subscriber } from "../../utils/observer-interface";
 import { Component } from "../types/component";
-import { Products as ProductsModel } from "../../model/products/products";
+// import { Products as ProductsModel } from "../../model/products/products";
+import { Filter as FilterModel } from "../../model/products/filter";
 
 export class Slider extends Component implements Subscriber {
-    private readonly products: ProductsModel;
+    // private readonly products: ProductsModel;
+    private readonly filterModel: FilterModel;
     private readonly sliderName: string;
-    constructor(products: ProductsModel, sliderName: string) {
+    constructor(/* products: ProductsModel,  */filterModel: FilterModel, sliderName: string) {
         super({containerTag: 'div', className: ['slider', `slider-${sliderName}`, 'pb-3']});
-        this.products = products;
+        // this.products = products;
+        this.filterModel = filterModel;
         this.sliderName = sliderName.toLocaleLowerCase();
-        this.subscribe(this.products);
+        this.subscribe(/* this.products,  */this.filterModel);
     }
 
     protected template(): DocumentFragment {

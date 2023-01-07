@@ -8,18 +8,22 @@ import { HashRouter } from '../../router/router';
 import CartLocalStorage from '../../model/cart-local-storage';
 import { CartName } from '../../model/types/cart';
 import { Router } from 'express';
+import Filter from '../../model/products/filter';
+import { IFilter } from '../../model/types/filter';
 
 class MainController extends Controller {
     private view: MainView;
     private cart: Cart;
     private products: Products = new Products([]);
+    private filter: Filter = new Filter({});
+
     private cartLS: CartLocalStorage;
     constructor(router: HashRouter) {
         super(router);
 
         this.cartLS = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);        
         this.cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
-        this.view = new MainView(this.cart, this.cartLS, this.products, this.getBigFromQuery());
+        this.view = new MainView(this.cart, this.cartLS, this.products, this.filter, this.getBigFromQuery());
     }
 
     async init() {
@@ -38,6 +42,8 @@ class MainController extends Controller {
         this.view.handleScaleClick(this.handleScaleClick.bind(this));
         
         this.products.set(products);
+        // TODO: get filter from query
+        // this.filter.setFilter(this.products.);
         
         this.view.handleProductClick(this.handleProductClick.bind(this));
 
@@ -45,6 +51,7 @@ class MainController extends Controller {
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
         this.view.handleCopyLinkClick(this.handleCopyLinkClick.bind(this));
+        this.view.handleResetFiltersClick(this.handleResetFiltersClick.bind(this));        
     }
 
     private handleClickToCartIcon(e: Event) {
@@ -80,6 +87,23 @@ class MainController extends Controller {
     private handleCopyLinkClick() {
         navigator.clipboard.writeText(document.location.href);
     }
+
+    private handleResetFiltersClick() {
+        this.router.clearSearchParams();
+        this.router.navigateTo(Routers.MAIN);
+    }
+
+    /* private getFilterFromQuery(): Partial<IFilter> {
+        const filter = {};
+        const query = this.router.getSearchParams();
+        let curParam = query.sort;
+        if (curParam && typeof curParam === 'string') {
+
+
+        }
+
+        return filter;
+    } */
 
 }
 

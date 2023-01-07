@@ -1,20 +1,20 @@
 import { Component } from "../types/component";
-import { Products as ProductsModel } from "../../model/products/products";
+// import { Products as ProductsModel } from "../../model/products/products";
+import { Filter as FilterModel } from "../../model/products/filter";
 import { Filter } from './filter';
 import { Slider } from "./slider";
 
-export class AllFilters extends Component
-{
+export class AllFilters extends Component {
     private readonly categoryFilter;
     private readonly brandFilter;
     private readonly priceSlider;
     private readonly stockSlider;
-    constructor(productsModel: ProductsModel) {
+    constructor(filterModel: FilterModel) {
         super({containerTag: 'div', className: 'all-filters d-flex flex-wrap col-lg-3 col-12 mb-3'.split(' ')});
-        this.categoryFilter = new Filter('category', ['Laptop', 'skincare']);
-        this.brandFilter = new Filter('brand', ['Apple', 'Samsung', 'Mictosoft']);
-        this.priceSlider = new Slider(productsModel, 'price');
-        this.stockSlider = new Slider(productsModel, 'stock');
+        this.categoryFilter = new Filter(filterModel, 'category', ['Laptop', 'skincare']);
+        this.brandFilter = new Filter(filterModel, 'brand', ['Apple', 'Samsung', 'Mictosoft']);
+        this.priceSlider = new Slider(filterModel, 'price');
+        this.stockSlider = new Slider(filterModel, 'stock');
     }
 
     protected template(): DocumentFragment {

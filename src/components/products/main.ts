@@ -1,18 +1,18 @@
 import { Component } from "../types/component";
 import { Products } from "./products";
 import { Products as ProductsModel } from "../../model/products/products";
+import { Filter as FilterModel } from "../../model/products/filter";
 import { Cart } from "../../model/cart";
 import CartLocalStorage from "../../model/cart-local-storage";
 import { AllFilters } from "./all-filters";
 
-export class MainProducts extends Component
-{
+export class MainProducts extends Component {
     private readonly filters;
     private readonly products;
-    constructor(big: boolean, productsModel: ProductsModel, cart: Cart, cartLS: CartLocalStorage) {
+    constructor(big: boolean, productsModel: ProductsModel, filterModel: FilterModel, cart: Cart, cartLS: CartLocalStorage) {
         super({containerTag: 'main', className: 'main container'.split(' ')});
-        this.filters = new AllFilters(productsModel);
-        this.products = new Products(big, productsModel, cart, cartLS);
+        this.filters = new AllFilters(filterModel);
+        this.products = new Products(big, productsModel, filterModel, cart, cartLS);
     }
 
     protected template(): HTMLElement {
@@ -46,6 +46,14 @@ export class MainProducts extends Component
             callback();
             copyLink.innerHTML = 'Copied!';
             setTimeout(() => { copyLink.innerHTML = 'Copy link'; }, 600);
+        })
+    }
+
+    public handleResetFiltersClick(callback: () => void) {
+        const reset = this.container.querySelector('.reset-filters');
+        if (!reset || !(reset instanceof HTMLElement)) throw new Error('No reset-filters button');
+        reset.addEventListener('click', (e: Event) => {
+            callback();
         })
     }
 
