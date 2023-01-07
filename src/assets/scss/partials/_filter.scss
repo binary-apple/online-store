@@ -22,7 +22,7 @@
     border-radius: 4px;
     line-height: 1;
     overflow-y: auto;
-    max-height: 25vh;
+    max-height: max(25vh, 150px);
 }
 
 .filter-item {
