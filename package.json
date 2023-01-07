@@ -59,6 +59,7 @@
     },
     "dependencies": {
         "mustache": "^4.2.0",
+        "mustache-loader": "^1.4.3",
         "vanilla-router": "^1.2.8"
     }
 }
