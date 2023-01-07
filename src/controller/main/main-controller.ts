@@ -89,7 +89,6 @@ class MainController extends Controller {
     }
 
     private handleResetFiltersClick() {
-        this.router.clearSearchParams();
         this.router.navigateTo(Routers.MAIN);
     }
 
