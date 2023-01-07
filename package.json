@@ -44,6 +44,7 @@
         "jest": "^29.3.1",
         "jest-environment-jsdom": "^29.3.1",
         "mini-css-extract-plugin": "^2.7.2",
+        "mustache-loader": "^1.4.3",
         "postcss-loader": "^7.0.2",
         "postcss-preset-env": "^7.8.3",
         "prettier": "^2.8.1",
@@ -58,7 +59,7 @@
         "webpack-merge": "^5.8.0"
     },
     "dependencies": {
-        "mustache": "^4.2.0",
+        "mustache": "3.0",
         "vanilla-router": "^1.2.8"
     }
 }

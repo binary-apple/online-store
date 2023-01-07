@@ -18,9 +18,6 @@ class ErrorController extends Controller {
     }
 
     init() {
-        /* eslint-disable-next-line */
-        console.log('error - 404');
-
         const view = new ErrorView(this.cart);
         view.init(this.root);
 

@@ -1,7 +1,6 @@
 import { Cart } from '../../model/cart';
 import { Component } from '../types/component';
-import Mustache from 'mustache';
-import Navigation from './component/navigation.html';
+const Navigation = require('./component/navigation.html');
 import Checkbox from '../ui/checkbox';
 
 class CartNavigation extends Component {
@@ -69,13 +68,14 @@ class CartNavigation extends Component {
 
     public getTemplate() {
         const pagination = this.cart.getPagination();
+
         const selectAll = new Checkbox({
             id: 'select-all',
             text: 'Select all',
             value: 'select-all',
         }).getTemplate();
 
-        return Mustache.render(Navigation, { limit: pagination.limit, page: pagination.page, selectAll });
+        return Navigation({ limit: pagination.limit, page: pagination.page, selectAll });
     }
 
     public update() {

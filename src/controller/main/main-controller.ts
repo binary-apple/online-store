@@ -30,24 +30,19 @@ class MainController extends Controller {
     }
     
     async init() {
-        /* eslint-disable-next-line */
-        console.log('products');
-        
         this.view.init(this.root);
         
         this.filter.setFilter(this.getFilterFromQuery());
         this.products.filter(this.filter.get());
         this.products.notify();
 
-        
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
         this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
-        
+
         this.view.handleScaleClick(this.handleScaleClick.bind(this));
-        
-        
+
         this.view.handleProductClick(this.handleProductClick.bind(this));
 
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));

@@ -2,10 +2,10 @@ import { Modal } from 'bootstrap';
 import { Cart } from '../../model/cart';
 import { IPromoCode } from '../../model/types/cart';
 import { Component } from '../types/component';
-import Mustache from 'mustache';
-import Total from './component/total/total.html';
-import TotalInfo from './component/total/totalinfo.html';
-import Promocode from './component/promocodes/promocode.html';
+
+const Total = require('./component/total/total.html');
+const TotalInfo = require('./component/total/totalinfo.html');
+const Promocode = require('./component/promocodes/promocode.html');
 
 class CartTotalBoard extends Component {
     cart: Cart;
@@ -136,7 +136,7 @@ class CartTotalBoard extends Component {
         const totalInfo = this.getTotalInfo();
         const promocodes = this.getPromocodesTemplate();
 
-        return Mustache.render(Total, { totalPrice, totalInfo, promocodes });
+        return Total({ totalPrice, totalInfo, promocodes });
     }
 
     private getTotalInfo() {
@@ -147,7 +147,7 @@ class CartTotalBoard extends Component {
         const through = this.cart.getConfirmedPromocodes().length ? 'cart-board__total-price--through' : '';
         const word = counter > 1 ? 'products' : 'product';
 
-        return Mustache.render(TotalInfo, { through, counter, cartPrice, discount, word });
+        return TotalInfo({ through, counter, cartPrice, discount, word });
     }
 
     private getPromocodesTemplate() {
@@ -161,7 +161,7 @@ class CartTotalBoard extends Component {
     private promocodeItem(item: IPromoCode) {
         const discount = item.discount * 100;
 
-        return Mustache.render(Promocode, { discount, name: item.name });
+        return Promocode({ discount, name: item.name });
     }
 
     public update() {
