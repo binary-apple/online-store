@@ -101,6 +101,12 @@ class CartTotalBoard extends Component {
                         input.value = '';
                         input.focus();
                     }
+
+                    const price = document.querySelector('.cart-board__total') as HTMLElement;
+
+                    if (price) {
+                        price.innerText = this.cart.getTotalPrice();
+                    }
                 });
             }
         }
