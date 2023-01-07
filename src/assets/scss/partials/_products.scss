@@ -33,7 +33,11 @@ input[type="search"] {
 }
 
 .product-item {
-    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: $onSurface;
+    height: 120px;
     background: $surface;
     border-radius: 4px;
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
@@ -42,59 +46,65 @@ input[type="search"] {
     }
 }
 
+.item-img-wrapper {
+    height: 100px;
+    width: 120px;
+    min-width: 60px;
+    max-width: 20vw;
+    border-radius: 4px;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
 .item-img {
-    position: absolute;
     width: 100%;
-    height: 50%;
+    height: 100%;
     object-fit: contain;
-    border-radius: 4px 4px 0 0;
 }
 
-.product-item {
-    cursor: pointer;
-}
-
-.product-col-3 > .product-item {
-    width: calc(33% - 0.5rem);
-    padding-bottom: 36%;
-    font-size: small;
-}
-
-.product-col-4 > .product-item {
-    width: calc(25% - 0.5rem);
-    padding-bottom: 32%;
-    font-size: x-small;
-}
-
-.products-button {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 15%;
+.product-item-wrapper {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
 }
 
 .product-info {
-    position: absolute;
-    top: 52%;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    height: 100px;
+    width: 45vw;
+    max-width: 60vw;
 }
 
-.product-price::before {
-    content: '€';
+.product-title {
+    font-size: 14px;
+    font-weight: 700;
+    height: 21px;
+    overflow: hidden;
 }
 
-.add {
-    border: 1px solid $primary;
-    background: $surface;
-    color: $primary;
-    &:hover {
-        border-color: $secondary;
-        background: $surface;
-        color: $secondary;
+.product-description {
+    font-size: 12px;
+    overflow-y: auto;
+    max-height: 66%;
+}
+
+.product-price {
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: auto;
+    &::before {
+        content: "€";
     }
 }
 
-#prods {
-    row-gap: 1rem;
+.products-button {
+    max-width: 20vw;
+}
+
+.big-scale > .product-item {
+    display: flex;
+
 }
 
 .found {

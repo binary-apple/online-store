@@ -44,7 +44,7 @@ export class Products extends Component implements Subscriber {
                 </div>
             </div>
         </div>
-        <div id="prods" class="d-flex flex-wrap justify-content-between product-col-${this.big ? 3 : 4 }"></div>
+        <div id="prods" class="d-flex flex-wrap"></div>
         `;
         return temp.content;
     }
@@ -55,27 +55,33 @@ export class Products extends Component implements Subscriber {
         prodsWrapper.innerHTML = '';
         this.productsModel.get().forEach((el) => {
             let productItem = document.createElement('div');
-            productItem.classList.add(...`product-item ${this.cart.isProductInCart(el.id) ? 'in-cart' : ''}`.trim().split(' '));
-            productItem.dataset.idproduct=`${el.id}`;
-            productItem.innerHTML = `
-            <img src="${el.thumbnail}" 
-                loading="lazy" 
-                alt="${el.title}" 
-                class="item-img">
-            <div class="product-info mx-1 lh-base">
-                <div>${el.title}</div>
-                <div>Price: <span class="product-price">${el.price}</span></div>
+            productItem.classList.add(...`${this.big ? 'big-scale col-12' : 'small-scale col-md-4 col-6'} py-2 px-1`.trim().split(' '));
+            productItem.innerHTML =`
+            <a href='/product/${el.id}' class="product-item px-2 ${this.cart.isProductInCart(el.id) ? 'in-cart' : ''}" data-idproduct=${el.id}>
+                <div class="item-img-wrapper">
+                    <img src="${el.thumbnail}" 
+                    loading="lazy" 
+                    alt="${el.title}" 
+                    class="item-img">
+                </div>
+                <div class="product-item-wrapper">
+                    <div class="product-info mx-2 lh-base">
+                        <div class="product-title">${el.title}</div>
+                        <div class="product-description">${el.description}</div>
+                        <div class="product-price">${el.price}</div>
+                    </div>
+                    <button class="products-button ${this.cart.isProductInCart(el.id) ? 'drop' : 'add'}" data-idbutton="${el.id}">
+                        ${this.cart.isProductInCart(el.id) ? 'Remove' : 'To cart'}
+                    </button>
+                </div>
             </div>
-            <button class="products-button ${this.cart.isProductInCart(el.id) ? 'drop' : 'add'}" data-idbutton="${el.id}">
-                ${this.cart.isProductInCart(el.id) ? 'Remove' : 'To cart'}
-            </button>
             `
             prodsWrapper.append(productItem);
         })
     }
 
     private drawViewIcon(big: boolean = true) {
-        if (big) {
+        if (!big) {
             return `
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="0.5" y="0.5" width="6" height="6" stroke="#414141"/>
@@ -92,22 +98,9 @@ export class Products extends Component implements Subscriber {
         } else {
             return `
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="0.5" y="0.5" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="0.5" y="13.5" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="0.5" y="7" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="0.5" y="20" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="7" y="0.5" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="7" y="13.5" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="7" y="7" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="7" y="20" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="13.5" y="0.5" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="13.5" y="13.5" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="13.5" y="7" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="13.5" y="20" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="20" y="0.5" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="20" y="13.5" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="20" y="7" width="4.5" height="4.5" stroke="#414141"/>
-            <rect x="20" y="20" width="4.5" height="4.5" stroke="#414141"/>
+            <rect x="0.5" y="0.5" width="24" height="6" stroke="#414141"/>
+            <rect x="0.5" y="9.5" width="24" height="6" stroke="#414141"/>
+            <rect x="0.5" y="18.5" width="24" height="6" stroke="#414141"/>
             </svg>
             `
         }
@@ -143,16 +136,22 @@ export class Products extends Component implements Subscriber {
         this.big = false;
     }
 
-    private _handleScaleClick(iconClass: string, removeClass: string, setClass: string, big: boolean, callback: (big: boolean) => void) {
+    private _handleScaleClick(iconClass: string, removeClasses: Array<string>, setClasses: Array<string>, big: boolean, callback: (big: boolean) => void) {
         const scaleIcon = this.container.getElementsByClassName(iconClass)[0];
         if (scaleIcon) {
             scaleIcon.addEventListener('click', () => {
                 const prods = this.container.querySelector('#prods');
-                if (prods) {
-                    if (prods.classList.contains(removeClass)) {
-                        prods.classList.remove(removeClass);
-                        prods.classList.add(setClass);
-                    }
+                if (prods && prods.childNodes) {
+                    prods.childNodes.forEach((el) => {
+                        if (el instanceof HTMLElement) {
+                            removeClasses.forEach((elClass) => {
+                                if (el.classList.contains(elClass)) el.classList.remove(elClass);
+                            })
+                            setClasses.forEach((elClass) => {
+                                el.classList.add(elClass);
+                            })
+                        }
+                    })
                 }
                 if (big) this.setBigScale();
                 else this.setSmallScale();
@@ -162,8 +161,10 @@ export class Products extends Component implements Subscriber {
     }
 
     public handleScaleClick(callback: (big: boolean) => void) {
-        this._handleScaleClick('small-view', 'product-col-3', 'product-col-4', false, callback);
-        this._handleScaleClick('big-view', 'product-col-4', 'product-col-3', true, callback);
+        const bigScaleClasses = ['big-scale','col-12'];
+        const smallScaleClasses = ['small-scale', 'col-md-4', 'col-6'];
+        this._handleScaleClick('small-view', bigScaleClasses, smallScaleClasses, false, callback);
+        this._handleScaleClick('big-view', smallScaleClasses, bigScaleClasses, true, callback);
     }
 
     private toggleProductInCart(id: number) {
@@ -181,6 +182,7 @@ export class Products extends Component implements Subscriber {
             throw new Error('No products-wrapper');
         }
         prods.addEventListener('click', (e: Event) => {
+            e.preventDefault();
             const target = e.target;
             if (!(target instanceof HTMLElement) || !(target)) {
                 return;
