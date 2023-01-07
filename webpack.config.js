@@ -71,7 +71,7 @@ const baseConfig = {
             },
             {
                 test: /\.html$/,
-                use: ['html-loader'],
+                loader: 'mustache-loader',
             },
         ],
     },

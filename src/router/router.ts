@@ -79,8 +79,6 @@ router.add(Routers.PRODUCT, () => {
 router.add(Routers.CART, () => {
     const cartController = new CartController(router);
 
-    console.log(router.getSearchParams());
-
     cartController.init();
 });
 

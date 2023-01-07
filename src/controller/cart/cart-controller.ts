@@ -5,7 +5,6 @@ import CartLocalStorage from '../../model/cart-local-storage';
 import { HashRouter } from '../../router/router';
 import { ICartPagination } from '../../model/types/cart';
 import { CartName } from '../../model/types/cart';
-import { products } from '../../model/productItems';
 
 class CartController extends Controller {
     cart: Cart;

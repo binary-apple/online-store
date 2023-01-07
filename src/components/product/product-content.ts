@@ -1,10 +1,10 @@
 import { Component } from '../types/component';
-import Mustache from 'mustache';
-import Content from './component/content.html';
+// import Mustache from 'mustache';
+// import Content from './component/content.html';
 import { Product } from '../../model/types/product';
 import { Cart } from '../../model/cart';
-import Rating from './component/rating.html';
-import Image from './component/image.html';
+// import Rating from './component/rating.html';
+// import Image from './component/image.html';
 import { products } from '../../model/productItems';
 import Preloader from '../../assets/img/preloader.svg?inline';
 
@@ -133,19 +133,21 @@ class ProductContent extends Component {
 
         this.cartText = this.getCartBtnText();
 
-        return Mustache.render(Content, {
-            name,
-            rating,
-            image,
-            mainImage,
-            price,
-            discount,
-            description,
-            stock,
-            category,
-            brand,
-            cartText: this.cartText,
-        });
+        return '';
+
+        // return Mustache.render(Content, {
+        //     name,
+        //     rating,
+        //     image,
+        //     mainImage,
+        //     price,
+        //     discount,
+        //     description,
+        //     stock,
+        //     category,
+        //     brand,
+        //     cartText: this.cartText,
+        // });
     }
 
     productInCart() {
@@ -176,7 +178,9 @@ class ProductContent extends Component {
         return this.product.images
             .map((item: string) => {
                 const image = item;
-                return Mustache.render(Image, { image });
+
+                return '';
+                // return Mustache.render(Image, { image });
             })
             .join('');
     }
@@ -193,7 +197,8 @@ class ProductContent extends Component {
             ratingClass = 'product-rating__item--empty';
         }
 
-        return Mustache.render(Rating, { ratingClass });
+        return '';
+        // return Mustache.render(Rating, { ratingClass });
     }
 
     public update() {

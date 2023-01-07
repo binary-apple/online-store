@@ -17,28 +17,25 @@ class MainController extends Controller {
     constructor(router: HashRouter) {
         super(router);
 
-        this.cartLS = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);        
+        this.cartLS = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);
         this.cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
         this.view = new MainView(this.cart, this.cartLS, this.products, this.getBigFromQuery());
     }
 
     async init() {
-        /* eslint-disable-next-line */
-        console.log('products');
-
         this.view.init(this.root);
-        
+
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
         // TODO: implement
         // this.view.handleSliderInput(this.handleSliderInput.bind(this));
         this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
-        
+
         this.view.handleScaleClick(this.handleScaleClick.bind(this));
-        
+
         this.products.set(products);
-        
+
         this.view.handleProductClick(this.handleProductClick.bind(this));
 
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
@@ -79,7 +76,6 @@ class MainController extends Controller {
         // TODO: implement via Routers
         this.router.navigateTo(`/product/${id}`);
     }
-
 }
 
 export default MainController;
