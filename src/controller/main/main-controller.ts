@@ -43,6 +43,8 @@ class MainController extends Controller {
 
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
+
+        this.view.handleCopyLinkClick(this.handleCopyLinkClick.bind(this));
     }
 
     private handleClickToCartIcon(e: Event) {
@@ -73,6 +75,10 @@ class MainController extends Controller {
     private handleProductClick(id: number) {
         // TODO: implement via Routers
         this.router.navigateTo(`/product/${id}`);
+    }
+
+    private handleCopyLinkClick() {
+        navigator.clipboard.writeText(document.location.href);
     }
 
 }

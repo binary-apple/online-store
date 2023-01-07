@@ -63,7 +63,5 @@ export class AllFilters extends Component
         filterWrapper.append(filter);
         return filterWrapper;
     }
-
-
     
 }

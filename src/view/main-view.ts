@@ -51,4 +51,8 @@ export class MainView extends BaseView implements View {
         this.content.handleProductClick(callback);
     }
 
+    public handleCopyLinkClick(callback: () => void) {
+        this.content.handleCopyLinkClick(callback);
+    }
+
 }

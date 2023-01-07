@@ -39,4 +39,12 @@ export class MainProducts extends Component
         this.products.handleProductClick(callback);
     }
 
+    public handleCopyLinkClick(callback: () => void) {
+        const copyLink = this.container.querySelector('.copy-link');
+        if (!copyLink) throw new Error('No copy-link button');
+        copyLink.addEventListener('click', (e: Event) => {
+            callback();
+        })
+    }
+
 }
