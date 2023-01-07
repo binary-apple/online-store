@@ -1,5 +1,5 @@
 import { Component } from "../types/component";
-// import { Products as ProductsModel } from "../../model/products/products";
+import { Products as ProductsModel } from "../../model/products/products";
 import { Filter as FilterModel } from "../../model/products/filter";
 import { Filter } from './filter';
 import { Slider } from "./slider";
@@ -9,10 +9,11 @@ export class AllFilters extends Component {
     private readonly brandFilter;
     private readonly priceSlider;
     private readonly stockSlider;
-    constructor(filterModel: FilterModel) {
+    constructor(productsModel: ProductsModel, filterModel: FilterModel) {
         super({containerTag: 'div', className: 'all-filters d-flex flex-wrap col-lg-3 col-12 mb-3'.split(' ')});
-        this.categoryFilter = new Filter(filterModel, 'category', ['Laptop', 'skincare']);
-        this.brandFilter = new Filter(filterModel, 'brand', ['Apple', 'Samsung', 'Mictosoft']);
+        const filterMetrics = productsModel.getMetrics();
+        this.categoryFilter = new Filter(filterModel, 'category', filterMetrics.categories);
+        this.brandFilter = new Filter(filterModel, 'brand', filterMetrics.brands);
         this.priceSlider = new Slider(filterModel, 'price');
         this.stockSlider = new Slider(filterModel, 'stock');
     }

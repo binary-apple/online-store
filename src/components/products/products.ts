@@ -27,7 +27,7 @@ export class Products extends Component implements Subscriber {
             <div class="found w-50">
                 Found: <span class="found-cnt"></span>
             </div>
-            <input type="search" placeholder="Search product" class="w-100">
+            <input type="search" placeholder="Search product" class="search-input w-100">
         </div>
         <div class=" flex-grow-1 d-flex align-items-center justify-content-between gap-2 mb-2">
             <select name="sort" id="sort" class="sort">
@@ -210,6 +210,14 @@ export class Products extends Component implements Subscriber {
         const foundEl = this.container.querySelector('.found-cnt');
         if (!foundEl) return;
         foundEl.innerHTML = `${this.productsModel.get().length}`;
+    }
+
+    public handleSearchInput(callback: (value: string) => void) {
+        const search = this.container.querySelector('.search-input');
+        if (!search || !(search instanceof HTMLInputElement)) throw new Error('No searching form');
+        search.addEventListener('input', (e) => {
+            callback(search.value);
+        })
     }
 
     public update(): void {

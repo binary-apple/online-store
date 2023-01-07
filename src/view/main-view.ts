@@ -60,4 +60,8 @@ export class MainView extends BaseView implements View {
         this.content.handleResetFiltersClick(callback);
     }
 
+    public handleSearchInput(callback: (value: string) => void) {
+        this.content.handleSearchInput(callback);
+    }
+
 }

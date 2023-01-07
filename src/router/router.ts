@@ -19,6 +19,19 @@ export class HashRouter extends Router {
         history.pushState({}, '', url);
     }
 
+    removeSearchParam(key: string) {
+
+        const url = new URL(window.location.href);
+
+        const params = this.getSearchParams();
+
+        if (key in params) {
+            url.searchParams.delete(key);
+        }
+
+        history.pushState({}, '', url);
+    }
+
     clearSearchParams() {
         const url = new URL(window.location.href);
 

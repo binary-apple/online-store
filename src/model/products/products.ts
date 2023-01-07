@@ -76,7 +76,7 @@ export class Products extends Store {
                     );
                 })
                 .sort(sortItems);
-
+            this.notify();
             return;
         }
 
@@ -126,6 +126,8 @@ export class Products extends Store {
                     : null;
             })
             .sort(sortItems);
+
+            this.notify();
     }
 
     private sortItems(filter: IFilter, a: Product, b: Product) {

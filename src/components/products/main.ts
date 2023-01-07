@@ -11,7 +11,7 @@ export class MainProducts extends Component {
     private readonly products;
     constructor(big: boolean, productsModel: ProductsModel, filterModel: FilterModel, cart: Cart, cartLS: CartLocalStorage) {
         super({containerTag: 'main', className: 'main container'.split(' ')});
-        this.filters = new AllFilters(filterModel);
+        this.filters = new AllFilters(productsModel, filterModel);
         this.products = new Products(big, productsModel, filterModel, cart, cartLS);
     }
 
@@ -55,6 +55,10 @@ export class MainProducts extends Component {
         reset.addEventListener('click', (e: Event) => {
             callback();
         })
+    }
+
+    public handleSearchInput(callback: (value: string) => void) {
+        this.products.handleSearchInput(callback);
     }
 
 }

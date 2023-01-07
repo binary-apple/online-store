@@ -1,16 +1,17 @@
 import { Component } from "../types/component";
 import { Filter as FilterModel } from "../../model/products/filter";
 import { Publisher, Subscriber } from "../../utils/observer-interface";
+import { FilterMetric } from "../../model/types/filter";
 
 export class Filter extends Component implements Subscriber {
     private readonly filterName: string;
-    private readonly filterList: Array<string>;
+    private readonly filterMetric: FilterMetric;
     private readonly filterModel: FilterModel;
-    constructor(filterModel: FilterModel, filterName: string, filterList: Array<string>) {
+    constructor(filterModel: FilterModel, filterName: string, filterMetric: FilterMetric) {
         super({containerTag: 'div', className: ['filter', `filter-${filterName}`]});
         this.filterModel = filterModel;
         this.filterName = filterName;
-        this.filterList = filterList;
+        this.filterMetric = filterMetric;
         this.subscribe(this.filterModel);
     }
 
@@ -25,16 +26,17 @@ export class Filter extends Component implements Subscriber {
 
     private drawFilterList() {
         const res: Array<string> = [];
-        this.filterList.forEach((el) => {
+        for (let key in this.filterMetric) {
+            this.filterMetric[key] 
             res.push(`
             <div class="filter-item">
-                <input type="checkbox" id="${el}" class="default-check">
+                <input type="checkbox" id="${key}" class="default-check">
                 <div class="custom-check"></div>
-                <label for="${el}">${el}</label>
-                <span class="filtred-cnt">(???)</span>
+                <label for="${key}">${key}</label>
+                <span class="filtred-cnt">(${this.filterMetric[key].available}/${this.filterMetric[key].total})</span>
             </div>
             `);
-        })
+        }
         return res.join('');
     }
 
