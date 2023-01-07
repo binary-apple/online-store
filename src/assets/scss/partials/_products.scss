@@ -32,80 +32,78 @@ input[type="search"] {
     cursor: pointer;
 }
 
-.product-item {
+
+.big-scale > .product-item {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    color: $onSurface;
     height: 120px;
+    color: $onSurface;
     background: $surface;
     border-radius: 4px;
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
     &.in-cart {
         box-shadow: 4px 8px 16px rgba(255, 102, 51, 0.2);
     }
-}
 
-.item-img-wrapper {
-    height: 100px;
-    width: 120px;
-    min-width: 60px;
-    max-width: 20vw;
-    border-radius: 4px;
-    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
-}
+    .item-img-wrapper {
+        height: 100px;
+        width: 120px;
+        min-width: 60px;
+        max-width: 20vw;
+        border-radius: 4px;
+        box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
 
-.item-img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-}
+        .item-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+    
+    .product-item-wrapper {
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
 
-.product-item-wrapper {
-    display: flex;
-    flex-grow: 1;
-    align-items: center;
-}
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            height: 100px;
+            width: 45vw;
+            max-width: 60vw;
 
-.product-info {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1;
-    height: 100px;
-    width: 45vw;
-    max-width: 60vw;
-}
+            .product-title {
+                font-size: 14px;
+                font-weight: 700;
+                height: 21px;
+                overflow: hidden;
+            }
+            
+            .product-description {
+                font-size: 12px;
+                overflow-y: auto;
+                max-height: 66%;
+            }
+            
+            .product-price {
+                font-size: 12px;
+                font-weight: 700;
+                margin-top: auto;
+                &::before {
+                    content: "€";
+                }
+            }
+        }
 
-.product-title {
-    font-size: 14px;
-    font-weight: 700;
-    height: 21px;
-    overflow: hidden;
-}
-
-.product-description {
-    font-size: 12px;
-    overflow-y: auto;
-    max-height: 66%;
-}
-
-.product-price {
-    font-size: 12px;
-    font-weight: 700;
-    margin-top: auto;
-    &::before {
-        content: "€";
+        .products-button {
+            max-width: 20vw;
+        }
     }
 }
 
-.products-button {
-    max-width: 20vw;
-}
 
-.big-scale > .product-item {
-    display: flex;
-
-}
 
 .found {
     font-weight: 700;
