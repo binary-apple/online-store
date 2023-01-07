@@ -67,12 +67,7 @@ class MainController extends Controller {
 
     private getBigFromQuery(): boolean {
         const query = this.router.getSearchParams();
-        const strBig = query.big;
-        if (typeof strBig === 'string') {
-            if (strBig === 'true') return true;
-            if (strBig === 'false') return false;
-        }
-        return true;
+        return !!query.big;
     }
 
     private handleProductClick(id: number) {

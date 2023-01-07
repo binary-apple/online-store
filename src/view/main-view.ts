@@ -13,7 +13,7 @@ export class MainView extends BaseView implements View {
     private footer: Footer;
     private content: MainProducts;
 
-    constructor(cart: Cart, cartLS: CartLocalStorage, productsModel: ProductsModel, private big: boolean = true) {
+    constructor(cart: Cart, cartLS: CartLocalStorage, productsModel: ProductsModel, private big: boolean) {
         super();
         this.header = new Header(cart);
         this.footer = new Footer();
