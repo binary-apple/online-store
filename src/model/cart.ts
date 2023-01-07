@@ -11,6 +11,8 @@ export class Cart extends Store {
         limit: 3,
         page: 1,
     } as ICartPagination;
+    openModalPage = false;
+    productsToOrder: Array<Product> = [];
 
     constructor(products: Array<Product>) {
         super();
@@ -172,7 +174,7 @@ export class Cart extends Store {
         this.notify();
     }
 
-    changeParamsLimit(limit: number) {
+    public changeParamsLimit(limit: number) {
         if (limit < 1) {
             this.pagination.limit = 1;
         } else {
@@ -195,7 +197,7 @@ export class Cart extends Store {
         return [start, end];
     }
 
-    changeParamsPage(type: string | number) {
+    public changeParamsPage(type: string | number) {
         const changeFromEvent = typeof type === 'string';
         const changeFromQuery = typeof type === 'number';
 
@@ -239,5 +241,27 @@ export class Cart extends Store {
         }
 
         this.notify();
+    }
+
+    public toggleModalPage() {
+        this.openModalPage = !this.openModalPage;
+
+        this.notify();
+    }
+
+    public addToOrder(product: Product) {
+        this.productsToOrder.push(product);
+    }
+
+    public emptyOrderArray() {
+        this.productsToOrder.length = 0;
+    }
+
+    public getOrder() {
+        return this.productsToOrder;
+    }
+
+    public orderModalIsOpen() {
+        return this.openModalPage;
     }
 }

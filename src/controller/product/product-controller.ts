@@ -58,9 +58,12 @@ class ProductController extends Controller {
                     this.cartLocalStorage.set(this.cart.get());
                 }
 
-                this.router.navigateTo('/cart', '');
-                this.router.addSearchParams('productId', '' + product.id);
-                this.router.addSearchParams('makeOrder', 'true');
+                const productState = {
+                    isRedirect: true,
+                    product: product,
+                };
+
+                this.router.navigateTo('/cart', JSON.stringify(productState));
             });
         } else {
             this.router.navigateTo('/404', '');

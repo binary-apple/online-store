@@ -6,6 +6,7 @@ import { Header } from '../components/header';
 import { Footer } from '../components/footer';
 import { Cart } from '../model/cart';
 import { Modal } from 'bootstrap';
+import { Product } from '../model/types/product';
 
 class CartView extends BaseView implements View {
     private content: CartContent;
@@ -38,6 +39,7 @@ class CartView extends BaseView implements View {
 
         this.selectAllChangeHandler();
         this.inputHandlerPromoCode();
+        this.setPersonInfo();
     }
 
     private getBreadcrumbs() {
@@ -91,6 +93,18 @@ class CartView extends BaseView implements View {
 
     public selectAllChangeHandler() {
         this.content.cartNavigation.selectAllChangeHandler();
+    }
+
+    public makeOrder(callback: (products: Array<Product>) => void) {
+        this.content.makeOrder(callback);
+    }
+
+    public orderFromClickToButton(callback: (products: Array<Product>) => void) {
+        this.content.orderFromClickToButton(callback);
+    }
+
+    public setPersonInfo() {
+        this.content.setPersonInfo();
     }
 }
 

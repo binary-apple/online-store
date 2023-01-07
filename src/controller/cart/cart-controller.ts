@@ -5,7 +5,8 @@ import CartLocalStorage from '../../model/cart-local-storage';
 import { HashRouter } from '../../router/router';
 import { ICartPagination } from '../../model/types/cart';
 import { CartName } from '../../model/types/cart';
-import { products } from '../../model/productItems';
+import { Product } from '../../model/types/product';
+import { IRouter } from '../../router/types/router';
 
 class CartController extends Controller {
     cart: Cart;
@@ -21,7 +22,6 @@ class CartController extends Controller {
     async init() {
         const cartView = new CartView(this.cart);
         cartView.init();
-
         this.setPaginationFromQueryParams();
 
         cartView.breadCrumbsClickHandler((e: Event) => {
@@ -155,6 +155,17 @@ class CartController extends Controller {
             this.cart.removePromocode(promo);
             this.cartLS.set(this.cart.get());
         });
+
+        cartView.orderFromClickToButton((products: Array<Product>) => {
+            products.forEach((item) => {
+                this.cart.removeProductFromCart(item.id);
+            });
+
+            this.cart.emptyOrderArray();
+            this.cartLS.set(this.cart.get());
+        });
+
+        this.checkRedirectFromProduct(cartView);
     }
 
     setPaginationFromQueryParams() {
@@ -186,6 +197,30 @@ class CartController extends Controller {
         this.cart.changeParamsPage(pageValue);
 
         this.router.addSearchParams('page', '' + pageValue);
+    }
+
+    checkRedirectFromProduct(cartView: CartView) {
+        const page = (this.router as unknown as IRouter)._currentPage;
+
+        if (page.state) {
+            const pageState = JSON.parse(page?.state as string);
+
+            if (pageState.isRedirect) {
+                this.cart.emptyOrderArray();
+                this.cart.addToOrder(pageState.product);
+
+                cartView.makeOrder((products: Array<Product>) => {
+                    products.forEach((item) => {
+                        this.cart.removeProductFromCart(item.id);
+                    });
+
+                    this.cart.emptyOrderArray();
+                    this.cartLS.set(this.cart.get());
+                });
+
+                page.state = null;
+            }
+        }
     }
 }
 

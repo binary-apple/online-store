@@ -1,0 +1,68 @@
+<div
+    class="modal fade order-modal"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-fullscreen-md-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Make order</h5>
+                <span class="btn-close" data-bs-dismiss="modal" aria-label="Close"></span>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="order__person d-flex">
+                        <div class="order__firstname">
+                            <span class="order__field">Firstname *</span>
+                            <input
+                                class="order-firstname__value"
+                                value="{{firstname.value}}"
+                                type="text"
+                                placeholder="Enter firstname"
+                            />
+                        </div>
+                        <div class="order__firstname">
+                            <span class="order__field">Lastname *</span>
+                            <input
+                                value="{{lastname.value}}"
+                                class="order-lastname__value"
+                                type="text"
+                                placeholder="Enter lastname"
+                            />
+                        </div>
+                    </div>
+                    <div class="order__card d-flex">
+                        <div class="order__address w-50">
+                            <span class="order__field">Address *</span>
+                            <div>
+                                <input
+                                    value="{{card.value}}"
+                                    class="order-address__value"
+                                    type="text"
+                                    placeholder="Enter address"
+                                />
+                            </div>
+                        </div>
+                        <div class="order__cart-number w-50">
+                            <span class="order__field">Card number *</span>
+                            <div>
+                                <input
+                                    value="{{card.value}}"
+                                    class="order-cart-number__value"
+                                    type="text"
+                                    placeholder="Enter cart number"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" disabled="true" class="btn cart-order-modal__confirm">Order now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

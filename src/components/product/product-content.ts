@@ -7,6 +7,7 @@ import Rating from './component/rating.html';
 import Image from './component/image.html';
 import { products } from '../../model/productItems';
 import Preloader from '../../assets/img/preloader.svg?inline';
+import { Modal } from 'bootstrap';
 
 class ProductContent extends Component {
     product: Product;
@@ -14,6 +15,7 @@ class ProductContent extends Component {
     products: Array<Product>;
     cartText = '';
     btnToCartDisabled = '';
+    orderModal: Modal = {} as Modal;
 
     constructor(product: Product, cart: Cart) {
         super({ containerTag: 'main', className: ['main-container'] });
@@ -201,6 +203,20 @@ class ProductContent extends Component {
 
         if (btn) {
             btn.innerText = this.getCartBtnText();
+        }
+
+        const hasModal = Object.keys(this.orderModal).length;
+
+        if (this.cart.openModalPage) {
+            if (!hasModal) {
+                const modal = document.querySelector('.order-modal');
+
+                if (modal) {
+                    this.orderModal = new Modal(modal);
+
+                    this.orderModal.show();
+                }
+            }
         }
     }
 }

@@ -70,8 +70,9 @@ const baseConfig = {
                 ],
             },
             {
-                test: /\.html$/,
-                use: ['html-loader'],
+                test: /\.html$/i,
+                resourceQuery: '',
+                loader: 'mustache-loader',
             },
         ],
     },

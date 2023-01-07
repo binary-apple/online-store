@@ -21,7 +21,7 @@ class MainController extends Controller {
 
         // this.cart.attach(this.cartAPI);
         // TODO: implement without cartAPI
-        
+
         this.cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
         this.view = new MainView(this.cart, this.products, this.getBigFromQuery());
     }
@@ -31,18 +31,18 @@ class MainController extends Controller {
         console.log('products');
 
         this.view.init(this.root);
-        
+
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
         // TODO: implement
         // this.view.handleSliderInput(this.handleSliderInput.bind(this));
         this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
-        
+
         this.view.handleScaleClick(this.handleScaleClick.bind(this));
-        
+
         this.products.set(products);
-        
+
         this.view.handleProductClick(this.handleProductClick.bind(this));
 
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
@@ -83,7 +83,6 @@ class MainController extends Controller {
         // TODO: implement via Routers
         this.router.navigateTo(`/product/${id}`);
     }
-
 }
 
 export default MainController;

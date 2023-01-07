@@ -2,6 +2,10 @@
 @import './partials/fonts';
 @import './partials/settings';
 @import './partials/typography';
+@import './partials/breadcrumbs';
+@import './partials/cart-content';
+@import './partials/product';
+@import './partials/order';
 @import './partials/checkbox';
 @import './partials/buttons';
 @import './partials/footer';
@@ -41,15 +45,3 @@ main {
     width: 100%;
     margin: 0 auto;
 }
-
-/* breadcrumbs */
-
-@import './partials/breadcrumbs';
-
-/* cart */
-
-@import './partials/cart-content';
-
-/* product */
-
-@import './partials/product';

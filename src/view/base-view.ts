@@ -6,7 +6,7 @@ class BaseView {
         this.root = document.querySelector('#app') as HTMLElement;
         this.root.innerHTML = '';
         this.container = document.createElement('main');
-        this.container.classList.add(...['row', 'main-container']);
+        this.container.classList.add(...['main-container']);
     }
 }
 

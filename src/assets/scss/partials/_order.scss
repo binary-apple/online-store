@@ -1,0 +1,39 @@
+@import './colors';
+
+.order-modal {
+    .btn {
+        width: max-content;
+        height: 45px;
+        padding: 0 35px;
+    }
+
+    input {
+        height: 40px;
+        border-radius: 4px;
+        border: 1px solid;
+        padding: 0 15px;
+        font-size: 14px;
+    }
+}
+
+.cart-order-modal {
+    &__confirm {
+        background-color: $primary;
+        color: white;
+
+        &:hover {
+            background-color: hsl(15, 100%, 55%);
+            color: white;
+        }
+    }
+}
+
+.order {
+    &__card {
+        margin-top: 15px;
+    }
+
+    &__field {
+        height: 30px;
+    }
+}
