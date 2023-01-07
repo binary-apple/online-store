@@ -17,7 +17,7 @@ export class Products extends Component implements Subscriber {
         this.filterModel = filterModel;
         this.cart = cart;
         this.cartLS = cartLS;        
-        this.subscribe(this.productsModel, this.productsModel, this.cart);
+        this.subscribe(this.productsModel, this.filterModel, this.cart);
     }
 
     protected template(): DocumentFragment {
@@ -216,12 +216,28 @@ export class Products extends Component implements Subscriber {
         const search = this.container.querySelector('.search-input');
         if (!search || !(search instanceof HTMLInputElement)) throw new Error('No searching form');
         search.addEventListener('input', (e) => {
+            console.log(search.value);
             callback(search.value);
         })
+    }
+
+    public handleSortInput(callback: (value: string) => void) {
+        const sort = this.container.querySelector('#sort');
+        if (!sort || !(sort instanceof HTMLSelectElement)) throw new Error('No sorting form');
+        sort.addEventListener('input', (e) => {
+            callback(sort.value);
+        })
+    }
+
+    private setSearch() {
+        const search = this.container.querySelector('.search-input');
+        if (!search || !(search instanceof HTMLInputElement)) throw new Error('No searching form');
+        search.value = this.filterModel.get().search;
     }
 
     public update(): void {
         this.drawProducts();
         this.setFoundCount();
+        this.setSearch();
     }
 }

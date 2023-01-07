@@ -64,4 +64,8 @@ export class MainView extends BaseView implements View {
         this.content.handleSearchInput(callback);
     }
 
+    public handleSortInput(callback: (value: string) => void) {
+        this.content.handleSortInput(callback);
+    }
+
 }

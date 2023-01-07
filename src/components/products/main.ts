@@ -61,4 +61,8 @@ export class MainProducts extends Component {
         this.products.handleSearchInput(callback);
     }
 
+    public handleSortInput(callback: (value: string) => void) {
+        this.products.handleSortInput(callback);
+    }
+
 }

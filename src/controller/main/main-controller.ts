@@ -35,16 +35,14 @@ class MainController extends Controller {
         
         this.view.init(this.root);
         
+        this.filter.setFilter(this.getFilterFromQuery());
+        this.products.filter(this.filter.get());
         this.products.notify();
 
-        // TODO: get filter from query
-        // this.filter.setFilter(this.products.);
         
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
-        // TODO: implement
-        // this.view.handleSliderInput(this.handleSliderInput.bind(this));
         this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
         
         this.view.handleScaleClick(this.handleScaleClick.bind(this));
@@ -59,6 +57,7 @@ class MainController extends Controller {
         this.view.handleResetFiltersClick(this.handleResetFiltersClick.bind(this));        
 
         this.view.handleSearchInput(this.handleSearchInput.bind(this));
+        this.view.handleSortInput(this.handleSortInput.bind(this));
     }
 
     private handleClickToCartIcon(e: Event) {
@@ -99,6 +98,17 @@ class MainController extends Controller {
         this.router.navigateTo(Routers.MAIN);
     }
 
+    private getFilterFromQuery(): Partial<IFilter> {
+        const query = this.router.getSearchParams();
+        const filter: Partial<IFilter> = {};
+        if ('search' in query) {
+            filter.search = String(query['search']);
+        }
+        // TODO: set other components according query
+
+        return filter;
+    }
+
     private handleSearchInput(value: string) {
         if (value.length === 0) {
             this.router.removeSearchParam('search');
@@ -106,23 +116,19 @@ class MainController extends Controller {
         if (value.length > 0) {
             this.router.addSearchParams('search', value);
         }
-        // todo set current filter
-        // this.filter.setFilter({search: value});
-        // console.log(this.filter);
-        // this.products.filter(this.filter.get());
+        this.filter.setFilter({search: value});
+        this.products.filter(this.filter.get());
     }
 
-    /* private getFilterFromQuery(): Partial<IFilter> {
-        const filter = {};
-        const query = this.router.getSearchParams();
-        let curParam = query.sort;
-        if (curParam && typeof curParam === 'string') {
-
-
+    private handleSortInput(value: string) {
+        const valueArr = value.toLowerCase().split('-');
+        if (valueArr[1].toLowerCase() === 'title') {
+            this.router.removeSearchParam('sort');
+        } else {
+            this.router.addSearchParams('sort', value.toLowerCase());
+            this.filter.setFilter({ sort: {order: valueArr[1], value: valueArr[0]} });
         }
-
-        return filter;
-    } */
+    }
 
 }
 

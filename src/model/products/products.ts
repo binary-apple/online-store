@@ -82,48 +82,68 @@ export class Products extends Store {
 
         this.initializeFilter(filter);
 
+        const isSubstring = (str: string, substr: string) => {
+            return str.toLowerCase().includes(substr.trim().toLowerCase());
+        }
+
         this.filtred = this.initialItems
             .filter((el) => {
-                const category = el.category.toLowerCase().trim();
-                const brand = el.brand.toLowerCase().trim();
+                if (filter.search) {
+                    if (!isSubstring(el.brand, filter.search) &&
+                        !isSubstring(el.category, filter.search) &&
+                        !isSubstring(String(el.price), filter.search) &&
+                        !isSubstring(String(el.stock), filter.search) &&
+                        !isSubstring(String(el.rating), filter.search) &&
+                        !isSubstring(String(el.discountPercentage), filter.search) &&
+                        !isSubstring(el.description, filter.search) &&
+                        !isSubstring(el.title, filter.search) &&
+                        !isSubstring(el.title, filter.search)) {
+                        return false;
+                    }
+                }
+                // TODO: check all other filters
+                return true;
 
-                const searchOnly = filter.search && !filter.categories.length && !filter.brands.length;
+                // const category = el.category.toLowerCase().trim();
+                // const brand = el.brand.toLowerCase().trim();
 
-                const categoriesOnly = !filter.search && filter.categories.length && !filter.brands.length;
+                // const searchOnly = filter.search && !filter.categories.length && !filter.brands.length;
 
-                const brandsOnly = !filter.search && !filter.categories.length && filter.brands.length;
-                const searchCategories = filter.categories.includes(category);
-                const searchBrands = filter.brands.includes(brand);
+                // const categoriesOnly = !filter.search && filter.categories.length && !filter.brands.length;
 
-                const searchPrice = this.searchByPrice(filter, el);
-                const searchStock = this.searchByStock(filter, el);
+                // const brandsOnly = !filter.search && !filter.categories.length && filter.brands.length;
+                // const searchCategories = filter.categories.includes(category);
+                // const searchBrands = filter.brands.includes(brand);
 
-                const search = this.searchItems(el, filter.search);
+                // const searchPrice = this.searchByPrice(filter, el);
+                // const searchStock = this.searchByStock(filter, el);
 
-                const searchAndCategories = filter.search && filter.categories.length && !filter.brands.length;
-                const searchBySearchAndCategories = this.bySearchAndCategories(filter, el);
-                const seachByAll = filter.search && filter.categories.length && filter.brands.length;
-                const searchByAllParams = this.byAllParams(filter, el);
-                const searchAndBrand = filter.search && !filter.categories.length && filter.brands.length;
-                const searchAndBrandFilter = this.searchAndBrand(filter, el);
-                const categoriesAndBrands = !filter.search && filter.categories.length && filter.brands.length;
-                const categoriesAndBrandsFilter = this.categoriesAndBrandsFilter(filter, el);
+                // const search = this.searchItems(el, filter.search);
 
-                return searchOnly
-                    ? search && searchPrice && searchStock
-                    : categoriesOnly
-                    ? searchCategories && searchPrice && searchStock
-                    : brandsOnly
-                    ? searchBrands && searchPrice && searchStock
-                    : searchAndCategories
-                    ? searchBySearchAndCategories && searchPrice && searchStock
-                    : seachByAll
-                    ? searchByAllParams && searchPrice && searchStock
-                    : searchAndBrand
-                    ? searchAndBrandFilter && searchPrice && searchStock
-                    : categoriesAndBrands
-                    ? categoriesAndBrandsFilter && searchPrice && searchStock
-                    : null;
+                // const searchAndCategories = filter.search && filter.categories.length && !filter.brands.length;
+                // const searchBySearchAndCategories = this.bySearchAndCategories(filter, el);
+                // const seachByAll = filter.search && filter.categories.length && filter.brands.length;
+                // const searchByAllParams = this.byAllParams(filter, el);
+                // const searchAndBrand = filter.search && !filter.categories.length && filter.brands.length;
+                // const searchAndBrandFilter = this.searchAndBrand(filter, el);
+                // const categoriesAndBrands = !filter.search && filter.categories.length && filter.brands.length;
+                // const categoriesAndBrandsFilter = this.categoriesAndBrandsFilter(filter, el);
+
+                // return searchOnly
+                //     ? search && searchPrice && searchStock
+                //     : categoriesOnly
+                //     ? searchCategories && searchPrice && searchStock
+                //     : brandsOnly
+                //     ? searchBrands && searchPrice && searchStock
+                //     : searchAndCategories
+                //     ? searchBySearchAndCategories && searchPrice && searchStock
+                //     : seachByAll
+                //     ? searchByAllParams && searchPrice && searchStock
+                //     : searchAndBrand
+                //     ? searchAndBrandFilter && searchPrice && searchStock
+                //     : categoriesAndBrands
+                //     ? categoriesAndBrandsFilter && searchPrice && searchStock
+                //     : null;
             })
             .sort(sortItems);
 
@@ -131,14 +151,14 @@ export class Products extends Store {
     }
 
     private sortItems(filter: IFilter, a: Product, b: Product) {
-        const { value, order } = filter.sort;
+        let { value, order } = filter.sort;
+
+        if (!value || !order) {
+            value = 'id';
+            order = 'asc';
+        }
 
         let sorting;
-
-        // TODO: understand why values can be undefined
-        if (!a[value] || !b[value]) {
-            throw new Error('Products values not specified');
-        }
 
         if (order === 'desc') {
             sorting = +b[value]! - +a[value]!;
@@ -187,7 +207,7 @@ export class Products extends Store {
     private initializeFilter(filter: IFilter) {
         filter.categories = filter.categories.map((item) => item.toLowerCase().trim());
         filter.brands = filter.brands.map((item) => item.toLowerCase().trim());
-        filter.search = filter.search.toLowerCase().trim();
+        filter.search = filter.search.toLowerCase();
     }
 
     private searchByPrice(filter: IFilter, el: Product) {
