@@ -10,7 +10,7 @@ export class Products extends Component implements Subscriber {
     private readonly cart: Cart;
     private readonly cartLS: CartLocalStorage;
     constructor(private big: boolean, products: ProductsModel, cart: Cart, cartLS: CartLocalStorage) {
-        super({containerTag: 'div', className: 'products col-lg-10 col-12 px-md-4'.split(' ')});
+        super({containerTag: 'div', className: 'products col-lg-9 col-12 px-md-4'.split(' ')});
         this.productsModel = products;
         this.cart = cart;
         this.cartLS = cartLS;        

@@ -6,7 +6,7 @@ export class Slider extends Component implements Subscriber {
     private readonly products: ProductsModel;
     private readonly sliderName: string;
     constructor(products: ProductsModel, sliderName: string) {
-        super({containerTag: 'div', className: ['slider', `slider-${sliderName}`]});
+        super({containerTag: 'div', className: ['slider', `slider-${sliderName}`, 'pb-3']});
         this.products = products;
         this.sliderName = sliderName.toLocaleLowerCase();
         this.subscribe(this.products);
@@ -15,7 +15,7 @@ export class Slider extends Component implements Subscriber {
     protected template(): DocumentFragment {
         const temp = document.createElement('template');
         temp.innerHTML = `
-        <div class="d-flex justify-content-center lh-base">${this.sliderName.replace(new RegExp(/(^\w{1})/), this.sliderName[0].toUpperCase())}</div>
+        <div class="slider-title d-flex justify-content-center lh-base">${this.sliderName.replace(new RegExp(/(^\w{1})/), this.sliderName[0].toUpperCase())}</div>
         <div class="d-flex justify-content-between w-100 mb-3">
             <div class="min-${this.sliderName} ${this.sliderName}">0</div>
             <div class="max-${this.sliderName} ${this.sliderName}">100</div>

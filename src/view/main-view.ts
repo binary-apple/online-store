@@ -36,7 +36,7 @@ export class MainView extends BaseView implements View {
     }
 
     public setSliderTrack() {
-        this.content.setSliderTrack();
+        // this.content.setSliderTrack();
     }
 
     public handleResizeWindow(callback: (e: Event)=> void) {
