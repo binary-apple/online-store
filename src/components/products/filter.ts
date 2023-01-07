@@ -18,8 +18,8 @@ export class Filter extends Component implements Subscriber {
     protected template(): DocumentFragment {
         const temp = document.createElement('template');
         temp.innerHTML = `
-        <div class="filter-title">${this.filterName}</div>
-        <div>${this.drawFilterList()}</div>
+        <div class="filter-title">${this.filterName.replace(new RegExp(/(^\w{1})/), this.filterName[0].toUpperCase())}</div>
+        <div class="p-1">${this.drawFilterList()}</div>
         `;
         return temp.content;
     }

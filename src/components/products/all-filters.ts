@@ -27,10 +27,6 @@ export class AllFilters extends Component {
         wrapper.append(this.defineFilterWrapper(this.brandFilter.render()));
         wrapper.append(this.defineSliders());
 
-        wrapper.childNodes.forEach((el) => { 
-            if (el instanceof HTMLElement) el.classList.add(...'col-lg-12 col-md-3 col-12 my-1'.split(' '));
-        })
-
         temp.innerHTML = wrapper.innerHTML;
 
         return temp.content;
@@ -38,7 +34,7 @@ export class AllFilters extends Component {
 
     private defineButtons(): HTMLElement {
         const buttons = document.createElement('div');
-        buttons.classList.add(...'filter-buttons col-lg-12 col-md-3 col-12 my-1 flex-wrap'.split(' '));
+        buttons.classList.add(...'filter-buttons col-lg-12 col-md-2 col-12 my-1 flex-wrap'.split(' '));
         buttons.innerHTML = `
         <div class="col-lg-6 col-12 px-1">
             <button class="reset-filters">Reset filters</button>
@@ -52,7 +48,7 @@ export class AllFilters extends Component {
 
     private defineSliders(): HTMLElement {
         const sliders = document.createElement('div');
-        sliders.classList.add(...'sliders col-lg-12 col-md-3 col-12 my-1 px-2'.split(' '));
+        sliders.classList.add(...'sliders col-lg-12 col-md-2 col-12 my-1 px-2'.split(' '));
         sliders.append(this.priceSlider.render());
         sliders.append(this.stockSlider.render());
         return sliders;
@@ -60,7 +56,7 @@ export class AllFilters extends Component {
 
     private defineFilterWrapper(filter: HTMLElement): HTMLElement {
         const filterWrapper = document.createElement('div');
-        filterWrapper.classList.add(...'col-lg-12 col-md-3 col-12 my-1 px-1'.split(' '));
+        filterWrapper.classList.add(...'col-lg-12 col-md-4 col-12 my-1 px-1'.split(' '));
         filterWrapper.append(filter);
         return filterWrapper;
     }
