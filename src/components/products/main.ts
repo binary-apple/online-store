@@ -65,4 +65,8 @@ export class MainProducts extends Component {
         this.products.handleSortInput(callback);
     }
 
+    public handleFilterClick(callback: (filterName: string, value: string, inFilter: boolean) => void) {
+        this.filters.handleFilterClick(callback);
+    }
+
 }

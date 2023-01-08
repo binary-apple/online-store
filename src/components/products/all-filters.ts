@@ -18,18 +18,15 @@ export class AllFilters extends Component {
         this.stockSlider = new Slider(filterModel, 'stock');
     }
 
-    protected template(): DocumentFragment {
-        const temp = document.createElement('template');
-
+    protected template(): DocumentFragment | HTMLElement {
         const wrapper = document.createElement('div');
+        wrapper.classList.add(...'d-flex flex-wrap w-100'.split(' '));
         wrapper.append(this.defineButtons());
         wrapper.append(this.defineFilterWrapper(this.categoryFilter.render()));
         wrapper.append(this.defineFilterWrapper(this.brandFilter.render()));
         wrapper.append(this.defineSliders());
 
-        temp.innerHTML = wrapper.innerHTML;
-
-        return temp.content;
+        return wrapper;
     }
 
     private defineButtons(): HTMLElement {
@@ -59,6 +56,11 @@ export class AllFilters extends Component {
         filterWrapper.classList.add(...'col-lg-12 col-md-4 col-12 my-1 px-1'.split(' '));
         filterWrapper.append(filter);
         return filterWrapper;
+    }
+
+    public handleFilterClick(callback: (filterName: string, value: string, inFilter: boolean) => void) {
+        this.brandFilter.handleFilterClick(callback);
+        this.categoryFilter.handleFilterClick(callback);
     }
     
 }

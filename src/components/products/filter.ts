@@ -10,18 +10,18 @@ export class Filter extends Component implements Subscriber {
     constructor(filterModel: FilterModel, filterName: string, filterMetric: FilterMetric) {
         super({containerTag: 'div', className: ['filter', `filter-${filterName}`]});
         this.filterModel = filterModel;
-        this.filterName = filterName;
+        this.filterName = filterName.toLowerCase();
         this.filterMetric = filterMetric;
         this.subscribe(this.filterModel);
     }
 
-    protected template(): DocumentFragment {
-        const temp = document.createElement('template');
+    protected template(): HTMLElement {
+        const temp = document.createElement('div');
         temp.innerHTML = `
         <div class="filter-title">${this.filterName.replace(new RegExp(/(^\w{1})/), this.filterName[0].toUpperCase())}</div>
-        <div class="p-1">${this.drawFilterList()}</div>
+        <div class="filter-options p-1">${this.drawFilterList()}</div>
         `;
-        return temp.content;
+        return temp;
     }
 
     private drawFilterList() {
@@ -29,7 +29,7 @@ export class Filter extends Component implements Subscriber {
         for (const key in this.filterMetric) {
             this.filterMetric[key] 
             res.push(`
-            <div class="filter-item">
+            <div class="filter-item" data-filter-opt="${key}">
                 <input type="checkbox" id="${key}" class="default-check">
                 <div class="custom-check"></div>
                 <label for="${key}">${key}</label>
@@ -40,6 +40,23 @@ export class Filter extends Component implements Subscriber {
         return res.join('');
     }
 
+    public handleFilterClick(callback: (filterName: string, value: string, inFilter: boolean) => void) {
+        const filterOptions = this.container.querySelector('.filter-options');
+        if (!filterOptions) throw new Error('No filter items');
+        filterOptions.addEventListener('click', (e: Event) => {
+            const target = e.target;
+
+            if (target instanceof HTMLInputElement) {
+                callback(this.filterName, target.id, target.checked);
+            }
+        })
+    }
+
+    private setFilter(): void {
+        // TODO: set filter depending on filter
+    }
+
     update(): void {
+        this.setFilter();
     }
 }

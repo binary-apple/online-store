@@ -218,9 +218,6 @@ export class Products extends Component implements Subscriber {
         const foundEl = this.container.querySelector('.found-cnt');
         if (!foundEl) return;
         foundEl.innerHTML = `${this.productsModel.get().length}`;
-/*         if (this.productsModel.get().length === 0) {
-
-        } */
     }
 
     public handleSearchInput(callback: (value: string) => void) {
