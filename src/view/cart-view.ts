@@ -95,12 +95,8 @@ class CartView extends BaseView implements View {
         this.content.cartNavigation.selectAllChangeHandler();
     }
 
-    public makeOrder(callback: (products: Array<Product>) => void) {
-        this.content.makeOrder(callback);
-    }
-
-    public orderFromClickToButton(callback: (products: Array<Product>) => void) {
-        this.content.orderFromClickToButton(callback);
+    public makeOrder(callback: (products: Array<Product>) => void, redirect: () => void, auto?: boolean) {
+        this.content.makeOrder(callback, redirect, auto);
     }
 
     public setPersonInfo() {

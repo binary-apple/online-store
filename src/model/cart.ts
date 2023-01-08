@@ -151,15 +151,15 @@ export class Cart extends Store {
         }
     }
 
-    isProductInCart(id: number) {
+    public isProductInCart(id: number) {
         return this.productsInCart.find((product) => product.id === id) ? true : false;
     }
 
-    getCart() {
+    public getCart() {
         return { productsInCart: this.productsInCart, promoList: this.promoList, totalDisc: this.totalDisc };
     }
 
-    setCart({
+    public setCart({
         productsInCart,
         promoList,
         totalDisc,
@@ -263,5 +263,10 @@ export class Cart extends Store {
 
     public orderModalIsOpen() {
         return this.openModalPage;
+    }
+
+    public empty() {
+        this.productsInCart.length = 0;
+        this.notify();
     }
 }

@@ -4,11 +4,12 @@ import CartTotalBoard from './cart-total-board';
 import { Product } from '../../model/types/product';
 import { Cart } from '../../model/cart';
 import CartNavigation from './cart-navigation';
-import OrderModal from '../markup/orderModal.html';
+const OrderModal = require('../markup/orderModal.html');
 import { Modal } from 'bootstrap';
 import FormStore from '../../model/form';
-import { ValidationError } from '../types/validation-error';
-import { IFieldForm } from '../../model/types/form';
+import masterCard from '../../assets/img/mastercard.svg';
+import visa from '../../assets/img/visa.svg';
+import bitcoin from '../../assets/img/bitcoin.svg';
 
 const counterTemplate = require('./component/counter.html');
 const contentTemplate = require('./component/content.html');
@@ -21,7 +22,9 @@ class CartContent extends Component {
     cartNavigation: CartNavigation;
     form: FormStore;
     order: unknown;
-    orderEvents = [] as Array<number>;
+    orderEvents = false;
+    openModalOrder = false;
+    modals = [] as Array<Modal>;
 
     constructor(cart: Cart) {
         super({ containerTag: 'section', className: ['cart-content'] });
@@ -32,43 +35,82 @@ class CartContent extends Component {
         this.cartNavigation = new CartNavigation(this.cart);
 
         this.order = {
-            firstname: {
+            name: {
                 value: '',
                 validation: {
                     required: true,
-                    valueType: 'string',
+                    valueType: 'name',
+                    wordCount: 2,
+                    wordLength: 3,
                 },
                 isValid: false,
                 isDirty: false,
+                isBackward: false,
             },
-            lastname: {
+            phone: {
                 value: '',
                 validation: {
                     required: true,
-                    valueType: 'string',
+                    valueType: 'phone',
+                    minLength: 10,
                 },
                 isValid: false,
                 isDirty: false,
+                isBackward: false,
             },
             address: {
                 value: '',
                 validation: {
                     required: true,
-                    valueType: 'any',
-                    minLength: 5,
+                    valueType: 'address',
+                    wordCount: 3,
+                    wordLength: 5,
                 },
                 isValid: false,
                 isDirty: false,
+                isBackward: false,
+            },
+            email: {
+                value: '',
+                validation: {
+                    required: true,
+                    valueType: 'email',
+                },
+                isValid: false,
+                isDirty: false,
+                isBackward: false,
             },
             card: {
                 value: '',
                 validation: {
                     required: true,
                     valueType: 'number',
-                    maxLength: 16,
+                    length: 16,
                 },
                 isValid: false,
                 isDirty: false,
+                isBackward: false,
+            },
+            cardDate: {
+                value: '',
+                validation: {
+                    required: true,
+                    valueType: 'cardDate',
+                },
+                isValid: false,
+                isDirty: false,
+                isBackward: false,
+            },
+            cvv: {
+                value: '',
+                validation: {
+                    required: true,
+                    valueType: 'number',
+                    length: 3,
+                },
+                isValid: false,
+                isDirty: false,
+                isBackward: false,
             },
         };
 
@@ -78,24 +120,59 @@ class CartContent extends Component {
         this.subscribe(this.form);
     }
 
-    public makeOrder(callback: (products: Array<Product>) => void) {
+    public makeOrder(callback: (products: Array<Product>) => void, redirect: () => void, auto = false) {
         const modalOrder = document.querySelector('.order-modal');
 
         if (modalOrder) {
-            const modal = new Modal(modalOrder);
+            if (!this.modals.length) {
+                const modal = new Modal(modalOrder);
+                this.modals.push(modal);
+            }
 
-            modal.show();
+            if (auto) {
+                this.modals[0].show();
+            }
 
-            const makeOrderBtn = document.querySelector('.cart-order-modal__confirm');
+            const orderModalOpen = document.querySelector('.cart-board__btn');
 
-            if (makeOrderBtn) {
-                if (this.orderEvents.length === 0) {
-                    this.orderEvents.push(1);
+            if (orderModalOpen && !this.openModalOrder) {
+                this.openModalOrder = true;
 
+                orderModalOpen.addEventListener('click', () => {
+                    this.modals[0].show();
+                });
+
+                const makeOrderBtn = document.querySelector('.cart-order-modal__confirm');
+
+                if (makeOrderBtn) {
                     makeOrderBtn.addEventListener('click', () => {
-                        callback(this.cart.getOrder());
+                        const order = this.cart.getOrder().length ? [...this.cart.getOrder()] : [...this.cart.get()];
+                        this.cart.emptyOrderArray();
 
-                        modal.hide();
+                        callback(order);
+
+                        this.modals[0].hide();
+                        const success = document.querySelector('.modal-order-success');
+
+                        if (success) {
+                            const successModal = new Modal(success);
+
+                            successModal.show();
+
+                            setTimeout(() => {
+                                successModal.hide();
+                            }, 3000);
+
+                            success.addEventListener('hidden.bs.modal', () => {
+                                redirect();
+                            });
+                        }
+                    });
+                }
+
+                if (this.modals[0]) {
+                    modalOrder.addEventListener('hidden.bs.modal', () => {
+                        this.form.reset();
                     });
                 }
             }
@@ -103,54 +180,60 @@ class CartContent extends Component {
     }
 
     public setPersonInfo() {
-        const firstName = document.querySelector('.order-firstname__value');
+        if (!this.orderEvents) {
+            this.orderEvents = true;
 
-        if (firstName) {
-            firstName.addEventListener('input', (e) => {
-                this.form.set('firstname', e);
-            });
-        }
-
-        const lastName = document.querySelector('.order-lastname__value');
-
-        if (lastName) {
-            lastName.addEventListener('input', (e) => {
-                this.form.set('lastname', e);
-            });
-        }
-
-        const address = document.querySelector('.order-address__value');
-
-        if (address) {
-            address.addEventListener('input', (e: Event) => {
-                this.form.set('address', e);
-            });
-        }
-
-        const cardNumber = document.querySelector('.order-cart-number__value');
-
-        if (cardNumber) {
-            cardNumber.addEventListener('input', (e: Event) => {
-                this.form.set('card', e);
+            this.getOrderInputs().forEach((item) => {
+                if (item.input) {
+                    item.input.addEventListener('input', (e) => {
+                        this.form.set(item.name, e);
+                    });
+                }
             });
         }
     }
 
-    public orderFromClickToButton(callback: (products: Array<Product>) => void) {
-        const orderButton = document.querySelector('.cart-board__btn');
+    private getOrderInputs() {
+        const name = document.querySelector('.order-name__value') as HTMLInputElement;
+        const phone = document.querySelector('.order-phone__value') as HTMLInputElement;
+        const email = document.querySelector('.order-email__value') as HTMLInputElement;
+        const cvv = document.querySelector('.order-cvv__value') as HTMLInputElement;
+        const cardDate = document.querySelector('.order-cardDate__value') as HTMLInputElement;
+        const address = document.querySelector('.order-address__value') as HTMLInputElement;
+        const cardNumber = document.querySelector('.order-card__value') as HTMLInputElement;
 
-        if (orderButton) {
-            this.cart.emptyOrderArray();
+        const orderInputs = [
+            {
+                name: 'name',
+                input: name,
+            },
+            {
+                name: 'phone',
+                input: phone,
+            },
+            {
+                name: 'address',
+                input: address,
+            },
+            {
+                name: 'email',
+                input: email,
+            },
+            {
+                name: 'cvv',
+                input: cvv,
+            },
+            {
+                name: 'cardDate',
+                input: cardDate,
+            },
+            {
+                name: 'card',
+                input: cardNumber,
+            },
+        ];
 
-            this.cart.get().forEach((item) => {
-                this.cart.addToOrder(item);
-            });
-
-            const cb = callback.bind(this, this.cart.getOrder());
-
-            const makeOrder = this.makeOrder.bind(this, cb);
-            orderButton.addEventListener('click', makeOrder);
-        }
+        return orderInputs;
     }
 
     protected template() {
@@ -167,8 +250,9 @@ class CartContent extends Component {
         const total = this.cartTotal.getTemplate();
         const navigation = this.cartNavigation.getTemplate();
         const contentIsHide = this.cart.getTotalCount() === 0 ? 'hide' : '';
+        const orderMakeModal = OrderModal(this.order);
 
-        return contentTemplate({ counter, contentIsHide, products, total, navigation });
+        return contentTemplate({ counter, contentIsHide, products, total, navigation, orderMakeModal });
     }
 
     private cartCounter() {
@@ -178,55 +262,14 @@ class CartContent extends Component {
         return cartNoEmpty ? counterTemplate({ counter }) : '';
     }
 
-    checkValidateError(errorObj: ValidationError) {
-        const { input, fieldname, field, checkname } = errorObj;
+    private addIcon(img: HTMLElement) {
+        const iconPay = document.querySelector('.order-card__icon');
 
-        const parent = input.parentNode as HTMLElement;
-
-        if (parent) {
-            checkname.forEach((item) => {
-                if (item === 'valueType') {
-                    this.fieldNotType(field, parent, fieldname);
-                } else if (item === 'required') {
-                    this.isRequired(field, parent, fieldname);
-                }
-            });
-        }
-    }
-
-    fieldNotType(field: IFieldForm, parent: HTMLElement, fieldname: string) {
-        const validateError = document.createElement('p');
-        validateError.classList.add('validate-error');
-
-        const error = parent.querySelector('.validate-error');
-
-        if (field.notType) {
-            validateError.innerText = `${fieldname} is ${field.validation.valueType} type`;
-
-            if (!error) {
-                parent.append(validateError);
-            } else {
-                error.remove();
-                parent.append(validateError);
-            }
-        }
-    }
-
-    isRequired(field: IFieldForm, parent: HTMLElement, fieldname: string) {
-        const validateError = document.createElement('p');
-        validateError.classList.add('validate-error');
-
-        const error = parent.querySelector('.validate-error');
-
-        if (!field.value.length) {
-            validateError.innerText = `${fieldname} is required`;
-
-            if (error) {
-                //     error.remove();
-                //     parent.append(validateError);
-            } else {
-                //     parent.append(validateError);
-            }
+        if (iconPay) {
+            img.onload = () => {
+                iconPay.innerHTML = '';
+                iconPay.append(img);
+            };
         }
     }
 
@@ -241,76 +284,43 @@ class CartContent extends Component {
                 title.insertAdjacentHTML('beforeend', this.cartCounter());
             }
         }
-
         const order = this.form.get();
 
-        const firstName = document.querySelector('.order-firstname__value') as HTMLInputElement;
+        const orderInputs = this.getOrderInputs();
 
-        if (firstName) {
-            firstName.value = order.firstname.value as string;
+        const img = document.createElement('img');
 
-            if (order.firstname.isDirty) {
-                const errorObj = {
-                    input: firstName,
-                    fieldname: 'Firstname',
-                    field: order.firstname,
-                    checkname: Object.keys(order.firstname.validation),
-                };
-
-                this.checkValidateError(errorObj);
-            }
+        if (order.card.value.startsWith('4')) {
+            img.setAttribute('src', visa);
+        } else if (order.card.value.startsWith('5')) {
+            img.setAttribute('src', masterCard);
+        } else {
+            img.setAttribute('src', bitcoin);
         }
 
-        const lastName = document.querySelector('.order-lastname__value') as HTMLInputElement;
+        this.addIcon(img);
 
-        if (lastName) {
-            lastName.value = order.lastname.value as string;
+        orderInputs.forEach((item) => {
+            item.input.value = order[item.name].value as string;
 
-            if (order.lastname.isDirty) {
-                const errorObj = {
-                    input: lastName,
-                    fieldname: 'Lastname',
-                    field: order.lastname,
-                    checkname: Object.keys(order.lastname.validation),
-                };
+            const hasErrors = order[item.name].errors?.length;
 
-                this.checkValidateError(errorObj);
+            if (hasErrors) {
+                const errorTemp = item.input.parentNode?.querySelector('.validate-error');
+
+                if (errorTemp) {
+                    errorTemp.remove();
+                }
+
+                const error = document.createElement('p');
+                error.classList.add('validate-error');
+                error.innerText = (order[item.name].errors as Array<string>)[0] as string;
+
+                item.input.parentNode?.append(error);
+            } else {
+                item.input.parentNode?.querySelector('.validate-error')?.remove();
             }
-        }
-
-        const address = document.querySelector('.order-address__value') as HTMLInputElement;
-
-        if (address) {
-            address.value = order.address.value as string;
-
-            if (order.address.isDirty) {
-                const errorObj = {
-                    input: address,
-                    fieldname: 'Address',
-                    field: order.address,
-                    checkname: Object.keys(order.address.validation),
-                };
-
-                this.checkValidateError(errorObj);
-            }
-        }
-
-        const cardNumber = document.querySelector('.order-cart-number__value') as HTMLInputElement;
-
-        if (cardNumber) {
-            cardNumber.value = order.card.value as string;
-
-            if (order.card.isDirty) {
-                const errorObj = {
-                    input: cardNumber,
-                    fieldname: 'Card',
-                    field: order.card,
-                    checkname: Object.keys(order.address.validation),
-                };
-
-                this.checkValidateError(errorObj);
-            }
-        }
+        });
 
         const makeOrderBtn = document.querySelector('.cart-order-modal__confirm');
 

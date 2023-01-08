@@ -15,21 +15,21 @@
                 <div class="modal-body">
                     <div class="order__person d-flex">
                         <div class="order__firstname">
-                            <span class="order__field">Firstname *</span>
+                            <span class="order__field">Name *</span>
                             <input
-                                class="order-firstname__value"
-                                value="{{firstname.value}}"
+                                class="order-name__value"
+                                value="{{name.value}}"
                                 type="text"
-                                placeholder="Enter firstname"
+                                placeholder="Enter your name"
                             />
                         </div>
                         <div class="order__firstname">
-                            <span class="order__field">Lastname *</span>
+                            <span class="order__field">Phone *</span>
                             <input
-                                value="{{lastname.value}}"
-                                class="order-lastname__value"
+                                class="order-phone__value"
+                                value="{{phone.value}}"
                                 type="text"
-                                placeholder="Enter lastname"
+                                placeholder="Enter your phone"
                             />
                         </div>
                     </div>
@@ -41,20 +41,58 @@
                                     value="{{card.value}}"
                                     class="order-address__value"
                                     type="text"
-                                    placeholder="Enter address"
+                                    placeholder="Enter your address"
                                 />
                             </div>
                         </div>
-                        <div class="order__cart-number w-50">
-                            <span class="order__field">Card number *</span>
+                        <div class="order__firstname">
+                            <span class="order__field">Email *</span>
+                            <input
+                                class="order-email__value"
+                                value="{{email.value}}"
+                                type="text"
+                                placeholder="Enter your email"
+                            />
+                        </div>
+                    </div>
+                    <div class="d-flex order-card flex-column">
+                        <div class="order__cart-number order-card__title">
                             <div>
                                 <input
                                     value="{{card.value}}"
-                                    class="order-cart-number__value"
+                                    class="order-card__value order-card__input order-card__input--number"
                                     type="text"
-                                    placeholder="Enter cart number"
+                                    placeholder="0000 0000 0000 0000"
                                 />
                             </div>
+                        </div>
+                        <div class="d-flex w-100 order-card__info justify-content__between">
+                            <div class="d-flex">
+                                <div class="order-card__number">
+                                    <span class="order__field">Date</span>
+                                    <div>
+                                        <input
+                                            value="{{cardDate.value}}"
+                                            class="order-card__input order-cardDate__value w-100"
+                                            type="text"
+                                            placeholder="12/22"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="order-card__cvv">
+                                    <span class="order__field">CVV</span>
+                                    <div>
+                                        <input
+                                            value="{{cvv.value}}"
+                                            class="order-card__input order-cvv__value w-100"
+                                            type="text"
+                                            placeholder="123"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="order-card__icon"></div>
                         </div>
                     </div>
                 </div>

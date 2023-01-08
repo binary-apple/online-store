@@ -2,7 +2,10 @@ interface IValidation {
     required: true;
     valueType: string;
     maxLength: number;
+    length: number;
     minLength: number;
+    wordCount: number;
+    wordLength: number;
 }
 
 export interface IFieldForm {
@@ -12,6 +15,7 @@ export interface IFieldForm {
     isDirty: boolean;
     notType: boolean;
     isBackward: boolean;
+    errors?: Array<string>;
 }
 
 export interface ValidationObject {

@@ -5,6 +5,8 @@ import CartLocalStorage from '../../model/cart-local-storage';
 import { HashRouter } from '../../router/router';
 import { ICartPagination } from '../../model/types/cart';
 import { CartName } from '../../model/types/cart';
+import { IRouter } from '../../router/types/router';
+import { Product } from '../../model/types/product';
 
 class CartController extends Controller {
     cart: Cart;
@@ -154,14 +156,20 @@ class CartController extends Controller {
             this.cartLS.set(this.cart.get());
         });
 
-        cartView.orderFromClickToButton((products: Array<Product>) => {
-            products.forEach((item) => {
-                this.cart.removeProductFromCart(item.id);
-            });
+        cartView.makeOrder(
+            (products: Array<Product>) => {
+                products.forEach((item) => {
+                    this.cart.removeProductFromCart(item.id);
+                });
 
-            this.cart.emptyOrderArray();
-            this.cartLS.set(this.cart.get());
-        });
+                this.cart.emptyOrderArray();
+                this.cartLS.set(this.cart.get());
+            },
+            () => {
+                this.router.navigateTo('/');
+            },
+            false
+        );
 
         this.checkRedirectFromProduct(cartView);
     }
@@ -207,14 +215,20 @@ class CartController extends Controller {
                 this.cart.emptyOrderArray();
                 this.cart.addToOrder(pageState.product);
 
-                cartView.makeOrder((products: Array<Product>) => {
-                    products.forEach((item) => {
-                        this.cart.removeProductFromCart(item.id);
-                    });
+                cartView.makeOrder(
+                    (products: Array<Product>) => {
+                        products.forEach((item) => {
+                            this.cart.removeProductFromCart(item.id);
+                        });
 
-                    this.cart.emptyOrderArray();
-                    this.cartLS.set(this.cart.get());
-                });
+                        this.cart.emptyOrderArray();
+                        this.cartLS.set(this.cart.get());
+                    },
+                    () => {
+                        this.router.navigateTo('/');
+                    },
+                    true
+                );
 
                 page.state = null;
             }

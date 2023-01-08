@@ -7,10 +7,25 @@ class FormStore extends Store {
     constructor(form: unknown) {
         super();
 
-        this.form = form as ValidationObject;
+        this.form = Object.fromEntries(
+            Object.entries(form as ValidationObject).map((item) => {
+                item[1].errors = [];
+
+                return item;
+            })
+        );
+    }
+
+    public reset() {
+        for (const key in this.form) {
+            this.form[key].value = '';
+        }
+
+        this.notify();
     }
 
     public set(key: string, e: Event) {
+        const inputEvent = e as unknown as InputEvent;
         const inputTarget = e.target as HTMLInputElement;
         const { value } = inputTarget;
         const field = this.form[key] as IFieldForm;
@@ -18,7 +33,7 @@ class FormStore extends Store {
         this.checkBackward(field, e);
         this.checkType(field, e);
 
-        const [isValid, validValue] = this.validate(field, value);
+        const [isValid, validValue] = this.validate(field, value, inputEvent);
 
         this.form[key].isValid = isValid;
         this.form[key].value = validValue;
@@ -27,7 +42,7 @@ class FormStore extends Store {
         this.notify();
     }
 
-    checkBackward(field: IFieldForm, e: Event) {
+    public checkBackward(field: IFieldForm, e: Event) {
         const inputEvent = e as InputEvent;
 
         const { inputType } = inputEvent;
@@ -41,7 +56,7 @@ class FormStore extends Store {
         }
     }
 
-    checkType(field: IFieldForm, e: Event) {
+    public checkType(field: IFieldForm, e: Event) {
         const inputEvent = e as InputEvent;
 
         const { data } = inputEvent;
@@ -75,9 +90,9 @@ class FormStore extends Store {
         return this.form;
     }
 
-    public validate(field: IFieldForm, value: string) {
+    public validate(field: IFieldForm, value: string, e: InputEvent) {
         const validations = Object.entries(field.validation);
-        let validValue = field.value ? field.value.trim() : '';
+        let validValue = value;
 
         let isValid = field.isValid;
 
@@ -86,10 +101,18 @@ class FormStore extends Store {
 
             switch (name) {
                 case 'required': {
-                    if (!validValue) {
+                    const index = field.errors?.indexOf('Field is required') as number;
+                    field.value = value;
+
+                    if (!field.value) {
                         isValid = false;
+
+                        if (index === -1) {
+                            field.errors?.push('Field is required');
+                        }
                     } else {
                         isValid = true;
+                        (field.errors as Array<string>).length = 0;
                     }
 
                     break;
@@ -98,27 +121,54 @@ class FormStore extends Store {
                     const [, type] = item;
 
                     if (type === 'string') {
-                        validValue = this.lettersOnly(value);
+                        const [valueField, validFlag] = this.lettersOnly(validValue, field, e);
+                        validValue = valueField as string;
+                        isValid = validFlag as boolean;
                     } else if (type === 'number') {
-                        validValue = this.numbersOnly(value);
+                        const [valueField, validFlag] = this.numbersOnly(validValue, field, e);
+                        validValue = valueField as string;
+                        isValid = validFlag as boolean;
+                    } else if (type === 'name') {
+                        const [valueField, validFlag] = this.separateString(validValue, field, e);
+
+                        validValue = valueField as string;
+                        isValid = validFlag as boolean;
+                    } else if (type === 'cardDate') {
+                        const [valueField, validFlag] = this.cardDate(validValue, field, e);
+
+                        validValue = valueField as string;
+                        isValid = validFlag as boolean;
+                    } else if (type === 'phone') {
+                        const [valueField, validFlag] = this.phone(validValue, field, e);
+
+                        validValue = valueField as string;
+                        isValid = validFlag as boolean;
+                    } else if (type === 'address') {
+                        const [valueField, validFlag] = this.separateString(validValue, field, e);
+
+                        validValue = valueField as string;
+                        isValid = validFlag as boolean;
+                    } else if (type === 'email') {
+                        const [valueField, validFlag] = this.email(validValue, field);
+
+                        validValue = valueField as string;
+                        isValid = validFlag as boolean;
                     } else {
                         validValue = value;
                     }
 
                     break;
                 }
-                case 'maxLength': {
-                    validValue = this.maxLength(validValue, field.validation.maxLength as number);
+                case 'length': {
+                    const [valueField, validFlag] = this.length(validValue, field.validation.length as number, field);
+                    validValue = valueField as string;
+                    isValid = validFlag as boolean;
                     break;
                 }
                 case 'minLength': {
-                    const minLength = field.validation.minLength as number;
-
-                    if (validValue.length < minLength) {
-                        isValid = false;
-                    } else {
-                        isValid = true;
-                    }
+                    const [valueField, validFlag] = this.minLength(validValue, field);
+                    validValue = valueField as string;
+                    isValid = validFlag as boolean;
                     break;
                 }
             }
@@ -135,52 +185,243 @@ class FormStore extends Store {
         return isValid;
     }
 
-    private lettersOnly(value: string) {
+    separateString(value: string, field: IFieldForm, e: InputEvent) {
+        let isValid = true;
+
+        const words = value
+            .trim()
+            .split(' ')
+            .filter((el) => el);
+
+        if (words.length > field.validation.wordCount! - 1) {
+            const name = words.every((el) => el.length > field.validation.wordLength! - 1);
+
+            if (!name) {
+                field.errors?.push(`Every word in name should consist of ${field.validation.wordLength} letters`);
+                isValid = false;
+            } else {
+                (field.errors as Array<string>).length = 0;
+                isValid = true;
+            }
+        } else {
+            field.errors?.push(`Name should consist of ${field.validation.wordCount} words`);
+            isValid = false;
+        }
+
+        const isLetters = this.lettersOnly(field.value, field, e);
+
+        return [isLetters[0], isValid];
+    }
+
+    email(value: string, field: IFieldForm) {
+        let isValid = false;
+
+        const existAt = value.indexOf('@');
+        const existDot = value.lastIndexOf('.');
+
+        if (existAt > -1 && existDot > -1 && existAt < existDot && !value.endsWith('.')) {
+            isValid = true;
+            (field.errors as Array<string>).length = 0;
+        } else {
+            field.errors?.push('Format email is: username@mail.ru');
+            isValid = false;
+        }
+
+        return [value, isValid];
+    }
+
+    cardDate(value: string, field: IFieldForm, e: InputEvent) {
+        let isValid = true;
+        let validValue = value;
+
+        const hasSlash = validValue.indexOf('/') > -1;
+
+        if (validValue.length === 2 && +validValue > 12) {
+            validValue = '12';
+        }
+
+        if (validValue.length === 2 && !hasSlash && !field.isBackward) {
+            validValue = validValue + '/';
+        }
+
+        const date = validValue.split('/').slice(0, 2);
+
+        if (date.length === 2) {
+            let month = this.numbersOnly(date[0], field, e)[0] as string;
+            let year = this.numbersOnly(date[1], field, e)[0] as string;
+
+            if (year.length > 2) {
+                year = year.slice(0, 2);
+            }
+
+            if (month.length > 2) {
+                month = month.slice(0, 2);
+            }
+
+            if (+month > 12) {
+                month = '12';
+            }
+
+            const dateString = month + '/' + year;
+
+            return [dateString, isValid];
+        } else if (date.length === 1) {
+            const valueField = this.numbersOnly(validValue, field, e);
+            isValid = false;
+
+            return [valueField[0], isValid];
+        } else {
+            isValid = false;
+        }
+
+        return [validValue, isValid];
+    }
+
+    phone(value: string, field: IFieldForm, e: InputEvent) {
+        let isValid = true;
+        let validValue = value;
+
+        if (validValue.startsWith('+')) {
+            const valid = validValue.slice(1, validValue.length);
+            const [numbers, isValidation] = this.numbersOnly(valid, field, e);
+            isValid = isValidation;
+            const [valueFiled, isRight] = this.minLength(numbers, field);
+            isValid = isRight;
+            validValue = '+' + valueFiled;
+        } else {
+            field.errors?.push('Phone should start with +');
+            isValid = false;
+        }
+
+        return [validValue, isValid];
+    }
+
+    private minLength(value: string, field: IFieldForm) {
+        let isValid = false;
+
+        const minLength = field.validation.minLength as number;
+
+        const indexError = field.errors?.indexOf('The field must contain at least ${minLength} characters') as number;
+
+        if (value.length < minLength) {
+            isValid = false;
+
+            field.errors?.push(`The field must contain at least ${minLength} characters`);
+        } else {
+            if (indexError > -1) {
+                (field.errors as Array<string>).splice(indexError, 1);
+            }
+            isValid = true;
+        }
+
+        return [value, isValid] as [string, boolean];
+    }
+
+    private lettersOnly(value: string, field: IFieldForm, e: InputEvent) {
         const isString = value.match(/[A-Za-z]|-| /g);
 
         let validValue;
+        let isValid = true;
+
+        const indexError = field.errors?.indexOf('Field should contain only letters') as number;
 
         if (isString) {
             if (isString.length !== value.length) {
-                validValue = value.slice(0, value.length - 1);
+                if (indexError === -1) {
+                    (field.errors as Array<string>).length = 0;
+                    field.errors?.push('Field should contain only letters');
+                }
+                const indexChar = value.indexOf(e.data as string, 0) as number;
+
+                validValue = value.slice(0, indexChar) + value.slice(indexChar + 1);
+                isValid = false;
             } else {
+                if (indexError >= 0) {
+                    (field.errors as Array<string>).length = 0;
+                }
+
                 validValue = value;
+                isValid = true;
             }
         } else {
+            if (indexError === -1 && !field.isBackward) {
+                (field.errors as Array<string>).length = 0;
+                field.errors?.push('Field should contain only letters');
+            }
+
+            if (indexError > -1 && field.isBackward) {
+                (field.errors as Array<string>).splice(indexError, 1);
+            }
+
+            isValid = false;
             validValue = '';
         }
 
-        return validValue;
+        return [validValue, isValid] as [string, boolean];
     }
 
-    private numbersOnly(value: string) {
+    private numbersOnly(value: string, field: IFieldForm, e: InputEvent) {
         const isNumber = value.match(/[0-9]/g);
 
         let validValue = '';
+        let isValid = true;
 
-        if (!isNumber || !value) {
-            return '';
-        }
+        const indexError = field.errors?.indexOf('Field should contain only numbers') as number;
 
-        if (isNumber.length !== value.length) {
-            validValue = value.slice(0, value.length - 1);
+        if (isNumber?.length !== value.length) {
+            if (indexError === -1 && !field.isBackward) {
+                (field.errors as Array<string>).length = 0;
+                field.errors?.push('Field should contain only numbers');
+            }
+
+            const indexChar = value.indexOf(e.data as string, 0) as number;
+
+            validValue = value.slice(0, indexChar) + value.slice(indexChar + 1);
+            isValid = false;
         } else {
+            (field.errors as Array<string>).length = 0;
+
             validValue = value;
+            isValid = true;
         }
 
-        return validValue;
+        return [validValue, isValid] as [string, boolean];
     }
 
-    private maxLength(value: string, maxLength: number) {
-        let validValue = '';
+    private length(value: string, length: number, field: IFieldForm) {
+        let isValid = true;
 
-        if (value.length > maxLength) {
-            validValue = value.slice(0, maxLength);
-        } else {
-            validValue = value;
+        const indexError = field.errors?.indexOf(`The number of characters must be ${length}`);
+
+        if (value.length - 1 === length && !field.isBackward) {
+            isValid = true;
+            (field.errors as Array<string>).length = 0;
+            field.value = value.slice(0, value.length - 1);
         }
 
-        return validValue;
+        if (!field.isBackward) {
+            if (field.value.length !== length) {
+                if (value.length > length) {
+                    field.value = value.slice(0, length);
+                    isValid = true;
+                } else {
+                    field.value = value;
+                    isValid = false;
+                }
+
+                if (indexError === -1) {
+                    field.errors?.push(`The number of characters must be ${length}`);
+                }
+            }
+        } else {
+            field.value = value;
+
+            if (indexError === -1) {
+                field.errors?.push(`The number of characters must be ${length}`);
+            }
+        }
+
+        return [field.value, isValid] as [string, boolean];
     }
 }
 
