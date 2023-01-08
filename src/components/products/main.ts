@@ -42,7 +42,7 @@ export class MainProducts extends Component {
     public handleCopyLinkClick(callback: () => void) {
         const copyLink = this.container.querySelector('.copy-link');
         if (!copyLink || !(copyLink instanceof HTMLElement)) throw new Error('No copy-link button');
-        copyLink.addEventListener('click', (e: Event) => {
+        copyLink.addEventListener('click', () => {
             callback();
             copyLink.innerHTML = 'Copied!';
             setTimeout(() => { copyLink.innerHTML = 'Copy link'; }, 600);
@@ -52,7 +52,7 @@ export class MainProducts extends Component {
     public handleResetFiltersClick(callback: () => void) {
         const reset = this.container.querySelector('.reset-filters');
         if (!reset || !(reset instanceof HTMLElement)) throw new Error('No reset-filters button');
-        reset.addEventListener('click', (e: Event) => {
+        reset.addEventListener('click', () => {
             callback();
         })
     }

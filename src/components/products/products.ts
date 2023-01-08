@@ -57,7 +57,7 @@ export class Products extends Component implements Subscriber {
         if (!prodsWrapper) throw new Error('Products Wrapper not exist');
         prodsWrapper.innerHTML = '';
         this.productsModel.get().forEach((el) => {
-            let productItem = document.createElement('div');
+            const productItem = document.createElement('div');
             productItem.classList.add(...`${this.big ? 'big-scale col-12' : 'small-scale col-md-4 col-6'} py-2 px-1`.trim().split(' '));
             productItem.innerHTML =`
             <a href='/product/${el.id}' class="product-item px-2 ${this.cart.isProductInCart(el.id) ? 'in-cart' : ''}" data-idproduct=${el.id}>
@@ -83,7 +83,7 @@ export class Products extends Component implements Subscriber {
         })
     }
 
-    private drawViewIcon(big: boolean = true) {
+    private drawViewIcon(big: boolean) {
         if (!big) {
             return `
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -215,8 +215,7 @@ export class Products extends Component implements Subscriber {
     public handleSearchInput(callback: (value: string) => void) {
         const search = this.container.querySelector('.search-input');
         if (!search || !(search instanceof HTMLInputElement)) throw new Error('No searching form');
-        search.addEventListener('input', (e) => {
-            console.log(search.value);
+        search.addEventListener('input', () => {
             callback(search.value);
         })
     }
@@ -224,7 +223,7 @@ export class Products extends Component implements Subscriber {
     public handleSortInput(callback: (value: string) => void) {
         const sort = this.container.querySelector('#sort');
         if (!sort || !(sort instanceof HTMLSelectElement)) throw new Error('No sorting form');
-        sort.addEventListener('input', (e) => {
+        sort.addEventListener('input', () => {
             callback(sort.value);
         })
     }

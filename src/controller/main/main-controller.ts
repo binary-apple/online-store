@@ -7,7 +7,6 @@ import { products } from '../../model/productItems';
 import { HashRouter } from '../../router/router';
 import CartLocalStorage from '../../model/cart-local-storage';
 import { CartName } from '../../model/types/cart';
-import { Router } from 'express';
 import Filter from '../../model/products/filter';
 import { IFilter } from '../../model/types/filter';
 
@@ -55,19 +54,19 @@ class MainController extends Controller {
         this.view.handleSortInput(this.handleSortInput.bind(this));
     }
 
-    private handleClickToCartIcon(e: Event) {
+    private handleClickToCartIcon() {
         this.router.navigateTo(Routers.CART);
     }
 
-    private handleClickToLogoIcon(e: Event) {
+    private handleClickToLogoIcon() {
         this.router.navigateTo(Routers.MAIN);
     }
 
-    private handleSliderInput(e: Event) {
+    private handleSliderInput() {
         this.view.setSliderTrack();
     }
 
-    private handleResizeWindow(e: Event) {
+    private handleResizeWindow() {
         this.view.setSliderTrack();
     }
 
@@ -130,7 +129,6 @@ class MainController extends Controller {
             this.filter.setFilter({ sort: {order: valueArr[1], value: valueArr[0]} });
             this.products.filter(this.filter.get());
         }
-        console.log(JSON.stringify(this.filter.get()));
     }
 
 }
