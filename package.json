@@ -59,7 +59,7 @@
         "webpack-merge": "^5.8.0"
     },
     "dependencies": {
-        "mustache": "^4.2.0",
+        "mustache": "3.0",
         "vanilla-router": "^1.2.8"
     }
 }

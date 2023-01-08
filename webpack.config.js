@@ -37,7 +37,7 @@ const baseConfig = {
                 type: 'asset/resource',
                 resourceQuery: '',
                 generator: {
-                    filename: 'assets/[name][ext]',
+                    filename: './assets/[name][ext]',
                 },
             },
             {
@@ -46,11 +46,11 @@ const baseConfig = {
                 type: 'asset/source',
             },
             {
-                test: /\.(woff(2)?|eot|ttf|otf|svg)$/,
+                test: /\.(woff(2)?|eot|ttf|otf)$/,
                 type: 'asset/resource',
                 resourceQuery: '',
                 generator: {
-                    filename: 'fonts/[name][ext]',
+                    filename: './fonts/[name][ext]',
                 },
             },
             {
@@ -70,8 +70,7 @@ const baseConfig = {
                 ],
             },
             {
-                test: /\.html$/i,
-                resourceQuery: '',
+                test: /\.html$/,
                 loader: 'mustache-loader',
             },
         ],

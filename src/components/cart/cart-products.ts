@@ -2,9 +2,9 @@ import { Component } from '../types/component';
 import Checkbox from '../ui/checkbox';
 import { Product } from '../../model/types/product';
 import { Cart } from '../../model/cart';
-import ProductTemplate from './component/product.html';
-import Mustache from 'mustache';
-import CartPlaceholder from './component/cartPlaceholder.html';
+
+const ProductTemplate = require('./component/product.html');
+const CartPlaceholder = require('./component/cart-placeholder.html');
 
 class CartProducts extends Component {
     cart: Cart;
@@ -70,7 +70,7 @@ class CartProducts extends Component {
             value: item.id,
         }).getTemplate();
 
-        return Mustache.render(ProductTemplate, {
+        return ProductTemplate({
             checkbox: checkboxProduct,
             order: item.order,
             title: item.title,
@@ -93,7 +93,7 @@ class CartProducts extends Component {
             return products.map(productTemplate).join('');
         }
 
-        return Mustache.render(CartPlaceholder, {});
+        return CartPlaceholder();
     }
 
     public update() {
@@ -105,7 +105,7 @@ class CartProducts extends Component {
             const products = this.cart.get();
 
             if (!products.length) {
-                productsWrapper.innerHTML = Mustache.render(CartPlaceholder, {});
+                productsWrapper.innerHTML = CartPlaceholder();
             } else {
                 productsWrapper.innerHTML = this.getTemplate();
             }

@@ -1,10 +1,9 @@
 import { Component } from '../types/component';
-import Mustache from 'mustache';
-import Content from './component/content.html';
+const Content = require('./component/content.html');
 import { Product } from '../../model/types/product';
 import { Cart } from '../../model/cart';
-import Rating from './component/rating.html';
-import Image from './component/image.html';
+const Rating = require('./component/rating.html');
+const Image = require('./component/image.html');
 import { products } from '../../model/productItems';
 import Preloader from '../../assets/img/preloader.svg?inline';
 import { Modal } from 'bootstrap';
@@ -135,7 +134,7 @@ class ProductContent extends Component {
 
         this.cartText = this.getCartBtnText();
 
-        return Mustache.render(Content, {
+        return Content({
             name,
             rating,
             image,
@@ -178,7 +177,8 @@ class ProductContent extends Component {
         return this.product.images
             .map((item: string) => {
                 const image = item;
-                return Mustache.render(Image, { image });
+
+                return Image({ image });
             })
             .join('');
     }
@@ -195,7 +195,7 @@ class ProductContent extends Component {
             ratingClass = 'product-rating__item--empty';
         }
 
-        return Mustache.render(Rating, { ratingClass });
+        return Rating({ ratingClass });
     }
 
     public update() {

@@ -6,17 +6,18 @@ import { MainProducts } from "../components/products/main";
 import { Products as ProductsModel } from "../model/products/products";
 // import { Content } from '../components/main';
 import BaseView from './base-view';
+import CartLocalStorage from "../model/cart-local-storage";
 
 export class MainView extends BaseView implements View {
     private header: Header;
     private footer: Footer;
     private content: MainProducts;
 
-    constructor(cart: Cart, productsModel: ProductsModel, private big: boolean = true) {
+    constructor(cart: Cart, cartLS: CartLocalStorage, productsModel: ProductsModel, private big: boolean = true) {
         super();
         this.header = new Header(cart);
         this.footer = new Footer();
-        this.content = new MainProducts(big, productsModel, cart);
+        this.content = new MainProducts(big, productsModel, cart, cartLS);
     }
 
     init(root: HTMLElement): void {

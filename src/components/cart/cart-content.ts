@@ -3,15 +3,15 @@ import CartProducts from './cart-products';
 import CartTotalBoard from './cart-total-board';
 import { Product } from '../../model/types/product';
 import { Cart } from '../../model/cart';
-import Mustache from 'mustache';
-import Content from './component/content.html';
-import Counter from './component/counter.html';
 import CartNavigation from './cart-navigation';
 import OrderModal from '../markup/orderModal.html';
 import { Modal } from 'bootstrap';
 import FormStore from '../../model/form';
 import { ValidationError } from '../types/validation-error';
 import { IFieldForm } from '../../model/types/form';
+
+const counterTemplate = require('./component/counter.html');
+const contentTemplate = require('./component/content.html');
 
 class CartContent extends Component {
     cart: Cart;
@@ -166,30 +166,16 @@ class CartContent extends Component {
         const products = this.cartProducts.getTemplate();
         const total = this.cartTotal.getTemplate();
         const navigation = this.cartNavigation.getTemplate();
-        const coontentIsHide = this.cart.getTotalCount() === 0 ? 'hide' : '';
-        const orderMakeModal = this.getModalTemplate();
+        const contentIsHide = this.cart.getTotalCount() === 0 ? 'hide' : '';
 
-        return Mustache.render(Content, { counter, navigation, products, total, coontentIsHide, orderMakeModal });
-    }
-
-    getModalTemplate() {
-        const { firstname, lastname, address, card } = this.form.get();
-        const isValid = this.form.isValid() ? '' : 'disabled';
-        return Mustache.render(OrderModal, { firstname, lastname, address, card, isValid });
-    }
-
-    getCardHint() {
-        const hint = document.createElement('p');
-        hint.innerText = 'hint';
-
-        return hint;
+        return contentTemplate({ counter, contentIsHide, products, total, navigation });
     }
 
     private cartCounter() {
         const counter = this.cart.getTotalCount();
         const cartNoEmpty = counter !== 0;
 
-        return cartNoEmpty ? Mustache.render(Counter, { counter }) : '';
+        return cartNoEmpty ? counterTemplate({ counter }) : '';
     }
 
     checkValidateError(errorObj: ValidationError) {
