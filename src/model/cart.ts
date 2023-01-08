@@ -109,8 +109,11 @@ export class Cart extends Store {
 
         if (productIdInCart >= 0) {
             if (!product.count) product.count = 0;
-            product.count += 1;
-            this.notify();
+
+            if (product.stock >= product.count + 1) {
+                product.count += 1;
+                this.notify();
+            }
         } else {
             this.addProductToCart(product, 1);
         }

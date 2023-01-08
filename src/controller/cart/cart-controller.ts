@@ -221,7 +221,6 @@ class CartController extends Controller {
                             this.cart.removeProductFromCart(item.id);
                         });
 
-                        this.cart.emptyOrderArray();
                         this.cartLS.set(this.cart.get());
                     },
                     () => {

@@ -38,8 +38,8 @@ export class Header extends Component implements Subscriber {
     }
 
     update(): void {
-        this.setProdsCount(this.container.querySelector('.purchase-cnt'));
-        this.setTotalSum(this.container.querySelector('.total-amount'));
+        this.setProdsCount(document.querySelector('.purchase-cnt'));
+        this.setTotalSum(document.querySelector('.total-amount'));
     }
 
     private setProdsCount(element: HTMLElement | null) {

@@ -146,10 +146,8 @@ class CartContent extends Component {
 
                 if (makeOrderBtn) {
                     makeOrderBtn.addEventListener('click', () => {
-                        const order = this.cart.getOrder().length ? [...this.cart.getOrder()] : [...this.cart.get()];
+                        const order = [...this.cart.get()];
                         this.cart.emptyOrderArray();
-
-                        callback(order);
 
                         this.modals[0].hide();
                         const success = document.querySelector('.modal-order-success');
@@ -165,6 +163,7 @@ class CartContent extends Component {
 
                             success.addEventListener('hidden.bs.modal', () => {
                                 redirect();
+                                callback(order);
                             });
                         }
                     });
@@ -301,24 +300,26 @@ class CartContent extends Component {
         this.addIcon(img);
 
         orderInputs.forEach((item) => {
-            item.input.value = order[item.name].value as string;
+            if (item.input) {
+                item.input.value = order[item.name].value as string;
 
-            const hasErrors = order[item.name].errors?.length;
+                const hasErrors = order[item.name].errors?.length;
 
-            if (hasErrors) {
-                const errorTemp = item.input.parentNode?.querySelector('.validate-error');
+                if (hasErrors) {
+                    const errorTemp = item.input.parentNode?.querySelector('.validate-error');
 
-                if (errorTemp) {
-                    errorTemp.remove();
+                    if (errorTemp) {
+                        errorTemp.remove();
+                    }
+
+                    const error = document.createElement('p');
+                    error.classList.add('validate-error');
+                    error.innerText = (order[item.name].errors as Array<string>)[0] as string;
+
+                    item.input.parentNode?.append(error);
+                } else {
+                    item.input.parentNode?.querySelector('.validate-error')?.remove();
                 }
-
-                const error = document.createElement('p');
-                error.classList.add('validate-error');
-                error.innerText = (order[item.name].errors as Array<string>)[0] as string;
-
-                item.input.parentNode?.append(error);
-            } else {
-                item.input.parentNode?.querySelector('.validate-error')?.remove();
             }
         });
 

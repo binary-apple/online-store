@@ -247,32 +247,38 @@ class FormStore extends Store {
         const date = validValue.split('/').slice(0, 2);
 
         if (date.length === 2) {
-            let month = this.numbersOnly(date[0], field, e)[0] as string;
-            let year = this.numbersOnly(date[1], field, e)[0] as string;
+            let [monthValue, isValidMonth] = this.numbersOnly(date[0], field, e);
+            let [yearValue, isValidYear] = this.numbersOnly(date[1], field, e);
 
-            if (year.length > 2) {
-                year = year.slice(0, 2);
+            if (yearValue.length > 2) {
+                yearValue = yearValue.slice(0, 2);
             }
 
-            if (month.length > 2) {
-                month = month.slice(0, 2);
+            if (monthValue.length > 2) {
+                monthValue = monthValue.slice(0, 2);
             }
 
-            if (+month > 12) {
-                month = '12';
+            if (+monthValue > 12) {
+                monthValue = '12';
             }
 
-            if (month.length === 2 && year.length === 2) {
-                const dateString = month + '/' + year;
+            if (monthValue.length === 2 && isValidMonth && yearValue.length === 2 && isValidYear) {
+                const dateString = monthValue + '/' + yearValue;
 
                 return [dateString, isValid];
             } else {
                 field.errors?.push('Date format is MM/YY');
                 isValid = false;
+
+                return [monthValue + '/' + yearValue, isValid];
             }
         } else if (date.length === 1) {
             field.errors?.push('Date format is MM/YY');
             isValid = false;
+
+            const valueMonth = this.numbersOnly(validValue, field, e);
+
+            return [valueMonth[0], isValid];
         } else {
             isValid = false;
         }
