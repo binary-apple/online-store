@@ -56,7 +56,15 @@ export class Products extends Component implements Subscriber {
         const prodsWrapper = this.container.querySelector('#prods');
         if (!prodsWrapper) throw new Error('Products Wrapper not exist');
         prodsWrapper.innerHTML = '';
-        this.productsModel.get().forEach((el) => {
+        const prods = this.productsModel.get();
+        if (prods.length === 0) {
+            const noProdsItem = document.createElement('h4');
+            noProdsItem.classList.add(...'mx-auto my-4 h3'.split(' '));
+            noProdsItem.innerHTML = `No products found :(`;
+            prodsWrapper.append(noProdsItem);
+            return;
+        }
+        prods.forEach((el) => {
             const productItem = document.createElement('div');
             productItem.classList.add(...`${this.big ? 'big-scale col-12' : 'small-scale col-md-4 col-6'} py-2 px-1`.trim().split(' '));
             productItem.innerHTML =`
@@ -210,6 +218,9 @@ export class Products extends Component implements Subscriber {
         const foundEl = this.container.querySelector('.found-cnt');
         if (!foundEl) return;
         foundEl.innerHTML = `${this.productsModel.get().length}`;
+/*         if (this.productsModel.get().length === 0) {
+
+        } */
     }
 
     public handleSearchInput(callback: (value: string) => void) {
