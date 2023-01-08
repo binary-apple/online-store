@@ -19,6 +19,19 @@ export class HashRouter extends Router {
         history.pushState({}, '', url);
     }
 
+    removeSearchParam(key: string) {
+
+        const url = new URL(window.location.href);
+
+        const params = this.getSearchParams();
+
+        if (key in params) {
+            url.searchParams.delete(key);
+        }
+
+        history.pushState({}, '', url);
+    }
+
     clearSearchParams() {
         const url = new URL(window.location.href);
 
@@ -33,24 +46,18 @@ export class HashRouter extends Router {
 
     getSearchParams() {
         const url = new URL(window.location.href);
-
-        const searchArr = url.search.split('?')[url.search.split('?').length - 1].split('&');
-
+        
         const paramsObj: IterableObject = {};
 
-        if (searchArr.length) {
-            searchArr.forEach((item) => {
-                const [key, value] = item.split('=');
+        url.searchParams.forEach((value: string, key: string) => {
+            const notANumber = Number.isNaN(+value);
 
-                const notANumber = Number.isNaN(+value);
+            const isNumber = notANumber ? false : +value;
+            const isTrue = value === 'true' ? true : false;
+            const isNotFalse = notANumber && value !== 'false' ? value : false;
 
-                const isNumber = notANumber ? false : +value;
-                const isTrue = value === 'true' ? true : false;
-                const isNotFalse = notANumber && value !== 'false' ? value : false;
-
-                paramsObj[key] = isNumber || isTrue || isNotFalse || false;
-            });
-        }
+            paramsObj[key] = isNumber || isTrue || isNotFalse || false;
+        })
 
         return paramsObj;
     }

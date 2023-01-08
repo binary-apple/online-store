@@ -25,11 +25,11 @@ class ErrorController extends Controller {
         view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
     }
 
-    private handleClickToCartIcon(e: Event) {
+    private handleClickToCartIcon() {
         this.router.navigateTo(Routers.CART);
     }
 
-    private handleClickToLogoIcon(e: Event) {
+    private handleClickToLogoIcon() {
         this.router.navigateTo(Routers.MAIN);
     }
 }

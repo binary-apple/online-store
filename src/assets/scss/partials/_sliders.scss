@@ -2,8 +2,10 @@
 @import './typography';
 
 .slider {
-    // max-width: 25%;
     position: relative;
+    & > * {
+        line-height: 1;
+    }
 }
 
 input[type='range'],
@@ -44,6 +46,10 @@ input[type='range']::-webkit-slider-thumb {
     &:nth-child(1)::-webkit-slider-thumb {
         z-index: 2;
     }
+}
+
+.slider-title {
+    font-weight: 700;
 }
 
 .slider-track {

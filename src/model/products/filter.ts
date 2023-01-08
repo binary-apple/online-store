@@ -1,7 +1,7 @@
 import { IFilter } from '../types/filter';
 import { Store } from '../store';
 
-class Filter extends Store {
+ export class Filter extends Store {
     private filter: IFilter = {
         sort: {
             order: '',

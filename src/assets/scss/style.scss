@@ -14,6 +14,7 @@
 @import './partials/products';
 @import './partials/preloader';
 @import './partials/validate';
+@import './partials/filter';
 
 body {
     background: $background;
@@ -39,6 +40,25 @@ main {
 .e404 {
     color: $primary;
     font-size: 80px;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background: $surface;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: $secondary;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: $primary;
 }
 
 .main-container {

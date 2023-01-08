@@ -1,5 +1,4 @@
-import { Component } from "../components/types/component";
-import { Publisher, Subscriber } from "../utils/observer-interface";
+import { Subscriber } from "../utils/observer-interface";
 import { Cart } from "./cart";
 
 export class CartAPI implements Subscriber {
