@@ -262,14 +262,17 @@ class FormStore extends Store {
                 month = '12';
             }
 
-            const dateString = month + '/' + year;
+            if (month.length === 2 && year.length === 2) {
+                const dateString = month + '/' + year;
 
-            return [dateString, isValid];
+                return [dateString, isValid];
+            } else {
+                field.errors?.push('Date format is MM/YY');
+                isValid = false;
+            }
         } else if (date.length === 1) {
-            const valueField = this.numbersOnly(validValue, field, e);
+            field.errors?.push('Date format is MM/YY');
             isValid = false;
-
-            return [valueField[0], isValid];
         } else {
             isValid = false;
         }
@@ -285,9 +288,9 @@ class FormStore extends Store {
             const valid = validValue.slice(1, validValue.length);
             const [numbers, isValidation] = this.numbersOnly(valid, field, e);
             isValid = isValidation;
-            const [valueFiled, isRight] = this.minLength(numbers, field);
+            const [valueFiled, isRight] = this.minLength('+' + numbers, field);
             isValid = isRight;
-            validValue = '+' + valueFiled;
+            validValue = valueFiled;
         } else {
             field.errors?.push('Phone should start with +');
             isValid = false;
@@ -419,6 +422,8 @@ class FormStore extends Store {
             if (indexError === -1) {
                 field.errors?.push(`The number of characters must be ${length}`);
             }
+
+            isValid = false;
         }
 
         return [field.value, isValid] as [string, boolean];
