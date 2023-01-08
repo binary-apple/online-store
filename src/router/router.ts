@@ -49,7 +49,7 @@ export class HashRouter extends Router {
         
         const paramsObj: IterableObject = {};
 
-        const searchArr = url.searchParams.forEach((value: string, key: string) => {
+        url.searchParams.forEach((value: string, key: string) => {
             const notANumber = Number.isNaN(+value);
 
             const isNumber = notANumber ? false : +value;

@@ -1,6 +1,6 @@
 import { Component } from "../types/component";
 import { Filter as FilterModel } from "../../model/products/filter";
-import { Publisher, Subscriber } from "../../utils/observer-interface";
+import { Subscriber } from "../../utils/observer-interface";
 import { FilterMetric } from "../../model/types/filter";
 
 export class Filter extends Component implements Subscriber {
@@ -26,7 +26,7 @@ export class Filter extends Component implements Subscriber {
 
     private drawFilterList() {
         const res: Array<string> = [];
-        for (let key in this.filterMetric) {
+        for (const key in this.filterMetric) {
             this.filterMetric[key] 
             res.push(`
             <div class="filter-item">
@@ -41,6 +41,5 @@ export class Filter extends Component implements Subscriber {
     }
 
     update(): void {
-        console.log('update filters');
     }
 }
