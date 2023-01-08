@@ -237,7 +237,11 @@ export class Products extends Component implements Subscriber {
     private setSort() {
         const sort = this.container.querySelector('#sort');
         if (!sort || !(sort instanceof HTMLSelectElement)) throw new Error('No sorting form');
-        sort.value = `${this.filterModel.get().sort.value}-${this.filterModel.get().sort.order}`;
+        if (this.filterModel.get().sort.value === '' || this.filterModel.get().sort.order === '') {
+            sort.value = `sort-title`;
+        } else {
+            sort.value = `${this.filterModel.get().sort.value}-${this.filterModel.get().sort.order}`;
+        } 
     }
 
     public update(): void {
