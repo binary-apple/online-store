@@ -52,6 +52,8 @@ class MainController extends Controller {
 
         this.view.handleSearchInput(this.handleSearchInput.bind(this));
         this.view.handleSortInput(this.handleSortInput.bind(this));
+
+        this.view.handleFilterClick(this.handleFilterClick.bind(this));
     }
 
     private handleClickToCartIcon() {
@@ -102,6 +104,12 @@ class MainController extends Controller {
             const valueArr = String(query['sort']).toLowerCase().split('-');
             filter.sort = {order: valueArr[1], value: valueArr[0]};
         }
+        if ('brand' in query) {
+            filter.brands = String(query['brand']).toLowerCase().split('|');
+        }
+        if ('category' in query) {
+            filter.categories = String(query['category']).toLowerCase().split('|');
+        }
         // TODO: set other components according query
 
         return filter;
@@ -129,6 +137,44 @@ class MainController extends Controller {
             this.filter.setFilter({ sort: {order: valueArr[1], value: valueArr[0]} });
             this.products.filter(this.filter.get());
         }
+    }
+
+    private handleFilterClick(filterName: string, value: string, inFilter: boolean) {
+        if (filterName === 'brand') {
+            const brands = this.filter.get().brands;
+            if (inFilter) {
+                if (!brands.includes(value)) {
+                    brands.push(value);
+                    this.filter.setFilter({brands: brands});
+                }
+            } else {
+                this.filter.setFilter({brands: brands.filter((el) => el !== value)});
+            }
+            const query = this.filter.get().brands.join('|');
+            if (query) {
+                this.router.addSearchParams('brand', query);
+            } else {
+                this.router.removeSearchParam('brand');
+            }
+        }
+        if (filterName === 'category') {
+            const categories = this.filter.get().categories;
+            if (inFilter) {
+                if (!categories.includes(value)) {
+                    categories.push(value);
+                    this.filter.setFilter({categories: categories});
+                }
+            } else {
+                this.filter.setFilter({categories: categories.filter((el) => el !== value)});
+            }
+            const query = this.filter.get().categories.join('|');
+            if (query) {
+                this.router.addSearchParams('category', query);
+            } else {
+                this.router.removeSearchParam('category');
+            }
+        }
+        this.products.filter(this.filter.get());
     }
 
 }

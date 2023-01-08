@@ -19,8 +19,6 @@ export class Products extends Store {
     public set(items: Array<Product>) {
         this.filtred = items;
         this.initialItems = items;
-        // TODO: call filter once I know how to do with it
-        // this.filter(this.filterItem);
         this.notify();
     }
 
@@ -100,6 +98,12 @@ export class Products extends Store {
                         !isSubstring(el.title, filter.search)) {
                         return false;
                     }
+                }
+                if (filter.brands.length > 0 && !filter.brands.includes(el.brand.trim().toLowerCase())) {
+                    return false;
+                }
+                if (filter.categories.length > 0 && !filter.categories.includes(el.category.toLowerCase())) {
+                    return false;
                 }
                 // TODO: check all other filters
                 return true;

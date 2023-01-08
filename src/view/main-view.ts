@@ -68,4 +68,8 @@ export class MainView extends BaseView implements View {
         this.content.handleSortInput(callback);
     }
 
+    public handleFilterClick(callback: (filterName: string, value: string, inFilter: boolean) => void) {
+        this.content.handleFilterClick(callback);
+    }
+
 }
