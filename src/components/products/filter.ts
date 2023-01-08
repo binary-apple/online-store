@@ -29,7 +29,7 @@ export class Filter extends Component implements Subscriber {
         for (const key in this.filterMetric) {
             this.filterMetric[key] 
             res.push(`
-            <div class="filter-item" data-filter-opt="${key}">
+            <div class="filter-item" data-options="${key}">
                 <input type="checkbox" id="${key}" class="default-check">
                 <div class="custom-check"></div>
                 <label for="${key}">${key}</label>
@@ -53,7 +53,15 @@ export class Filter extends Component implements Subscriber {
     }
 
     private setFilter(): void {
-        // TODO: set filter depending on filter
+        const filterOptions = this.container.querySelectorAll('.filter-item');
+        filterOptions.forEach((el) => {
+            const checkbox = el.querySelector('input');
+            if (checkbox instanceof HTMLInputElement && el instanceof HTMLElement) {
+                const options = el.dataset.options;
+
+                checkbox.checked = this.filterModel.get()[`${this.filterName === 'brand' ? 'brands' : 'categories'}`].includes(options!);
+            }
+        })
     }
 
     update(): void {

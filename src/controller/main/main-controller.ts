@@ -104,6 +104,12 @@ class MainController extends Controller {
             const valueArr = String(query['sort']).toLowerCase().split('-');
             filter.sort = {order: valueArr[1], value: valueArr[0]};
         }
+        if ('brand' in query) {
+            filter.brands = String(query['brand']).toLowerCase().split('|');
+        }
+        if ('category' in query) {
+            filter.categories = String(query['category']).toLowerCase().split('|');
+        }
         // TODO: set other components according query
 
         return filter;
@@ -169,7 +175,6 @@ class MainController extends Controller {
             }
         }
         this.products.filter(this.filter.get());
-        console.log(JSON.stringify(this.filter.get()));
     }
 
 }
