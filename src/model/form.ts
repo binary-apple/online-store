@@ -247,8 +247,10 @@ class FormStore extends Store {
         const date = validValue.split('/').slice(0, 2);
 
         if (date.length === 2) {
-            let [monthValue, isValidMonth] = this.numbersOnly(date[0], field, e);
-            let [yearValue, isValidYear] = this.numbersOnly(date[1], field, e);
+            let [monthValue] = this.numbersOnly(date[0], field, e);
+            const [isValidMonth] = this.numbersOnly(date[0], field, e);
+            let [yearValue] = this.numbersOnly(date[1], field, e);
+            const [isValidYear] = this.numbersOnly(date[1], field, e);
 
             if (yearValue.length > 2) {
                 yearValue = yearValue.slice(0, 2);

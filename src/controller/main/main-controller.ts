@@ -23,7 +23,10 @@ class MainController extends Controller {
         this.products.set(products);
 
         this.cartLS = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);
-        this.cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
+        this.cart = new Cart(
+            new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get(),
+            new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).getPromocodes()
+        );
         this.view = new MainView(this.cart, this.cartLS, this.products, this.filter, this.getBigFromQuery());
     }
 

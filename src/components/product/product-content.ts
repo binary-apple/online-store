@@ -45,9 +45,7 @@ class ProductContent extends Component {
             wrapper.addEventListener('click', async (e: Event) => {
                 const htmlTarget = e.target as HTMLElement;
 
-                const isImage =
-                    htmlTarget.classList.contains('product-images-item__img') ||
-                    htmlTarget.classList.contains('product-images-main__image');
+                const isImage = htmlTarget.classList.contains('product-images-item__img');
 
                 if (isImage) {
                     const wrapperPhoto = document.createElement('div');

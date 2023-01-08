@@ -16,7 +16,7 @@ class ProductController extends Controller {
     constructor(router: HashRouter) {
         super(router);
         this.cartLocalStorage = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);
-        this.cart = new Cart(this.cartLocalStorage.get());
+        this.cart = new Cart(this.cartLocalStorage.get(), this.cartLocalStorage.getPromocodes());
         this.products = products;
     }
 

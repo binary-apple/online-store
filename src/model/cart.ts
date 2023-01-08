@@ -14,14 +14,14 @@ export class Cart extends Store {
     openModalPage = false;
     productsToOrder: Array<Product> = [];
 
-    constructor(products: Array<Product>) {
+    constructor(products: Array<Product>, promocodes = []) {
         super();
         this.productsInCart = [...products];
         this.allPromocodes = new Map<string, number>([
             ['EPM', 0.1],
             ['RS', 0.1],
         ]);
-        this.promoList = [];
+        this.promoList = [...promocodes];
         this.totalDisc = 0;
     }
 
@@ -43,6 +43,10 @@ export class Cart extends Store {
 
     public getExistPromocodes() {
         return this.allPromocodes;
+    }
+
+    public getPromocodes() {
+        return this.promoList;
     }
 
     public getConfirmedPromocodes() {
@@ -271,5 +275,9 @@ export class Cart extends Store {
     public empty() {
         this.productsInCart.length = 0;
         this.notify();
+    }
+
+    public clearPromocodes() {
+        this.promoList.length = 0;
     }
 }

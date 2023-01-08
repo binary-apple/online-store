@@ -9,7 +9,10 @@ import { CartName } from '../../model/types/cart';
 
 class ErrorController extends Controller {
     // private root: HTMLElement;
-    private cart: Cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
+    private cart: Cart = new Cart(
+        new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get(),
+        new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).getPromocodes()
+    );
     constructor(router: HashRouter) {
         super(router);
         // this.root = document.body;

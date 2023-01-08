@@ -31,6 +31,19 @@ class CartLocalStorage extends Component {
         localStorage.setItem(this.name, jsonCart);
     }
 
+    setPromocodes(promo: Array<string>) {
+        const arr = JSON.stringify(promo);
+        localStorage.setItem(this.name + '-promo', arr);
+    }
+
+    getPromocodes() {
+        const promo = localStorage.getItem(this.name + '-promo');
+
+        if (promo) {
+            return JSON.parse(promo);
+        }
+    }
+
     get() {
         const jsonCart = localStorage.getItem(this.name);
 

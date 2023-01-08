@@ -16,7 +16,7 @@ class CartController extends Controller {
         super(router);
 
         this.cartLS = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);
-        this.cart = new Cart(this.cartLS.get());
+        this.cart = new Cart(this.cartLS.get(), this.cartLS.getPromocodes());
     }
 
     async init() {
@@ -148,11 +148,14 @@ class CartController extends Controller {
 
         cartView.confirmPromoCodeClickHandler((promo: string) => {
             this.cart.addPromocode(promo);
+
+            this.cartLS.setPromocodes(this.cart.getPromocodes());
             this.cartLS.set(this.cart.get());
         });
 
         cartView.removePromoCodeClickHandler((promo: string) => {
             this.cart.removePromocode(promo);
+            this.cartLS.setPromocodes(this.cart.getPromocodes());
             this.cartLS.set(this.cart.get());
         });
 
@@ -161,8 +164,10 @@ class CartController extends Controller {
                 products.forEach((item) => {
                     this.cart.removeProductFromCart(item.id);
                 });
+                this.cart.clearPromocodes();
 
                 this.cart.emptyOrderArray();
+                this.cartLS.setPromocodes(this.cart.getPromocodes());
                 this.cartLS.set(this.cart.get());
             },
             () => {
@@ -221,6 +226,8 @@ class CartController extends Controller {
                             this.cart.removeProductFromCart(item.id);
                         });
 
+                        this.cartLS.setPromocodes(this.cart.getPromocodes());
+                        this.cart.clearPromocodes();
                         this.cartLS.set(this.cart.get());
                     },
                     () => {
