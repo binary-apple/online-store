@@ -99,6 +99,10 @@ class MainController extends Controller {
         if ('search' in query) {
             filter.search = String(query['search']);
         }
+        if ('sort' in query) {
+            const valueArr = String(query['sort']).toLowerCase().split('-');
+            filter.sort = {order: valueArr[1], value: valueArr[0]};
+        }
         // TODO: set other components according query
 
         return filter;
@@ -119,10 +123,14 @@ class MainController extends Controller {
         const valueArr = value.toLowerCase().split('-');
         if (valueArr[1].toLowerCase() === 'title') {
             this.router.removeSearchParam('sort');
+            this.filter.setFilter({ sort: {order: '', value: ''} });
+            this.products.filter(this.filter.get());
         } else {
             this.router.addSearchParams('sort', value.toLowerCase());
             this.filter.setFilter({ sort: {order: valueArr[1], value: valueArr[0]} });
+            this.products.filter(this.filter.get());
         }
+        console.log(JSON.stringify(this.filter.get()));
     }
 
 }

@@ -235,9 +235,16 @@ export class Products extends Component implements Subscriber {
         search.value = this.filterModel.get().search;
     }
 
+    private setSort() {
+        const sort = this.container.querySelector('#sort');
+        if (!sort || !(sort instanceof HTMLSelectElement)) throw new Error('No sorting form');
+        sort.value = `${this.filterModel.get().sort.value}-${this.filterModel.get().sort.order}`;
+    }
+
     public update(): void {
         this.drawProducts();
         this.setFoundCount();
         this.setSearch();
+        this.setSort();
     }
 }
