@@ -32,63 +32,159 @@ input[type="search"] {
     cursor: pointer;
 }
 
-.product-item {
-    position: relative;
+
+.big-scale > .product-item {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 120px;
+    color: $onSurface;
     background: $surface;
     border-radius: 4px;
     box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
     &.in-cart {
         box-shadow: 4px 8px 16px rgba(255, 102, 51, 0.2);
     }
-}
 
-.item-img {
-    position: absolute;
-    width: 100%;
-    height: 50%;
-    object-fit: contain;
-    border-radius: 4px 4px 0 0;
-}
+    .item-img-wrapper {
+        height: 100px;
+        width: 120px;
+        min-width: 60px;
+        max-width: 20vw;
+        border-radius: 4px;
+        box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
 
-.product-item {
-    cursor: pointer;
-}
-
-.product-col-3 > .product-item {
-    width: calc(33% - 0.5rem);
-    padding-bottom: 36%;
-    font-size: small;
-}
-
-.product-col-4 > .product-item {
-    width: calc(25% - 0.5rem);
-    padding-bottom: 32%;
-    font-size: x-small;
-}
-
-.products-button {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    height: 15%;
-}
-
-.product-info {
-    position: absolute;
-    top: 52%;
-}
-
-.product-price::before {
-    content: '€';
-}
-
-.add {
-    border: 1px solid $primary;
-    background: $surface;
-    color: $primary;
-    &:hover {
-        border-color: $secondary;
-        background: $surface;
-        color: $secondary;
+        .item-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
     }
+    
+    .product-item-wrapper {
+        display: flex;
+        flex-grow: 1;
+        align-items: center;
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            height: 100px;
+            width: 45%;
+            max-width: 60vw;
+
+            .product-title {
+                font-size: 14px;
+                font-weight: 700;
+                height: 21px;
+                overflow: hidden;
+            }
+            
+            .product-description {
+                font-size: 12px;
+                overflow-y: auto;
+                max-height: 66%;
+            }
+            
+            .product-price {
+                font-size: 12px;
+                font-weight: 700;
+                margin-top: auto;
+                &::before {
+                    content: "€";
+                }
+            }
+        }
+
+        .products-button {
+            max-width: 20vw;
+        }
+    }
+}
+
+.small-scale > .product-item {
+    display: flex;
+    flex-direction: column;
+    padding: 0.5rem;
+    // justify-content: space-around;
+    // align-items: center;
+    height: 320px;
+    color: $onSurface;
+    background: $surface;
+    border-radius: 4px;
+    box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+    &.in-cart {
+        box-shadow: 4px 8px 16px rgba(255, 102, 51, 0.2);
+    }
+
+    .item-img-wrapper {
+        height: 40%;
+        width: 75%;
+        margin: auto;
+        // min-width: 60px;
+        // max-width: 20vw;
+        border-radius: 4px;
+        box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.1);
+
+        .item-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+    
+    .product-item-wrapper {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-items: center;
+        max-height: 60%;
+
+        .product-info {
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            max-height: 74%;
+
+            .product-title {
+                font-size: 14px;
+                font-weight: 700;
+                height: 21px;
+                overflow: hidden;
+            }
+            
+            .product-description {
+                font-size: 12px;
+                overflow-y: auto;
+                // max-height: 66%;
+                max-height: 70%;
+            }
+            
+            .product-price {
+                font-size: 12px;
+                font-weight: 700;
+                margin-top: auto;
+                &::before {
+                    content: "€";
+                }
+            }
+        }
+
+        .products-button {
+            max-width: 20vw;
+        }
+    }
+}
+
+
+
+.found {
+    font-weight: 700;
+}
+
+.sort {
+    width: min(55vw, 11rem);
 }

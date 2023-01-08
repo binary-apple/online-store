@@ -1,23 +1,31 @@
+import { Publisher, Subscriber } from "../../utils/observer-interface";
 import { Component } from "../types/component";
+// import { Products as ProductsModel } from "../../model/products/products";
+import { Filter as FilterModel } from "../../model/products/filter";
 
-export class Slider extends Component {
-    constructor() {
-        super({containerTag: 'div', className: 'slider col-md-3 col-12'.split(' ')});
+export class Slider extends Component implements Subscriber {
+    // private readonly products: ProductsModel;
+    private readonly filterModel: FilterModel;
+    private readonly sliderName: string;
+    constructor(/* products: ProductsModel,  */filterModel: FilterModel, sliderName: string) {
+        super({containerTag: 'div', className: ['slider', `slider-${sliderName}`, 'pb-3']});
+        // this.products = products;
+        this.filterModel = filterModel;
+        this.sliderName = sliderName.toLocaleLowerCase();
+        this.subscribe(/* this.products,  */this.filterModel);
     }
 
     protected template(): DocumentFragment {
         const temp = document.createElement('template');
         temp.innerHTML = `
-        <form oninput="min.value=Math.min(first.value, second.value);max.value=Math.max(second.value, first.value)" class="input-form pb-4">
-        <div class="d-flex justify-content-center lh-base">Price</div>
+        <div class="slider-title d-flex justify-content-center lh-base">${this.sliderName.replace(new RegExp(/(^\w{1})/), this.sliderName[0].toUpperCase())}</div>
         <div class="d-flex justify-content-between w-100 mb-3">
-        <output for="first" name="min" class="price px-3 lh-sm">0</output>
-        <output for="second" name="max" class="price px-3 lh-sm">100</output>
+            <div class="min-${this.sliderName} ${this.sliderName}">0</div>
+            <div class="max-${this.sliderName} ${this.sliderName}">100</div>
         </div>
-        <input type="range" name="first" min="0" max="100" value="0" class="slider">
-        <input type="range" name="second" min="0" max="100" value="100" class="slider">
+        <input type="range" name="min-${this.sliderName}" min="0" max="100" value="0" step="any" class="slider">
+        <input type="range" name="max-${this.sliderName}" min="0" max="100" value="100" step="any" class="slider">
         <div class="slider-track"></div>
-        </form>
         `;
         return temp.content;
     }
@@ -42,5 +50,9 @@ export class Slider extends Component {
                 element.addEventListener('input', callback);
             });
         }
+    }
+
+    update(): void {
+        console.log('slider update');
     }
 }
