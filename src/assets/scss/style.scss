@@ -1,0 +1,68 @@
+@import './partials/colors';
+@import './partials/fonts';
+@import './partials/settings';
+@import './partials/typography';
+@import './partials/breadcrumbs';
+@import './partials/cart-content';
+@import './partials/product';
+@import './partials/order';
+@import './partials/checkbox';
+@import './partials/buttons';
+@import './partials/footer';
+@import './partials/header';
+@import './partials/sliders';
+@import './partials/products';
+@import './partials/preloader';
+@import './partials/validate';
+@import './partials/filter';
+
+body {
+    background: $background;
+    color: $onSurface;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+main {
+    flex-grow: 1;
+}
+
+.error {
+    background: transparentize($primary, 0.8);
+}
+
+.e404,
+.e404-text {
+    font-weight: 800;
+}
+
+.e404 {
+    color: $primary;
+    font-size: 80px;
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+    height: 5px;
+}
+
+::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background: $surface;
+}
+
+::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background: $secondary;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: $primary;
+}
+
+.main-container {
+    max-width: 1205px;
+    width: 100%;
+    margin: 0 auto;
+}

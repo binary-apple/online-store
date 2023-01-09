@@ -1,0 +1,46 @@
+<div class="row d-flex cart-content__title">
+    <h1 class="col-2 cart-title__text">Cart</h1>
+    {{{counter}}}
+</div>
+<div
+    class="row col-9 cart-content__remove-selected d-flex flex-column flex-lg-row justify-content-lg-between {{contentIsHide}}"
+>
+    {{{navigation}}}
+</div>
+<div class="row cart-content__products flex-column flex-lg-row">
+    <ul class="col-12 col-lg-9 cart-products">
+        {{{products}}}
+    </ul>
+    <div class="col-12 col-lg-3 cart-total {{contentIsHide}}">{{{total}}}</div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-confirm-promo">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Apply promocode</h5>
+                <span class="btn-close" data-bs-dismiss="modal" aria-label="Close"></span>
+            </div>
+            <div class="modal-body">You really want to confirm the promotional code <b></b>?</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn cart-modal__confirm">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div
+    class="modal fade modal-order-success"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-confirm-promo">
+        <div class="modal-content">
+            <div class="modal-body">
+                Congratulations! Order is made. In <b>3</b> seconds you will be redirected to home page
+            </div>
+        </div>
+    </div>
+</div>
+{{{orderMakeModal}}}

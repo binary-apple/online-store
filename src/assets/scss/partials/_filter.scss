@@ -1,0 +1,97 @@
+@import './colors';
+
+.filter-title {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    font-weight: 700;
+    text-align: center;
+    border-bottom: 1px solid $secondary;
+    padding-bottom: 0.5rem;
+    padding-top: 0.5rem;
+    background: $surface;
+}
+
+.filter {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    background: $surface;
+    box-shadow: 1px 2px 4px rgb(0 0 0 / 10%);
+    border: 1px solid $secondary;
+    border-radius: 4px;
+    line-height: 1;
+    overflow-y: auto;
+    max-height: max(25vh, 150px);
+}
+
+.filter-item {
+    position: relative;
+    display: flex;
+    height: 24px;
+    gap: 10px;
+    align-items: center;
+    & > input, 
+    & > label {
+        cursor: pointer;
+    }
+}
+
+.filtred-cnt {
+    margin-left: auto;
+}
+
+.filter-item > .default-check {
+    position: absolute;
+    opacity: 0;
+    height: 20px;
+    width: 20px;
+}
+.filter-item > .custom-check {
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: $surface;
+    border: 1px solid $light;
+    border-radius: 4px;
+}
+
+.filter-item .default-check:checked ~ .custom-check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: $secondary;
+    border-color: $surface;
+    &::after {
+        content: '';
+        display: block;
+        width: 10px;
+        height: 7px;
+        background: url('../img/checkmark.svg') no-repeat;
+        background-size: 100%;
+    }
+}
+
+.all-filters {
+    height: fit-content;
+    @media (max-width:767.5px) {
+            width: 296px;
+            margin-left: auto;
+            margin-right: auto;
+    }
+}
+
+.filter-buttons {
+    display: flex;
+    justify-content: space-between;
+    & > div > button {
+        max-height: 40px;
+        font-size: 16px;
+        width: 100%;
+    }
+}
+
+.filter .not-found {
+    color: $hard;
+}

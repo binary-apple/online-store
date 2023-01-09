@@ -1,0 +1,39 @@
+@import './colors';
+@import './typography';
+
+.header {
+    min-height: 72px;
+    background-color: $surface;
+    box-shadow: 2px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    height: 32px;
+    width: 166px;
+    background: url('../img/logo.svg') no-repeat;
+}
+
+.cart {
+    height: 32px;
+    width: 32px;
+    background: url('../img/shopping-cart.svg') no-repeat;
+    background-size: 100%;
+}
+
+.purchase-cnt {
+    background-color: $primary;
+    padding: 2px;
+    color: $onPrimary;
+    min-width: 16px;
+    border-radius: 7px;
+    top: -4px;
+    left: 19px;
+    font-size: 12px;
+}
+
+.total-amount {
+    min-width: 70px;
+    &::before {
+        content: '€';
+    }
+}

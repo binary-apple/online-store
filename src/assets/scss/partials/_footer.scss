@@ -1,0 +1,30 @@
+@import './colors';
+@import './typography';
+
+.footer {
+    height: 150px;
+    background: #f9f4e2;
+    margin-top: auto;
+}
+
+.rsschool {
+    height: 32px;
+    width: 85px;
+    background: url('../img/rs_school_js.svg') no-repeat;
+    background-size: 100%;
+}
+
+.github-logo {
+    height: 35px;
+    width: 35px;
+    background: url('../img/github.svg') no-repeat;
+    background-size: 100%;
+}
+
+.github-text {
+    margin-left: 10px;
+    a,
+    a:hover {
+        color: $onSurface;
+    }
+}
