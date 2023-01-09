@@ -12,8 +12,8 @@ export class AllFilters extends Component {
     constructor(productsModel: ProductsModel, filterModel: FilterModel) {
         super({containerTag: 'div', className: 'all-filters d-flex flex-wrap col-lg-3 col-12 mb-3'.split(' ')});
         const filterMetrics = productsModel.getMetrics();
-        this.categoryFilter = new Filter(filterModel, 'category', filterMetrics.categories);
-        this.brandFilter = new Filter(filterModel, 'brand', filterMetrics.brands);
+        this.categoryFilter = new Filter(productsModel, filterModel, 'category', filterMetrics.categories);
+        this.brandFilter = new Filter(productsModel, filterModel, 'brand', filterMetrics.brands);
         this.priceSlider = new Slider(productsModel, filterModel, 'price');
         this.stockSlider = new Slider(productsModel, filterModel, 'stock');
     }

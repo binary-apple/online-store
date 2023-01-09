@@ -1,4 +1,5 @@
 import { Component } from "../types/component";
+import { Products as ProductsModel } from "../../model/products/products";
 import { Filter as FilterModel } from "../../model/products/filter";
 import { Subscriber } from "../../utils/observer-interface";
 import { FilterMetric } from "../../model/types/filter";
@@ -7,12 +8,14 @@ export class Filter extends Component implements Subscriber {
     private readonly filterName: string;
     private readonly filterMetric: FilterMetric;
     private readonly filterModel: FilterModel;
-    constructor(filterModel: FilterModel, filterName: string, filterMetric: FilterMetric) {
+    private readonly productsModel: ProductsModel;
+    constructor(products: ProductsModel, filterModel: FilterModel, filterName: string, filterMetric: FilterMetric) {
         super({containerTag: 'div', className: ['filter', `filter-${filterName}`]});
         this.filterModel = filterModel;
+        this.productsModel = products;
         this.filterName = filterName.toLowerCase();
         this.filterMetric = filterMetric;
-        this.subscribe(this.filterModel);
+        this.subscribe(this.filterModel, this.productsModel);
     }
 
     protected template(): HTMLElement {
@@ -64,7 +67,27 @@ export class Filter extends Component implements Subscriber {
         })
     }
 
+    private setFilterMetric(): void {
+        const filterOptions = this.container.querySelectorAll('.filter-item');
+        filterOptions.forEach((el) => {
+            const metricEl = el.querySelector('.filtred-cnt');
+            const metric = this.productsModel.getMetrics()[this.filterName === 'category' ? 'categories' : 'brands'];
+            if (metricEl instanceof HTMLElement && el instanceof HTMLElement) {
+                const options = el.dataset.options;
+                if (options) {
+                    metricEl.innerHTML = `(${metric[options].available}/${metric[options].total})`;
+                    if (metric[options].available === 0) {
+                        el.classList.add('not-found');
+                    } else {
+                        el.classList.remove('not-found');
+                    }
+                }
+            }
+        })
+    }
+
     update(): void {
         this.setFilter();
+        this.setFilterMetric();
     }
 }
