@@ -5,7 +5,8 @@ import MainController from '../controller/main/main-controller';
 import ProductController from '../controller/product/product-controller';
 import ErrorController from '../controller/error/error-controller';
 import { IterableObject } from '../utils/types/utils';
-import { IPageCartParams, IPageProductParams } from './types/router';
+import { IPageCartParams, IPageMainParams, IPageProductParams } from './types/router';
+import Controller from '../controller/controller';
 
 export class HashRouter extends Router {
     constructor(settings: RouterOptions) {
@@ -73,9 +74,20 @@ const router = new HashRouter({
 });
 
 router.add(Routers.MAIN, () => {
+    const queryParams = {
+        category: /[A-Za-zА-Яа-я]/g,
+        brand: /[A-Za-zА-Яа-я]/g,
+        big: /true|false/g,
+        search: /[A-Za-zА-Яа-я]|[0-9]/g,
+        price: /[0-9]/g,
+        stock: /[0-9]/g,
+    };
+
     const mainController = new MainController(router);
 
-    mainController.init();
+    const pageParams = router.getSearchParams() as unknown as IPageMainParams;
+
+    mainController.contollerInit(pageParams, queryParams, mainController);
 });
 
 router.add(Routers.PRODUCT, () => {
@@ -85,7 +97,7 @@ router.add(Routers.PRODUCT, () => {
 
     const productController = new ProductController(router);
 
-    productController.contollerInit(pageQuery, queryParams, productController);
+    new Controller(router).contollerInit(pageQuery, queryParams, productController);
 });
 
 router.add(Routers.CART, () => {
@@ -98,7 +110,7 @@ router.add(Routers.CART, () => {
 
     const cartController = new CartController(router);
 
-    cartController.contollerInit(pageQuery, queryParams, cartController);
+    new Controller(router).contollerInit(pageQuery, queryParams, cartController);
 });
 
 router.addUriListener();

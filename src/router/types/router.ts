@@ -12,11 +12,21 @@ export interface IQueryParams {
 }
 
 export interface IPageCartParams {
-    page?: number;
-    limit?: number;
+    page: number;
+    limit: number;
     [index: string]: number | undefined;
 }
 
 export interface IPageProductParams {
     [index: string]: undefined;
+}
+
+export interface IPageMainParams {
+    category: string;
+    brand: string;
+    big: boolean;
+    search: string;
+    price: number;
+    stock: number;
+    [index: string]: string | boolean | number;
 }

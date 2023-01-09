@@ -1,6 +1,7 @@
 import { HashRouter } from '../router/router';
-import { IPageCartParams, IPageProductParams, IQueryParams } from '../router/types/router';
+import { IPageCartParams, IPageProductParams, IQueryParams, IPageMainParams } from '../router/types/router';
 import CartController from './cart/cart-controller';
+import MainController from './main/main-controller';
 import ProductController from './product/product-controller';
 
 class Controller {
@@ -17,9 +18,9 @@ class Controller {
     }
 
     contollerInit(
-        pageQuery: IPageCartParams | IPageProductParams,
+        pageQuery: Partial<IPageCartParams> | Partial<IPageProductParams> | Partial<IPageMainParams>,
         queryParams: IQueryParams,
-        controller: CartController | ProductController
+        controller: CartController | ProductController | MainController
     ) {
         const hasParams = Object.keys(pageQuery).length;
 

@@ -263,8 +263,6 @@ export class Products extends Component implements Subscriber {
     }
 
     public update(): void {
-        console.log(this.cart.get());
-        console.log(this.cartLS.get());
         this.drawProducts();
         this.setFoundCount();
         this.setSearch();
