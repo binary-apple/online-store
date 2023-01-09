@@ -64,7 +64,7 @@ class FormStore extends Store {
         if (data) {
             if (field.validation.valueType !== 'any') {
                 if (field.validation.valueType === 'string') {
-                    const isString = data.match(/[A-Za-z]|-| /);
+                    const isString = data.match(/[A-Za-zА-Яа-я]|-| /g);
 
                     if (!isString) {
                         field.notType = true;
@@ -74,7 +74,7 @@ class FormStore extends Store {
                 }
 
                 if (field.validation.valueType === 'number') {
-                    const isNumber = data.match(/[0-9]/);
+                    const isNumber = data.match(/[0-9]/g);
 
                     if (isNumber) {
                         field.notType = false;
@@ -329,7 +329,7 @@ class FormStore extends Store {
     }
 
     private lettersOnly(value: string, field: IFieldForm, e: InputEvent) {
-        const isString = value.match(/[A-Za-z]|-| /g);
+        const isString = value.match(/[A-Za-zA-Яа-я]|-| /g);
 
         let validValue;
         let isValid = true;
