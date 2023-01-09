@@ -2,8 +2,7 @@ import { Products } from '../products';
 import { Product } from '../../types/product';
 import { IFilter } from '../../types/filter';
 import Filter from '../filter';
-import { Subscriber, Publisher } from '../../../utils/observer-interface';
-import { FilterMetric } from '../../types/filter';
+import { Subscriber } from '../../../utils/observer-interface';
 
 
 /* Products.filter */
@@ -130,7 +129,7 @@ describe('Products.set should set products correctly & notify all subscribers', 
     class FakeSubscriber implements Subscriber {
         public numCalls = 0;
 
-        update(publisher: Publisher) {
+        update() {
             this.numCalls++;
         }
     }    

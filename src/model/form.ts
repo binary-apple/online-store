@@ -193,8 +193,12 @@ class FormStore extends Store {
             .split(' ')
             .filter((el) => el);
 
-        if (words.length > field.validation.wordCount! - 1) {
-            const name = words.every((el) => el.length > field.validation.wordLength! - 1);
+        const valWordCnt = field.validation.wordCount;
+        const valWrodLen = field.validation.wordLength;
+        if (!valWordCnt || !valWrodLen) throw new Error('No word count or word length for validation');
+
+        if (words.length > valWordCnt - 1) {
+            const name = words.every((el) => el.length > valWrodLen - 1);
 
             if (!name) {
                 field.errors?.push(`Every word in name should consist of ${field.validation.wordLength} letters`);

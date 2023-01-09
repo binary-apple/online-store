@@ -128,10 +128,15 @@ export class Products extends Store {
 
         let sorting;
 
+        
+        const aValue = a[value];
+        const bValue = b[value];
+        if (!aValue || !bValue) throw new Error('Products have no parameters you sort by');
+
         if (order === 'desc') {
-            sorting = +b[value]! - +a[value]!;
+            sorting = +bValue - +aValue;
         } else {
-            sorting = +a[value]! - +b[value]!;
+            sorting = +aValue - +bValue;
         }
 
         return sorting;
