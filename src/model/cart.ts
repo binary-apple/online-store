@@ -130,8 +130,9 @@ export class Cart extends Store {
             if (this.productsInCart[productIdInCart].count === 1) {
                 this.removeProductFromCart(productId);
             } else {
-                if (!this.productsInCart[productIdInCart].count) this.productsInCart[productIdInCart].count = 0;
-                this.productsInCart[productIdInCart].count! -= 1;
+                const prodsInCart = this.productsInCart[productIdInCart];
+                if (!prodsInCart.count) prodsInCart.count = 0;
+                else prodsInCart.count -= 1;
                 this.notify();
             }
         } else {
