@@ -123,6 +123,10 @@ export class Products extends Store {
                     && (el.price < filter.price.from || el.price > filter.price.to)) {
                     return false;
                 }
+                if (filter.stock.from && filter.stock.to 
+                    && (el.price < filter.stock.from || el.price > filter.stock.to)) {
+                    return false;
+                }
                 return true;
 
                 // const category = el.category.toLowerCase().trim();
