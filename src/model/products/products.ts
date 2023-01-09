@@ -151,4 +151,4 @@ export class Products extends Store {
     }
 }
 
-export default Products;
+// export default Products;

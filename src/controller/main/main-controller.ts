@@ -2,7 +2,7 @@ import Controller from '../controller';
 import Routers from '../../router/routers';
 import { Cart } from '../../model/cart';
 import { MainView } from '../../view/main-view';
-import Products from '../../model/products/products';
+import { Products } from '../../model/products/products';
 import { products } from '../../model/productItems';
 import { HashRouter } from '../../router/router';
 import CartLocalStorage from '../../model/cart-local-storage';
