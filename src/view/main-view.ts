@@ -36,14 +36,6 @@ export class MainView extends BaseView implements View {
         this.header.handleClickToLogoIcon(callback);
     }
 
-    public setSliderTrack() {
-        // this.content.setSliderTrack();
-    }
-
-    public handleResizeWindow(callback: (e: Event)=> void) {
-        window.addEventListener('resize', callback, false);
-    }
-
     public handleScaleClick(callback: (big: boolean) => void) {
         this.content.handleScaleClick(callback);
     }
@@ -72,4 +64,11 @@ export class MainView extends BaseView implements View {
         this.content.handleFilterClick(callback);
     }
 
+    public handleSlidersInput(callback: (sliderName: 'price' | 'stock', minValue: number, maxValue: number)=>void) {
+        this.content.handleSlidersInput(callback);
+    }
+
+    public handleResizeWindow() {
+        this.content.handleResizeWindow();
+    }
 }

@@ -14,8 +14,8 @@ export class AllFilters extends Component {
         const filterMetrics = productsModel.getMetrics();
         this.categoryFilter = new Filter(filterModel, 'category', filterMetrics.categories);
         this.brandFilter = new Filter(filterModel, 'brand', filterMetrics.brands);
-        this.priceSlider = new Slider(filterModel, 'price');
-        this.stockSlider = new Slider(filterModel, 'stock');
+        this.priceSlider = new Slider(productsModel, filterModel, 'price');
+        this.stockSlider = new Slider(productsModel, filterModel, 'stock');
     }
 
     protected template(): DocumentFragment | HTMLElement {
@@ -61,6 +61,16 @@ export class AllFilters extends Component {
     public handleFilterClick(callback: (filterName: string, value: string, inFilter: boolean) => void) {
         this.brandFilter.handleFilterClick(callback);
         this.categoryFilter.handleFilterClick(callback);
+    }
+
+    public handleSlidersInput(callback: (sliderName: 'price' | 'stock', minValue: number, maxValue: number)=>void) {
+        this.priceSlider.handleSlidersInput(callback);
+        this.stockSlider.handleSlidersInput(callback);
+    }
+
+    public handleResizeWindow() {
+        this.priceSlider.handleResizeWindow();
+        this.stockSlider.handleResizeWindow();
     }
     
 }
