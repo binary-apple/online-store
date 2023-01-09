@@ -63,6 +63,7 @@ export class Slider extends Component implements Subscriber {
                     minValueEl.innerHTML = `${+minInput.value}`;
                     this.setSliderTrack();
                 }
+                if (+minInput.value >=  +maxInput.value) minInput.value = `${+maxInput.value}`;
                 callback(this.sliderName, +minInput.value, +maxInput.value);
             });
         }
@@ -73,6 +74,7 @@ export class Slider extends Component implements Subscriber {
                     maxValueEl.innerHTML = `${+maxInput.value}`;
                     this.setSliderTrack();
                 }
+                if (+maxInput.value <=  +minInput.value) maxInput.value = `${+minInput.value}`;
                 callback(this.sliderName, +minInput.value, +maxInput.value);
             });
         }
