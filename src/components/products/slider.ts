@@ -24,31 +24,56 @@ export class Slider extends Component implements Subscriber {
             <div class="min-${this.sliderName} ${this.sliderName}">${min}</div>
             <div class="max-${this.sliderName} ${this.sliderName}">${max}</div>
         </div>
-        <input type="range" name="min-${this.sliderName}" min="${min}" max="${max}" value="${min}" step="any" class="slider" id="min-${this.sliderName}">
-        <input type="range" name="max-${this.sliderName}" min="${min}" max="${max}" value="${max}" step="any" class="slider" id="max-${this.sliderName}">
+        <input type="range" name="min-${this.sliderName}" min="${min}" max="${max}" value="${min}" step="1" class="slider" id="min-${this.sliderName}">
+        <input type="range" name="max-${this.sliderName}" min="${min}" max="${max}" value="${max}" step="1" class="slider" id="max-${this.sliderName}">
         <div class="slider-track"></div>
         `;
         return temp.content;
     }
 
-    public setSliderTrack() {
-        const sliders = this.container.getElementsByClassName('slider');
+    private setSliderTrack() {
+        const minInput = this.container.querySelector(`#min-${this.sliderName}`);
+        const maxInput = this.container.querySelector(`#max-${this.sliderName}`);
         const track = this.container.querySelector('.slider-track');
-        if (track instanceof HTMLElement && sliders[0] instanceof HTMLInputElement && sliders[1] instanceof HTMLInputElement) {
-            const trackLen = sliders[0].getBoundingClientRect().width;
-            const trackValue = Math.abs(Number(sliders[0].value) - Number(sliders[1].value));
-            const trackMinValue = Math.min(Number(sliders[0].value), Number(sliders[1].value));
-            const trackFullValue = Number(sliders[0].max) - Number(sliders[1].min);
-            track.style.left = `${trackMinValue / trackFullValue * trackLen}px`;
-            track.style.width = `${(trackValue / trackFullValue) * trackLen}px`;
-        }
+        if (!(track instanceof HTMLElement && minInput instanceof HTMLInputElement && maxInput instanceof HTMLInputElement))
+        throw new Error('No slider');
+
+        const trackLen = minInput.getBoundingClientRect().width;
+        const trackValue = Number(maxInput.value) - Number(minInput.value);
+        const trackMinValue = Number(minInput.value);
+        const trackRangeValue = Number(minInput.max) - Number(maxInput.min);
+        track.style.left = `${(trackMinValue - Number(minInput.min)) / trackRangeValue * trackLen}px`;
+        track.style.width = `${(trackValue / trackRangeValue) * trackLen}px`;
     }
 
-    public handleSliderInput(callback: (e: Event)=>void) {
-        const sliders = this.container.querySelectorAll('.slider');
-        if (sliders) {
-            sliders.forEach(element => {
-                element.addEventListener('input', callback);
+    public handleResizeWindow() {
+        window.addEventListener('resize', this.setSliderTrack.bind(this));
+    }
+
+    public handleSlidersInput(callback: (sliderName: 'price' | 'stock', minValue: number, maxValue: number)=>void) {
+        const minInput = this.container.querySelector(`#min-${this.sliderName}`);
+        const maxInput = this.container.querySelector(`#max-${this.sliderName}`);
+        if (!(minInput instanceof HTMLInputElement && maxInput instanceof HTMLInputElement))
+        throw new Error('No inputs for sliders');
+
+        if (minInput instanceof HTMLInputElement) {
+            minInput.addEventListener('input', () => {
+                const minValueEl = this.container.querySelector(`.min-${this.sliderName}`);
+                if (minValueEl) {
+                    minValueEl.innerHTML = `${+minInput.value}`;
+                    this.setSliderTrack();
+                }
+                callback(this.sliderName, +minInput.value, +maxInput.value);
+            });
+        }
+        if (maxInput instanceof HTMLInputElement) {
+            maxInput.addEventListener('input', () => {
+                const maxValueEl = this.container.querySelector(`.max-${this.sliderName}`);
+                if (maxValueEl) {
+                    maxValueEl.innerHTML = `${+maxInput.value}`;
+                    this.setSliderTrack();
+                }
+                callback(this.sliderName, +minInput.value, +maxInput.value);
             });
         }
     }

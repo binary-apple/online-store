@@ -38,7 +38,7 @@ class MainController extends Controller {
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
-        this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
+        this.view.handleResizeWindow();
 
         this.view.handleScaleClick(this.handleScaleClick.bind(this));
 
@@ -54,6 +54,7 @@ class MainController extends Controller {
         this.view.handleSortInput(this.handleSortInput.bind(this));
 
         this.view.handleFilterClick(this.handleFilterClick.bind(this));
+        this.view.handleSlidersInput(this.handleSlidersInput.bind(this));
     }
 
     private handleClickToCartIcon() {
@@ -62,14 +63,6 @@ class MainController extends Controller {
 
     private handleClickToLogoIcon() {
         this.router.navigateTo(Routers.MAIN);
-    }
-
-    private handleSliderInput() {
-        this.view.setSliderTrack();
-    }
-
-    private handleResizeWindow() {
-        this.view.setSliderTrack();
     }
 
     private handleScaleClick(big: boolean) {
@@ -177,6 +170,14 @@ class MainController extends Controller {
         this.products.filter(this.filter.get());
     }
 
+    private handleSlidersInput(sliderName: 'price' | 'stock', minValue: number, maxValue: number) {
+        this.router.addSearchParams(`${sliderName}-min`, `${minValue}`);
+        this.router.addSearchParams(`${sliderName}-max`, `${maxValue}`);
+        const filter: Partial<IFilter> = {};
+        filter[sliderName] = {from: minValue, to: maxValue, min: 0, max: Infinity};
+        this.filter.setFilter(filter);
+        this.products.filter(this.filter.get());
+    }
 }
 
 export default MainController;

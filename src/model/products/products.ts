@@ -80,11 +80,11 @@ export class Products extends Store {
         if (isEmpty) {
             this.filtred = this.initialItems
                 .filter((el) => {
-                    return (
-                        filter.price.to >= el.price &&
-                        filter.price.from <= el.price &&
-                        filter.stock.from <= el.stock &&
-                        filter.stock.to >= el.stock
+                    return (el
+                        // filter.price.to >= el.price &&
+                        // filter.price.from <= el.price &&
+                        // filter.stock.from <= el.stock &&
+                        // filter.stock.to >= el.stock
                     );
                 })
                 .sort(sortItems);
@@ -119,7 +119,10 @@ export class Products extends Store {
                 if (filter.categories.length > 0 && !filter.categories.includes(el.category.toLowerCase())) {
                     return false;
                 }
-                // TODO: check all other filters
+                if (filter.price.from && filter.price.to 
+                    && (el.price < filter.price.from || el.price > filter.price.to)) {
+                    return false;
+                }
                 return true;
 
                 // const category = el.category.toLowerCase().trim();
@@ -187,37 +190,38 @@ export class Products extends Store {
         return sorting;
     }
 
-    private categoriesAndBrandsFilter(filter: IFilter, el: Product) {
-        const category = el.category.toLowerCase().trim();
-        const brand = el.brand.toLowerCase().trim();
+    // private categoriesAndBrandsFilter(filter: IFilter, el: Product) {
+    //     const category = el.category.toLowerCase().trim();
+    //     const brand = el.brand.toLowerCase().trim();
 
-        return filter.categories.includes(category) && filter.brands.includes(brand);
-    }
+    //     return filter.categories.includes(category) && filter.brands.includes(brand);
+    // }
 
-    private searchAndBrand(filter: IFilter, el: Product) {
-        const brand = el.brand.toLowerCase().trim();
+    // private searchAndBrand(filter: IFilter, el: Product) {
+    //     const brand = el.brand.toLowerCase().trim();
 
-        return this.searchItems(el, filter.search) && filter.brands.includes(brand);
-    }
+    //     return this.searchItems(el, filter.search) && filter.brands.includes(brand);
+    // }
 
-    private byAllParams(filter: IFilter, el: Product) {
-        const category = el.category.toLowerCase().trim();
-        const brand = el.brand.toLowerCase().trim();
+    // private byAllParams(filter: IFilter, el: Product) {
+    //     const category = el.category.toLowerCase().trim();
+    //     const brand = el.brand.toLowerCase().trim();
 
-        return (
-            this.searchItems(el, filter.search) && filter.categories.includes(category) && filter.brands.includes(brand)
-        );
-    }
+    //     return (
+    //         this.searchItems(el, filter.search) && filter.categories.includes(category) && filter.brands.includes(brand)
+    //     );
+    // }
 
-    private bySearchAndCategories(filter: IFilter, el: Product) {
-        const title = el.title.toLowerCase().trim();
-        const category = el.category.toLowerCase().trim();
+    // private bySearchAndCategories(filter: IFilter, el: Product) {
+    //     const title = el.title.toLowerCase().trim();
+    //     const category = el.category.toLowerCase().trim();
 
-        return this.searchItems(el, filter.search) && filter.categories.includes(category);
-    }
+    //     return this.searchItems(el, filter.search) && filter.categories.includes(category);
+    // }
 
     private emptyCheck(filter: IFilter) {
-        const isEmpty = !filter.search && !filter.categories && !filter.brands;
+        const isEmpty = !filter.search && !filter.categories && !filter.brands 
+            && !filter.price.from && !filter.price.to && !filter.stock.from && !filter.stock.to;
 
         return isEmpty;
     }
@@ -228,32 +232,32 @@ export class Products extends Store {
         filter.search = filter.search.toLowerCase();
     }
 
-    private searchByPrice(filter: IFilter, el: Product) {
-        return filter.price.to >= el.price && filter.price.from <= el.price;
-    }
+    // private searchByPrice(filter: IFilter, el: Product) {
+    //     return filter.price.to >= el.price && filter.price.from <= el.price;
+    // }
 
-    private searchByStock(filter: IFilter, el: Product) {
-        return filter.stock.to >= el.stock && filter.stock.from <= el.stock;
-    }
+    // private searchByStock(filter: IFilter, el: Product) {
+    //     return filter.stock.to >= el.stock && filter.stock.from <= el.stock;
+    // }
 
-    private searchItems(el: Product, value: string) {
-        if (!value) {
-            return;
-        }
+    // private searchItems(el: Product, value: string) {
+    //     if (!value) {
+    //         return;
+    //     }
 
-        const title = el.title.toLowerCase().trim();
-        const category = el.title.toLowerCase().trim();
-        const description = el.description.toLowerCase().trim();
-        const brand = el.brand.toLocaleLowerCase().trim();
+    //     const title = el.title.toLowerCase().trim();
+    //     const category = el.title.toLowerCase().trim();
+    //     const description = el.description.toLowerCase().trim();
+    //     const brand = el.brand.toLocaleLowerCase().trim();
 
-        return title.includes(value)
-            ? el
-            : category.includes(value)
-            ? el
-            : description.includes(value)
-            ? el
-            : brand.includes(value);
-    }
+    //     return title.includes(value)
+    //         ? el
+    //         : category.includes(value)
+    //         ? el
+    //         : description.includes(value)
+    //         ? el
+    //         : brand.includes(value);
+    // }
 }
 
 export default Products;

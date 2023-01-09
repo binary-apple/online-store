@@ -62,5 +62,15 @@ export class AllFilters extends Component {
         this.brandFilter.handleFilterClick(callback);
         this.categoryFilter.handleFilterClick(callback);
     }
+
+    public handleSlidersInput(callback: (sliderName: 'price' | 'stock', minValue: number, maxValue: number)=>void) {
+        this.priceSlider.handleSlidersInput(callback);
+        this.stockSlider.handleSlidersInput(callback);
+    }
+
+    public handleResizeWindow() {
+        this.priceSlider.handleResizeWindow();
+        this.stockSlider.handleResizeWindow();
+    }
     
 }
