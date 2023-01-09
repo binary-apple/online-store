@@ -91,13 +91,22 @@ export class Slider extends Component implements Subscriber {
         if (!(minValueEl instanceof HTMLElement && maxValueEl instanceof HTMLElement))
         throw new Error('No sliders values');
 
+        const {min, max} = this.products.getTotalRange(this.sliderName);
+        const {min: minFiltered, max: maxFiltered} = this.products.getFilteredRange(this.sliderName);
+
         if (this.filterModel.get()[this.sliderName].from && this.filterModel.get()[this.sliderName].to) {
             minInput.value = `${this.filterModel.get()[this.sliderName].from}`;
             maxInput.value = `${this.filterModel.get()[this.sliderName].to}`;
             minValueEl.innerHTML = `${+minInput.value}`;
             maxValueEl.innerHTML = `${+maxInput.value}`;
             this.setSliderTrack();
-        }
+        } else {
+            minInput.value = `${Math.max(min, minFiltered)}`;
+            maxInput.value = `${Math.min(max, maxFiltered)}`;
+            minValueEl.innerHTML = `${+minInput.value}`;
+            maxValueEl.innerHTML = `${+maxInput.value}`;
+            this.setSliderTrack();
+        } 
     }
 
     update(): void {

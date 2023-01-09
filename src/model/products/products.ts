@@ -74,23 +74,7 @@ export class Products extends Store {
 
     public filter(filter: IFilter) {
         this.filterItem = filter;
-        // const isEmpty = this.emptyCheck(filter);
         const sortItems = this.sortItems.bind(this, filter);
-
-        // if (isEmpty) {
-        //     this.filtred = this.initialItems
-        //         .filter((el) => {
-        //             return (el
-        //                 // filter.price.to >= el.price &&
-        //                 // filter.price.from <= el.price &&
-        //                 // filter.stock.from <= el.stock &&
-        //                 // filter.stock.to >= el.stock
-        //             );
-        //         })
-        //         .sort(sortItems);
-        //     this.notify();
-        //     return;
-        // }
 
         this.initializeFilter(filter);
 
