@@ -1,6 +1,7 @@
 import { IFilter, FilterMetric } from '../types/filter';
 import { Product } from '../types/product';
 import { Store } from '../store';
+import { number } from 'yargs';
 
 export class Products extends Store {
     initialItems: Array<Product>;
@@ -24,6 +25,19 @@ export class Products extends Store {
 
     public get() {
         return this.filtred;
+    }
+
+    private _getRange(rangeName: 'price' | 'stock', sourceArray: Array<Product>): {min: number, max: number} {
+        const targetArray = sourceArray.map((el) => el[rangeName])
+        return { min: Math.min(...targetArray), max: Math.max(...targetArray)};
+    }
+
+    public getTotalRange(rangeName: 'price' | 'stock') {
+        return this._getRange(rangeName, this.initialItems);
+    }
+
+    public getFilteredRange(rangeName: 'price' | 'stock') {
+        return this._getRange(rangeName, this.filtred);
     }
 
     public getMetrics() {

@@ -14,8 +14,8 @@ export class AllFilters extends Component {
         const filterMetrics = productsModel.getMetrics();
         this.categoryFilter = new Filter(filterModel, 'category', filterMetrics.categories);
         this.brandFilter = new Filter(filterModel, 'brand', filterMetrics.brands);
-        this.priceSlider = new Slider(filterModel, 'price');
-        this.stockSlider = new Slider(filterModel, 'stock');
+        this.priceSlider = new Slider(productsModel, filterModel, 'price');
+        this.stockSlider = new Slider(productsModel, filterModel, 'stock');
     }
 
     protected template(): DocumentFragment | HTMLElement {
