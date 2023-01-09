@@ -40,7 +40,7 @@ class MainController extends Controller {
         this.view.handleClickToCartIcon(this.handleClickToCartIcon.bind(this));
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
-        this.view.handleResizeWindow(this.handleResizeWindow.bind(this));
+        this.view.handleResizeWindow();
 
         this.view.handleScaleClick(this.handleScaleClick.bind(this));
 
@@ -54,6 +54,9 @@ class MainController extends Controller {
 
         this.view.handleSearchInput(this.handleSearchInput.bind(this));
         this.view.handleSortInput(this.handleSortInput.bind(this));
+
+        this.view.handleFilterClick(this.handleFilterClick.bind(this));
+        this.view.handleSlidersInput(this.handleSlidersInput.bind(this));
     }
 
     private handleClickToCartIcon() {
@@ -62,14 +65,6 @@ class MainController extends Controller {
 
     private handleClickToLogoIcon() {
         this.router.navigateTo(Routers.MAIN);
-    }
-
-    private handleSliderInput() {
-        this.view.setSliderTrack();
-    }
-
-    private handleResizeWindow() {
-        this.view.setSliderTrack();
     }
 
     private handleScaleClick(big: boolean) {
@@ -104,8 +99,26 @@ class MainController extends Controller {
             const valueArr = String(query['sort']).toLowerCase().split('-');
             filter.sort = { order: valueArr[1], value: valueArr[0] };
         }
-        // TODO: set other components according query
-
+        if ('brand' in query) {
+            filter.brands = String(query['brand']).toLowerCase().split('|');
+        }
+        if ('category' in query) {
+            filter.categories = String(query['category']).toLowerCase().split('|');
+        }
+        if ('price-min' in query && 'price-min') {
+            const minPrice = Number(query['price-min']);
+            const maxPrice = Number(query['price-max']);
+            if (!(Number.isNaN(minPrice) && Number.isNaN(minPrice))) {
+                filter.price = {min: 0, max: Infinity, from: minPrice, to: maxPrice};
+            }
+        }
+        if ('stock-min' in query && 'stock-min') {
+            const minStock = Number(query['stock-min']);
+            const maxStock = Number(query['stock-max']);
+            if (!(Number.isNaN(minStock) && Number.isNaN(minStock))) {
+                filter.stock = {min: 0, max: Infinity, from: minStock, to: maxStock};
+            }
+        }
         return filter;
     }
 
@@ -132,6 +145,54 @@ class MainController extends Controller {
             this.products.filter(this.filter.get());
         }
     }
+
+    private handleFilterClick(filterName: string, value: string, inFilter: boolean) {
+        if (filterName === 'brand') {
+            const brands = this.filter.get().brands;
+            if (inFilter) {
+                if (!brands.includes(value)) {
+                    brands.push(value);
+                    this.filter.setFilter({brands: brands});
+                }
+            } else {
+                this.filter.setFilter({brands: brands.filter((el) => el !== value)});
+            }
+            const query = this.filter.get().brands.join('|');
+            if (query) {
+                this.router.addSearchParams('brand', query);
+            } else {
+                this.router.removeSearchParam('brand');
+            }
+        }
+        if (filterName === 'category') {
+            const categories = this.filter.get().categories;
+            if (inFilter) {
+                if (!categories.includes(value)) {
+                    categories.push(value);
+                    this.filter.setFilter({categories: categories});
+                }
+            } else {
+                this.filter.setFilter({categories: categories.filter((el) => el !== value)});
+            }
+            const query = this.filter.get().categories.join('|');
+            if (query) {
+                this.router.addSearchParams('category', query);
+            } else {
+                this.router.removeSearchParam('category');
+            }
+        }
+        this.products.filter(this.filter.get());
+    }
+
+    private handleSlidersInput(sliderName: 'price' | 'stock', minValue: number, maxValue: number) {
+        this.router.addSearchParams(`${sliderName}-min`, `${minValue}`);
+        this.router.addSearchParams(`${sliderName}-max`, `${maxValue}`);
+        const filter: Partial<IFilter> = {};
+        filter[sliderName] = {from: minValue, to: maxValue, min: 0, max: Infinity};
+        this.filter.setFilter(filter);
+        this.products.filter(this.filter.get());
+    }
+
 }
 
 export default MainController;

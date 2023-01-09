@@ -65,4 +65,16 @@ export class MainProducts extends Component {
         this.products.handleSortInput(callback);
     }
 
+    public handleFilterClick(callback: (filterName: string, value: string, inFilter: boolean) => void) {
+        this.filters.handleFilterClick(callback);
+    }
+
+    public handleSlidersInput(callback: (sliderName: 'price' | 'stock', minValue: number, maxValue: number)=>void) {
+        this.filters.handleSlidersInput(callback);
+    }
+
+    public handleResizeWindow() {
+        this.filters.handleResizeWindow();
+    }
+
 }

@@ -6,14 +6,14 @@ export interface IFilter {
     categories: Array<string>;
     brands: Array<string>;
     price: {
-        from: number;
-        to: number;
+        from?: number;
+        to?: number;
         max: number;
         min: number;
     };
     stock: {
-        from: number;
-        to: number;
+        from?: number;
+        to?: number;
         max: number;
         min: number;
     };
