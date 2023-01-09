@@ -124,7 +124,7 @@ export class Products extends Store {
                     return false;
                 }
                 if (filter.stock.from && filter.stock.to 
-                    && (el.price < filter.stock.from || el.price > filter.stock.to)) {
+                    && (el.stock < filter.stock.from || el.stock > filter.stock.to)) {
                     return false;
                 }
                 return true;

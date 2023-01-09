@@ -78,7 +78,27 @@ export class Slider extends Component implements Subscriber {
         }
     }
 
+    private setSlider() {
+        const minInput = this.container.querySelector(`#min-${this.sliderName}`);
+        const maxInput = this.container.querySelector(`#max-${this.sliderName}`);
+        if (!(minInput instanceof HTMLInputElement && maxInput instanceof HTMLInputElement))
+        throw new Error('No inputs for sliders');
+        
+        const minValueEl = this.container.querySelector(`.min-${this.sliderName}`);
+        const maxValueEl = this.container.querySelector(`.max-${this.sliderName}`);
+        if (!(minValueEl instanceof HTMLElement && maxValueEl instanceof HTMLElement))
+        throw new Error('No sliders values');
+
+        if (this.filterModel.get()[this.sliderName].from && this.filterModel.get()[this.sliderName].to) {
+            minInput.value = `${this.filterModel.get()[this.sliderName].from}`;
+            maxInput.value = `${this.filterModel.get()[this.sliderName].to}`;
+            minValueEl.innerHTML = `${+minInput.value}`;
+            maxValueEl.innerHTML = `${+maxInput.value}`;
+            this.setSliderTrack();
+        }
+    }
+
     update(): void {
-        console.log('slider update');
+        this.setSlider();
     }
 }
