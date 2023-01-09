@@ -5,6 +5,7 @@ import MainController from '../controller/main/main-controller';
 import ProductController from '../controller/product/product-controller';
 import ErrorController from '../controller/error/error-controller';
 import { IterableObject } from '../utils/types/utils';
+import { IPageCartParams, IPageProductParams } from './types/router';
 
 export class HashRouter extends Router {
     constructor(settings: RouterOptions) {
@@ -20,7 +21,6 @@ export class HashRouter extends Router {
     }
 
     removeSearchParam(key: string) {
-
         const url = new URL(window.location.href);
 
         const params = this.getSearchParams();
@@ -46,7 +46,7 @@ export class HashRouter extends Router {
 
     getSearchParams() {
         const url = new URL(window.location.href);
-        
+
         const paramsObj: IterableObject = {};
 
         url.searchParams.forEach((value: string, key: string) => {
@@ -57,7 +57,7 @@ export class HashRouter extends Router {
             const isNotFalse = notANumber && value !== 'false' ? value : false;
 
             paramsObj[key] = isNumber || isTrue || isNotFalse || false;
-        })
+        });
 
         return paramsObj;
     }
@@ -79,14 +79,26 @@ router.add(Routers.MAIN, () => {
 });
 
 router.add(Routers.PRODUCT, () => {
+    const queryParams = {};
+
+    const pageQuery = router.getSearchParams() as unknown as IPageProductParams;
+
     const productController = new ProductController(router);
-    productController.init();
+
+    productController.contollerInit(pageQuery, queryParams, productController);
 });
 
 router.add(Routers.CART, () => {
+    const queryParams = {
+        page: /[0-9]/g,
+        limit: /[0-9]/g,
+    };
+
+    const pageQuery = router.getSearchParams() as unknown as IPageCartParams;
+
     const cartController = new CartController(router);
 
-    cartController.init();
+    cartController.contollerInit(pageQuery, queryParams, cartController);
 });
 
 router.addUriListener();
