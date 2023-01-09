@@ -28,7 +28,10 @@ class Controller {
             let validParams;
 
             for (const key in pageQuery) {
-                validParams = ('' + pageQuery[key]).match(queryParams[key])?.length === ('' + pageQuery[key]).length;
+                const value = (pageQuery[key] as string).replaceAll(' ', '+');
+                const match = value.length === value.match(queryParams[key])?.length;
+
+                validParams = match;
             }
 
             if (validParams) {
