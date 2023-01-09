@@ -61,8 +61,9 @@ export class Filter extends Component implements Subscriber {
             const checkbox = el.querySelector('input');
             if (checkbox instanceof HTMLInputElement && el instanceof HTMLElement) {
                 const options = el.dataset.options;
+                if (!options) throw new Error('No dataset for filter options');
 
-                checkbox.checked = this.filterModel.get()[`${this.filterName === 'brand' ? 'brands' : 'categories'}`].includes(options!);
+                checkbox.checked = this.filterModel.get()[`${this.filterName === 'brand' ? 'brands' : 'categories'}`].includes(options);
             }
         })
     }
