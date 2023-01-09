@@ -28,10 +28,16 @@ class Controller {
             let validParams;
 
             for (const key in pageQuery) {
-                const value = (pageQuery[key] as string).replaceAll(' ', '+');
-                const match = value.length === value.match(queryParams[key])?.length;
+                const value = typeof pageQuery[key] === 'string' ? (pageQuery[key] as string).replaceAll(' ', '+') : '' + pageQuery[key];
+                const match = '' + value.length === '' + value.match(queryParams[key])?.length;
 
-                validParams = match;
+                if (value === 'true' && key === 'big') {
+                    validParams = value.length === 4 && value.match(queryParams[key])?.length === 1;
+                } else if (value === 'false' && key === 'big') {
+                    validParams = value.length === 5 && value.match(queryParams[key])?.length === 1;
+                } else {
+                    validParams = match;
+                }
             }
 
             if (validParams) {
