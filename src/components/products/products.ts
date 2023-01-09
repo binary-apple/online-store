@@ -1,22 +1,28 @@
-import { Component } from "../types/component";
-import { Products as ProductsModel } from "../../model/products/products";
-import { Filter as FilterModel } from "../../model/products/filter";
-import { Subscriber } from "../../utils/observer-interface";
-import { Cart } from "../../model/cart";
-import { products } from "../../model/productItems";
-import CartLocalStorage from "../../model/cart-local-storage";
+import { Component } from '../types/component';
+import { Products as ProductsModel } from '../../model/products/products';
+import { Filter as FilterModel } from '../../model/products/filter';
+import { Subscriber } from '../../utils/observer-interface';
+import { Cart } from '../../model/cart';
+import { products } from '../../model/productItems';
+import CartLocalStorage from '../../model/cart-local-storage';
 
 export class Products extends Component implements Subscriber {
     private readonly productsModel: ProductsModel;
     private readonly filterModel: FilterModel;
     private readonly cart: Cart;
     private readonly cartLS: CartLocalStorage;
-    constructor(private big: boolean, products: ProductsModel, filterModel: FilterModel, cart: Cart, cartLS: CartLocalStorage) {
-        super({containerTag: 'div', className: 'products col-lg-9 col-12 px-md-4'.split(' ')});
+    constructor(
+        private big: boolean,
+        products: ProductsModel,
+        filterModel: FilterModel,
+        cart: Cart,
+        cartLS: CartLocalStorage
+    ) {
+        super({ containerTag: 'div', className: 'products col-lg-9 col-12 px-md-4'.split(' ') });
         this.productsModel = products;
         this.filterModel = filterModel;
         this.cart = cart;
-        this.cartLS = cartLS;        
+        this.cartLS = cartLS;
         this.subscribe(this.productsModel, this.filterModel, this.cart);
     }
 
@@ -58,9 +64,13 @@ export class Products extends Component implements Subscriber {
         prodsWrapper.innerHTML = '';
         this.productsModel.get().forEach((el) => {
             const productItem = document.createElement('div');
-            productItem.classList.add(...`${this.big ? 'big-scale col-12' : 'small-scale col-md-4 col-6'} py-2 px-1`.trim().split(' '));
-            productItem.innerHTML =`
-            <a href='/product/${el.id}' class="product-item px-2 ${this.cart.isProductInCart(el.id) ? 'in-cart' : ''}" data-idproduct=${el.id}>
+            productItem.classList.add(
+                ...`${this.big ? 'big-scale col-12' : 'small-scale col-md-4 col-6'} py-2 px-1`.trim().split(' ')
+            );
+            productItem.innerHTML = `
+            <a href='/product/${el.id}' class="product-item px-2 ${
+                this.cart.isProductInCart(el.id) ? 'in-cart' : ''
+            }" data-idproduct=${el.id}>
                 <div class="item-img-wrapper">
                     <img src="${el.thumbnail}" 
                     loading="lazy" 
@@ -73,14 +83,16 @@ export class Products extends Component implements Subscriber {
                         <div class="product-description">${el.description}</div>
                         <div class="product-price">${el.price}</div>
                     </div>
-                    <button class="products-button ${this.cart.isProductInCart(el.id) ? 'drop' : 'add'}" data-idbutton="${el.id}">
+                    <button class="products-button ${
+                        this.cart.isProductInCart(el.id) ? 'drop' : 'add'
+                    }" data-idbutton="${el.id}">
                         ${this.cart.isProductInCart(el.id) ? 'Remove' : 'To cart'}
                     </button>
                 </div>
             </div>
-            `
+            `;
             prodsWrapper.append(productItem);
-        })
+        });
     }
 
     private drawViewIcon(big: boolean) {
@@ -97,7 +109,7 @@ export class Products extends Component implements Subscriber {
             <rect x="18.5" y="9.5" width="6" height="6" stroke="#414141"/>
             <rect x="18.5" y="18.5" width="6" height="6" stroke="#414141"/>
             </svg>
-            `
+            `;
         } else {
             return `
             <svg width="25" height="25" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -105,7 +117,7 @@ export class Products extends Component implements Subscriber {
             <rect x="0.5" y="9.5" width="24" height="6" stroke="#414141"/>
             <rect x="0.5" y="18.5" width="24" height="6" stroke="#414141"/>
             </svg>
-            `
+            `;
         }
     }
 
@@ -139,7 +151,13 @@ export class Products extends Component implements Subscriber {
         this.big = false;
     }
 
-    private _handleScaleClick(iconClass: string, removeClasses: Array<string>, setClasses: Array<string>, big: boolean, callback: (big: boolean) => void) {
+    private _handleScaleClick(
+        iconClass: string,
+        removeClasses: Array<string>,
+        setClasses: Array<string>,
+        big: boolean,
+        callback: (big: boolean) => void
+    ) {
         const scaleIcon = this.container.getElementsByClassName(iconClass)[0];
         if (scaleIcon) {
             scaleIcon.addEventListener('click', () => {
@@ -149,12 +167,12 @@ export class Products extends Component implements Subscriber {
                         if (el instanceof HTMLElement) {
                             removeClasses.forEach((elClass) => {
                                 if (el.classList.contains(elClass)) el.classList.remove(elClass);
-                            })
+                            });
                             setClasses.forEach((elClass) => {
                                 el.classList.add(elClass);
-                            })
+                            });
                         }
-                    })
+                    });
                 }
                 if (big) this.setBigScale();
                 else this.setSmallScale();
@@ -164,15 +182,15 @@ export class Products extends Component implements Subscriber {
     }
 
     public handleScaleClick(callback: (big: boolean) => void) {
-        const bigScaleClasses = ['big-scale','col-12'];
+        const bigScaleClasses = ['big-scale', 'col-12'];
         const smallScaleClasses = ['small-scale', 'col-md-4', 'col-6'];
         this._handleScaleClick('small-view', bigScaleClasses, smallScaleClasses, false, callback);
         this._handleScaleClick('big-view', smallScaleClasses, bigScaleClasses, true, callback);
     }
 
     private toggleProductInCart(id: number) {
-        const product = products.find(e => e.id === id);
-        if (! product) {
+        const product = products.find((e) => e.id === id);
+        if (!product) {
             throw new Error('No such product');
         }
         this.cart.isProductInCart(id) ? this.cart.removeProductFromCart(id) : this.cart.addProductToCart(product);
@@ -187,7 +205,7 @@ export class Products extends Component implements Subscriber {
         prods.addEventListener('click', (e: Event) => {
             e.preventDefault();
             const target = e.target;
-            if (!(target instanceof HTMLElement) || !(target)) {
+            if (!(target instanceof HTMLElement) || !target) {
                 return;
             }
             const idButton = target.dataset.idbutton;
@@ -195,7 +213,7 @@ export class Products extends Component implements Subscriber {
                 this.toggleProductInCart(Number(idButton));
             } else {
                 const productEl = target.closest('.product-item');
-                if (!(productEl instanceof HTMLElement) || !(productEl)) {
+                if (!(productEl instanceof HTMLElement) || !productEl) {
                     return;
                 }
                 const idProduct = productEl.dataset.idproduct;
@@ -203,7 +221,7 @@ export class Products extends Component implements Subscriber {
                     callback(Number(idProduct));
                 }
             }
-        })
+        });
     }
 
     private setFoundCount() {
@@ -217,7 +235,7 @@ export class Products extends Component implements Subscriber {
         if (!search || !(search instanceof HTMLInputElement)) throw new Error('No searching form');
         search.addEventListener('input', () => {
             callback(search.value);
-        })
+        });
     }
 
     public handleSortInput(callback: (value: string) => void) {
@@ -225,7 +243,7 @@ export class Products extends Component implements Subscriber {
         if (!sort || !(sort instanceof HTMLSelectElement)) throw new Error('No sorting form');
         sort.addEventListener('input', () => {
             callback(sort.value);
-        })
+        });
     }
 
     private setSearch() {
@@ -241,10 +259,12 @@ export class Products extends Component implements Subscriber {
             sort.value = `sort-title`;
         } else {
             sort.value = `${this.filterModel.get().sort.value}-${this.filterModel.get().sort.order}`;
-        } 
+        }
     }
 
     public update(): void {
+        console.log(this.cart.get());
+        console.log(this.cartLS.get());
         this.drawProducts();
         this.setFoundCount();
         this.setSearch();

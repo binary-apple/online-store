@@ -229,6 +229,7 @@ class CartController extends Controller {
                         this.cartLS.setPromocodes(this.cart.getPromocodes());
                         this.cart.clearPromocodes();
                         this.cartLS.set(this.cart.get());
+                        console.log(this.cartLS.get(), 'in-cart');
                     },
                     () => {
                         this.router.navigateTo('/');

@@ -162,8 +162,8 @@ class CartContent extends Component {
                             }, 3000);
 
                             success.addEventListener('hidden.bs.modal', () => {
-                                redirect();
                                 callback(order);
+                                redirect();
                             });
                         }
                     });
