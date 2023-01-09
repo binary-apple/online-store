@@ -19,18 +19,20 @@ class MainController extends Controller {
     private cartLS: CartLocalStorage;
     constructor(router: HashRouter) {
         super(router);
-        
-        this.products.set(products);
-        
-        this.cartLS = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);        
-        this.cart = new Cart(new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get());
-        this.view = new MainView(this.cart, this.cartLS, this.products, this.filter, this.getBigFromQuery());
 
+        this.products.set(products);
+
+        this.cartLS = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);
+        this.cart = new Cart(
+            new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).get(),
+            new CartLocalStorage(CartName.LOCAL_STORAGE_NAME).getPromocodes()
+        );
+        this.view = new MainView(this.cart, this.cartLS, this.products, this.filter, this.getBigFromQuery());
     }
-    
+
     async init() {
         this.view.init(this.root);
-        
+
         this.filter.setFilter(this.getFilterFromQuery());
         this.products.filter(this.filter.get());
         this.products.notify();
@@ -48,7 +50,7 @@ class MainController extends Controller {
         this.view.handleClickToLogoIcon(this.handleClickToLogoIcon.bind(this));
 
         this.view.handleCopyLinkClick(this.handleCopyLinkClick.bind(this));
-        this.view.handleResetFiltersClick(this.handleResetFiltersClick.bind(this));        
+        this.view.handleResetFiltersClick(this.handleResetFiltersClick.bind(this));
 
         this.view.handleSearchInput(this.handleSearchInput.bind(this));
         this.view.handleSortInput(this.handleSortInput.bind(this));
@@ -95,7 +97,7 @@ class MainController extends Controller {
         }
         if ('sort' in query) {
             const valueArr = String(query['sort']).toLowerCase().split('-');
-            filter.sort = {order: valueArr[1], value: valueArr[0]};
+            filter.sort = { order: valueArr[1], value: valueArr[0] };
         }
         if ('brand' in query) {
             filter.brands = String(query['brand']).toLowerCase().split('|');
@@ -127,7 +129,7 @@ class MainController extends Controller {
         if (value.length > 0) {
             this.router.addSearchParams('search', value);
         }
-        this.filter.setFilter({search: value});
+        this.filter.setFilter({ search: value });
         this.products.filter(this.filter.get());
     }
 
@@ -135,11 +137,11 @@ class MainController extends Controller {
         const valueArr = value.toLowerCase().split('-');
         if (valueArr[1].toLowerCase() === 'title') {
             this.router.removeSearchParam('sort');
-            this.filter.setFilter({ sort: {order: '', value: ''} });
+            this.filter.setFilter({ sort: { order: '', value: '' } });
             this.products.filter(this.filter.get());
         } else {
             this.router.addSearchParams('sort', value.toLowerCase());
-            this.filter.setFilter({ sort: {order: valueArr[1], value: valueArr[0]} });
+            this.filter.setFilter({ sort: { order: valueArr[1], value: valueArr[0] } });
             this.products.filter(this.filter.get());
         }
     }
@@ -190,6 +192,7 @@ class MainController extends Controller {
         this.filter.setFilter(filter);
         this.products.filter(this.filter.get());
     }
+
 }
 
 export default MainController;

@@ -5,6 +5,8 @@ import CartLocalStorage from '../../model/cart-local-storage';
 import { HashRouter } from '../../router/router';
 import { ICartPagination } from '../../model/types/cart';
 import { CartName } from '../../model/types/cart';
+import { IRouter } from '../../router/types/router';
+import { Product } from '../../model/types/product';
 
 class CartController extends Controller {
     cart: Cart;
@@ -14,13 +16,12 @@ class CartController extends Controller {
         super(router);
 
         this.cartLS = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);
-        this.cart = new Cart(this.cartLS.get());
+        this.cart = new Cart(this.cartLS.get(), this.cartLS.getPromocodes());
     }
 
     async init() {
         const cartView = new CartView(this.cart);
         cartView.init();
-
         this.setPaginationFromQueryParams();
 
         cartView.breadCrumbsClickHandler((e: Event) => {
@@ -147,13 +148,35 @@ class CartController extends Controller {
 
         cartView.confirmPromoCodeClickHandler((promo: string) => {
             this.cart.addPromocode(promo);
+
+            this.cartLS.setPromocodes(this.cart.getPromocodes());
             this.cartLS.set(this.cart.get());
         });
 
         cartView.removePromoCodeClickHandler((promo: string) => {
             this.cart.removePromocode(promo);
+            this.cartLS.setPromocodes(this.cart.getPromocodes());
             this.cartLS.set(this.cart.get());
         });
+
+        cartView.makeOrder(
+            (products: Array<Product>) => {
+                products.forEach((item) => {
+                    this.cart.removeProductFromCart(item.id);
+                });
+                this.cart.clearPromocodes();
+
+                this.cart.emptyOrderArray();
+                this.cartLS.setPromocodes(this.cart.getPromocodes());
+                this.cartLS.set(this.cart.get());
+            },
+            () => {
+                this.router.navigateTo('/');
+            },
+            false
+        );
+
+        this.checkRedirectFromProduct(cartView);
     }
 
     setPaginationFromQueryParams() {
@@ -185,6 +208,37 @@ class CartController extends Controller {
         this.cart.changeParamsPage(pageValue);
 
         this.router.addSearchParams('page', '' + pageValue);
+    }
+
+    checkRedirectFromProduct(cartView: CartView) {
+        const page = (this.router as unknown as IRouter)._currentPage;
+
+        if (page.state) {
+            const pageState = JSON.parse(page?.state as string);
+
+            if (pageState.isRedirect) {
+                this.cart.emptyOrderArray();
+                this.cart.addToOrder(pageState.product);
+
+                cartView.makeOrder(
+                    (products: Array<Product>) => {
+                        products.forEach((item) => {
+                            this.cart.removeProductFromCart(item.id);
+                        });
+
+                        this.cartLS.setPromocodes(this.cart.getPromocodes());
+                        this.cart.clearPromocodes();
+                        this.cartLS.set(this.cart.get());
+                    },
+                    () => {
+                        this.router.navigateTo('/');
+                    },
+                    true
+                );
+
+                page.state = null;
+            }
+        }
     }
 }
 

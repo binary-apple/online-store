@@ -6,6 +6,7 @@ const Rating = require('./component/rating.html');
 const Image = require('./component/image.html');
 import { products } from '../../model/productItems';
 import Preloader from '../../assets/img/preloader.svg?inline';
+import { Modal } from 'bootstrap';
 
 class ProductContent extends Component {
     product: Product;
@@ -13,6 +14,7 @@ class ProductContent extends Component {
     products: Array<Product>;
     cartText = '';
     btnToCartDisabled = '';
+    orderModal: Modal = {} as Modal;
 
     constructor(product: Product, cart: Cart) {
         super({ containerTag: 'main', className: ['main-container'] });
@@ -43,56 +45,14 @@ class ProductContent extends Component {
             wrapper.addEventListener('click', async (e: Event) => {
                 const htmlTarget = e.target as HTMLElement;
 
-                const isImage =
-                    htmlTarget.classList.contains('product-images-item__img') ||
-                    htmlTarget.classList.contains('product-images-main__image');
+                const isImage = htmlTarget.classList.contains('product-images-item__img');
+                const bigImage = document.querySelector('.product-images-main__image') as HTMLElement;
 
                 if (isImage) {
-                    const wrapperPhoto = document.createElement('div');
-                    wrapperPhoto.innerHTML = Preloader;
+                    const srcTarget = htmlTarget.getAttribute('src') as string;
 
-                    wrapperPhoto.classList.add('preloader__bg');
-
-                    const img = document.createElement('img');
-                    img.classList.add('product-photo__img');
-
-                    const src = htmlTarget.getAttribute('src');
-
-                    if (src) {
-                        img.setAttribute('src', src);
-                        document.body.append(wrapperPhoto);
-
-                        setTimeout(() => {
-                            wrapperPhoto.classList.add('show');
-                        });
-
-                        const loadImg = new Promise((res) => {
-                            img.onload = () => {
-                                res(true);
-                            };
-                        });
-
-                        await loadImg;
-
-                        wrapperPhoto.innerHTML = '';
-
-                        wrapperPhoto.append(img);
-
-                        wrapperPhoto.addEventListener('click', (event) => {
-                            const htmlTarget = event.target as HTMLElement;
-
-                            const isBg = htmlTarget.classList.contains('preloader__bg');
-
-                            if (isBg) {
-                                htmlTarget.remove();
-                            }
-
-                            const isPic = htmlTarget.closest('.preloader__bg');
-
-                            if (isPic) {
-                                isPic.remove();
-                            }
-                        });
+                    if (srcTarget) {
+                        bigImage.setAttribute('src', srcTarget);
                     }
                 }
             });
@@ -201,6 +161,20 @@ class ProductContent extends Component {
 
         if (btn) {
             btn.innerText = this.getCartBtnText();
+        }
+
+        const hasModal = Object.keys(this.orderModal).length;
+
+        if (this.cart.openModalPage) {
+            if (!hasModal) {
+                const modal = document.querySelector('.order-modal');
+
+                if (modal) {
+                    this.orderModal = new Modal(modal);
+
+                    this.orderModal.show();
+                }
+            }
         }
     }
 }

@@ -14,9 +14,6 @@
         margin-top: 30px;
     }
 
-    &__remove-wrapper {
-    }
-
     &__select-all {
         display: flex;
     }
@@ -124,9 +121,6 @@
         font-weight: 400;
         font-size: 16px;
         line-height: 150%;
-    }
-
-    &__description {
     }
 
     &__one-price {
@@ -395,6 +389,14 @@
             background-color: hsl(15, 100%, 55%);
             color: white;
         }
+    }
+}
+
+.modal-confirm-promo {
+    .btn {
+        width: max-content;
+        height: 45px;
+        padding: 0 35px;
     }
 }
 

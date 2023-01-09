@@ -11,15 +11,17 @@ export class Cart extends Store {
         limit: 3,
         page: 1,
     } as ICartPagination;
+    openModalPage = false;
+    productsToOrder: Array<Product> = [];
 
-    constructor(products: Array<Product>) {
+    constructor(products: Array<Product>, promocodes = []) {
         super();
         this.productsInCart = [...products];
         this.allPromocodes = new Map<string, number>([
             ['EPM', 0.1],
             ['RS', 0.1],
         ]);
-        this.promoList = [];
+        this.promoList = [...promocodes];
         this.totalDisc = 0;
     }
 
@@ -41,6 +43,10 @@ export class Cart extends Store {
 
     public getExistPromocodes() {
         return this.allPromocodes;
+    }
+
+    public getPromocodes() {
+        return this.promoList;
     }
 
     public getConfirmedPromocodes() {
@@ -107,8 +113,11 @@ export class Cart extends Store {
 
         if (productIdInCart >= 0) {
             if (!product.count) product.count = 0;
-            product.count += 1;
-            this.notify();
+
+            if (product.stock >= product.count + 1) {
+                product.count += 1;
+                this.notify();
+            }
         } else {
             this.addProductToCart(product, 1);
         }
@@ -149,15 +158,15 @@ export class Cart extends Store {
         }
     }
 
-    isProductInCart(id: number) {
+    public isProductInCart(id: number) {
         return this.productsInCart.find((product) => product.id === id) ? true : false;
     }
 
-    getCart() {
+    public getCart() {
         return { productsInCart: this.productsInCart, promoList: this.promoList, totalDisc: this.totalDisc };
     }
 
-    setCart({
+    public setCart({
         productsInCart,
         promoList,
         totalDisc,
@@ -172,7 +181,7 @@ export class Cart extends Store {
         this.notify();
     }
 
-    changeParamsLimit(limit: number) {
+    public changeParamsLimit(limit: number) {
         if (limit < 1) {
             this.pagination.limit = 1;
         } else {
@@ -195,7 +204,7 @@ export class Cart extends Store {
         return [start, end];
     }
 
-    changeParamsPage(type: string | number) {
+    public changeParamsPage(type: string | number) {
         const changeFromEvent = typeof type === 'string';
         const changeFromQuery = typeof type === 'number';
 
@@ -239,5 +248,36 @@ export class Cart extends Store {
         }
 
         this.notify();
+    }
+
+    public toggleModalPage() {
+        this.openModalPage = !this.openModalPage;
+
+        this.notify();
+    }
+
+    public addToOrder(product: Product) {
+        this.productsToOrder.push(product);
+    }
+
+    public emptyOrderArray() {
+        this.productsToOrder.length = 0;
+    }
+
+    public getOrder() {
+        return this.productsToOrder;
+    }
+
+    public orderModalIsOpen() {
+        return this.openModalPage;
+    }
+
+    public empty() {
+        this.productsInCart.length = 0;
+        this.notify();
+    }
+
+    public clearPromocodes() {
+        this.promoList.length = 0;
     }
 }

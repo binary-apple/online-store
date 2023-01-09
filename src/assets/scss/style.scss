@@ -2,6 +2,10 @@
 @import './partials/fonts';
 @import './partials/settings';
 @import './partials/typography';
+@import './partials/breadcrumbs';
+@import './partials/cart-content';
+@import './partials/product';
+@import './partials/order';
 @import './partials/checkbox';
 @import './partials/buttons';
 @import './partials/footer';
@@ -9,6 +13,7 @@
 @import './partials/sliders';
 @import './partials/products';
 @import './partials/preloader';
+@import './partials/validate';
 @import './partials/filter';
 
 body {
@@ -52,7 +57,7 @@ main {
     background: $secondary;
 }
 
-  ::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: $primary;
 }
 
@@ -61,16 +66,3 @@ main {
     width: 100%;
     margin: 0 auto;
 }
-
-/* breadcrumbs */
-
-@import './partials/breadcrumbs';
-
-/* cart */
-
-@import './partials/cart-content';
-
-/* product */
-
-@import './partials/product';
-

@@ -190,6 +190,13 @@ class CartTotalBoard extends Component {
 
         if (totalWrapper && cartNav) {
             const products = this.cart.get();
+
+            const cartTotal = totalWrapper.querySelector('.cart-board__total') as HTMLElement;
+
+            if (cartTotal) {
+                cartTotal.innerText = this.cart.getTotalPrice() + '€';
+            }
+
             if (!products.length) {
                 totalWrapper.classList.add('hide');
                 cartNav.classList.add('hide');

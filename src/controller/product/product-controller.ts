@@ -16,7 +16,7 @@ class ProductController extends Controller {
     constructor(router: HashRouter) {
         super(router);
         this.cartLocalStorage = new CartLocalStorage(CartName.LOCAL_STORAGE_NAME);
-        this.cart = new Cart(this.cartLocalStorage.get());
+        this.cart = new Cart(this.cartLocalStorage.get(), this.cartLocalStorage.getPromocodes());
         this.products = products;
     }
 
@@ -58,9 +58,12 @@ class ProductController extends Controller {
                     this.cartLocalStorage.set(this.cart.get());
                 }
 
-                this.router.navigateTo('/cart', '');
-                this.router.addSearchParams('productId', '' + product.id);
-                this.router.addSearchParams('makeOrder', 'true');
+                const productState = {
+                    isRedirect: true,
+                    product: product,
+                };
+
+                this.router.navigateTo('/cart', JSON.stringify(productState));
             });
         } else {
             this.router.navigateTo('/404', '');

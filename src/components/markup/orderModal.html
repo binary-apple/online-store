@@ -1,0 +1,106 @@
+<div
+    class="modal fade order-modal"
+    id="exampleModal"
+    tabindex="-1"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-fullscreen-md-down">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Make order</h5>
+                <span class="btn-close" data-bs-dismiss="modal" aria-label="Close"></span>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="order__person d-flex">
+                        <div class="order__firstname">
+                            <span class="order__field">Name *</span>
+                            <input
+                                class="order-name__value"
+                                value="{{name.value}}"
+                                type="text"
+                                placeholder="Enter your name"
+                            />
+                        </div>
+                        <div class="order__firstname">
+                            <span class="order__field">Phone *</span>
+                            <input
+                                class="order-phone__value"
+                                value="{{phone.value}}"
+                                type="text"
+                                placeholder="Enter your phone"
+                            />
+                        </div>
+                    </div>
+                    <div class="order__card d-flex">
+                        <div class="order__address w-50">
+                            <span class="order__field">Address *</span>
+                            <div>
+                                <input
+                                    value="{{card.value}}"
+                                    class="order-address__value"
+                                    type="text"
+                                    placeholder="Enter your address"
+                                />
+                            </div>
+                        </div>
+                        <div class="order__firstname">
+                            <span class="order__field">Email *</span>
+                            <input
+                                class="order-email__value"
+                                value="{{email.value}}"
+                                type="text"
+                                placeholder="Enter your email"
+                            />
+                        </div>
+                    </div>
+                    <div class="d-flex order-card flex-column">
+                        <div class="order__cart-number order-card__title">
+                            <div>
+                                <input
+                                    value="{{card.value}}"
+                                    class="order-card__value order-card__input order-card__input--number"
+                                    type="text"
+                                    placeholder="0000 0000 0000 0000"
+                                />
+                            </div>
+                        </div>
+                        <div class="d-flex w-100 order-card__info justify-content__between">
+                            <div class="d-flex">
+                                <div class="order-card__number">
+                                    <span class="order__field">Date</span>
+                                    <div>
+                                        <input
+                                            value="{{cardDate.value}}"
+                                            class="order-card__input order-cardDate__value w-100"
+                                            type="text"
+                                            placeholder="12/22"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="order-card__cvv">
+                                    <span class="order__field">CVV</span>
+                                    <div>
+                                        <input
+                                            value="{{cvv.value}}"
+                                            class="order-card__input order-cvv__value w-100"
+                                            type="text"
+                                            placeholder="123"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="order-card__icon"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" disabled="true" class="btn cart-order-modal__confirm">Order now</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
