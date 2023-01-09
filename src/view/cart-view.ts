@@ -99,6 +99,14 @@ class CartView extends BaseView implements View {
         this.content.makeOrder(callback, redirect, auto);
     }
 
+    public handleClickToCartIcon(callback: (e: Event) => void) {
+        this.content.handleClickToCartIcon(callback);
+    }
+
+    public handleClickToLogoIcon(callback: (e: Event) => void) {
+        this.content.handleClickToLogoIcon(callback);
+    }
+
     public setPersonInfo() {
         this.content.setPersonInfo();
     }

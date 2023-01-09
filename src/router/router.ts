@@ -78,7 +78,7 @@ router.add(Routers.MAIN, () => {
         category: /[A-Za-zА-Яа-я]/g,
         brand: /[A-Za-zА-Яа-я]/g,
         big: /true|false/g,
-        search: /[A-Za-zА-Яа-я]|[0-9]/g,
+        search: /[A-Za-zА-Яа-я]|[0-9]|\+/g,
         'price-min': /[0-9]/g,
         'price-max': /[0-9]/g,
         'stock-min': /[0-9]/g,

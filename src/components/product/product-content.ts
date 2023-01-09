@@ -5,7 +5,6 @@ import { Cart } from '../../model/cart';
 const Rating = require('./component/rating.html');
 const Image = require('./component/image.html');
 import { products } from '../../model/productItems';
-import Preloader from '../../assets/img/preloader.svg?inline';
 import { Modal } from 'bootstrap';
 
 class ProductContent extends Component {
@@ -154,6 +153,37 @@ class ProductContent extends Component {
         }
 
         return Rating({ ratingClass });
+    }
+
+    public handleClickToCartIcon(callback: (e: Event) => void) {
+        const cart = document.querySelector('.cart');
+        if (cart) {
+            cart.addEventListener('click', function (e) {
+                e.preventDefault();
+                callback(e);
+            });
+        }
+    }
+
+    public handleClickToBreadcrumb(callback: () => void) {
+        const breadcrumbs = document.querySelector('a.breadcrumbs__link');
+
+        if (breadcrumbs) {
+            breadcrumbs.addEventListener('click', (e) => {
+                e.preventDefault();
+                callback();
+            })
+        }
+    }
+
+    public handleClickToLogoIcon(callback: (e: Event) => void) {
+        const logo = document.querySelector('.logo');
+        if (logo) {
+            logo.addEventListener('click', function (e) {
+                e.preventDefault();
+                callback(e);
+            });
+        }
     }
 
     public update() {

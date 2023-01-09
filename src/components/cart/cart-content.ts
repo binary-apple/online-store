@@ -272,6 +272,26 @@ class CartContent extends Component {
         }
     }
 
+    public handleClickToCartIcon(callback: (e: Event) => void) {
+        const cart = document.querySelector('.cart');
+        if (cart) {
+            cart.addEventListener('click', function (e) {
+                e.preventDefault();
+                callback(e);
+            });
+        }
+    }
+
+    public handleClickToLogoIcon(callback: (e: Event) => void) {
+        const logo = document.querySelector('.logo');
+        if (logo) {
+            logo.addEventListener('click', function (e) {
+                e.preventDefault();
+                callback(e);
+            });
+        }
+    }
+
     public update() {
         const counter = document.querySelector('.cart-title__cart-counter');
 

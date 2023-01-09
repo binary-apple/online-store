@@ -7,6 +7,7 @@ import ProductView from '../../view/product-view';
 import { Product } from '../../model/types/product';
 import { IRouter } from '../../router/types/router';
 import { products } from '../../model/productItems';
+import Routers from '../../router/routers';
 
 class ProductController extends Controller {
     cart: Cart;
@@ -65,6 +66,18 @@ class ProductController extends Controller {
 
                 this.router.navigateTo('/cart', JSON.stringify(productState));
             });
+
+            productView.handleClickToBreadcrumb(() => {
+                this.router.navigateTo(Routers.MAIN);
+            })
+
+            productView.handleClickToCartIcon(() => {
+                this.router.navigateTo(Routers.CART);
+            })
+    
+            productView.handleClickToLogoIcon(() => {
+                this.router.navigateTo(Routers.MAIN);
+            })
         } else {
             this.router.navigateTo('/404', '');
         }

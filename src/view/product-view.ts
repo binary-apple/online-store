@@ -71,6 +71,18 @@ class ProductView extends BaseView implements View {
     public makeOrder(callback: (product: Product) => void) {
         this.content.makeOrder(callback);
     }
+
+    public handleClickToBreadcrumb(callback: () => void) {
+        this.content.handleClickToBreadcrumb(callback)
+    }
+
+    public handleClickToCartIcon(callback: (e: Event) => void) {
+        this.content.handleClickToCartIcon(callback);
+    }
+
+    public handleClickToLogoIcon(callback: (e: Event) => void) {
+        this.content.handleClickToLogoIcon(callback);
+    }
 }
 
 export default ProductView;

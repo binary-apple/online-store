@@ -7,6 +7,7 @@ import { ICartPagination } from '../../model/types/cart';
 import { CartName } from '../../model/types/cart';
 import { IRouter } from '../../router/types/router';
 import { Product } from '../../model/types/product';
+import Routers from '../../router/routers';
 
 class CartController extends Controller {
     cart: Cart;
@@ -175,6 +176,14 @@ class CartController extends Controller {
             },
             false
         );
+
+        cartView.handleClickToCartIcon(() => {
+            this.router.navigateTo(Routers.CART);
+        })
+
+        cartView.handleClickToLogoIcon(() => {
+            this.router.navigateTo(Routers.MAIN);
+        })
 
         this.checkRedirectFromProduct(cartView);
     }
