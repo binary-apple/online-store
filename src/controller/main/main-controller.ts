@@ -103,8 +103,20 @@ class MainController extends Controller {
         if ('category' in query) {
             filter.categories = String(query['category']).toLowerCase().split('|');
         }
-        // TODO: set other components according query
-
+        if ('price-min' in query && 'price-min') {
+            const minPrice = Number(query['price-min']);
+            const maxPrice = Number(query['price-max']);
+            if (!(Number.isNaN(minPrice) && Number.isNaN(minPrice))) {
+                filter.price = {min: 0, max: Infinity, from: minPrice, to: maxPrice};
+            }
+        }
+        if ('stock-min' in query && 'stock-min') {
+            const minStock = Number(query['stock-min']);
+            const maxStock = Number(query['stock-max']);
+            if (!(Number.isNaN(minStock) && Number.isNaN(minStock))) {
+                filter.stock = {min: 0, max: Infinity, from: minStock, to: maxStock};
+            }
+        }
         return filter;
     }
 
