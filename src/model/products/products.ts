@@ -1,7 +1,7 @@
 import { IFilter, FilterMetric } from '../types/filter';
 import { Product } from '../types/product';
 import { Store } from '../store';
-import { number } from 'yargs';
+// import { number } from 'yargs';
 
 export class Products extends Store {
     initialItems: Array<Product>;

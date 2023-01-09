@@ -1,4 +1,4 @@
-import { Publisher, Subscriber } from "../../utils/observer-interface";
+import { Subscriber } from "../../utils/observer-interface";
 import { Component } from "../types/component";
 import { Products as ProductsModel } from "../../model/products/products";
 import { Filter as FilterModel } from "../../model/products/filter";
