@@ -26,7 +26,9 @@ export interface IPageMainParams {
     brand: string;
     big: boolean;
     search: string;
-    price: number;
-    stock: number;
+    'price-min': number;
+    'price-max': number;
+    'stock-min': number;
+    'stock-max': number;
     [index: string]: string | boolean | number;
 }

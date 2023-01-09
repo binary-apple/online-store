@@ -79,8 +79,10 @@ router.add(Routers.MAIN, () => {
         brand: /[A-Za-zА-Яа-я]/g,
         big: /true|false/g,
         search: /[A-Za-zА-Яа-я]|[0-9]/g,
-        price: /[0-9]/g,
-        stock: /[0-9]/g,
+        'price-min': /[0-9]/g,
+        'price-max': /[0-9]/g,
+        'stock-min': /[0-9]/g,
+        'stock-max': /[0-9]/g,
     };
 
     const mainController = new MainController(router);
